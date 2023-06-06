@@ -1,0 +1,38 @@
+{
+  "jhipsterSampleApplicationApp": {
+    "inspection": {
+      "home": {
+        "title": "Inspections",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Inspection",
+        "createOrEditLabel": "Create or edit a Inspection",
+        "notFound": "No Inspections found"
+      },
+      "created": "A new Inspection is created with identifier {{ param }}",
+      "updated": "A Inspection is updated with identifier {{ param }}",
+      "deleted": "A Inspection is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Inspection {{ id }}?"
+      },
+      "detail": {
+        "title": "Inspection"
+      },
+      "id": "Id",
+      "itemName": "Item Name",
+      "itemId": "Item Id",
+      "boardId": "Board Id",
+      "kingdeeId": "Kingdee Id",
+      "supplierName": "Supplier Name",
+      "email": "Email",
+      "inspectionDate": "Inspection Date",
+      "endOfProductionDate": "End Of Production Date",
+      "cateGory": "Cate Gory",
+      "technicalFile": "Technical File",
+      "qCResult": "Q C Result",
+      "docStatus": "Doc Status",
+      "goodsReadyForPickUpDate": "Goods Ready For Pick Up Date",
+      "inspectionType": "Inspection Type",
+      "inspectionBookingStatus": "Inspection Booking Status"
+    }
+  }
+}

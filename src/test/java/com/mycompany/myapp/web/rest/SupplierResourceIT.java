@@ -1,0 +1,807 @@
+package com.mycompany.myapp.web.rest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.domain.Supplier;
+import com.mycompany.myapp.repository.SupplierRepository;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+import javax.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Integration tests for the {@link SupplierResource} REST controller.
+ */
+@IntegrationTest
+@AutoConfigureMockMvc
+@WithMockUser
+class SupplierResourceIT {
+
+    private static final String DEFAULT_CLIENT = "AAAAAAAAAA";
+    private static final String UPDATED_CLIENT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PARENT_ITEM = "AAAAAAAAAA";
+    private static final String UPDATED_PARENT_ITEM = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ITEM_ID = "AAAAAAAAAA";
+    private static final String UPDATED_ITEM_ID = "BBBBBBBBBB";
+
+    private static final String DEFAULT_BOARD_ID = "AAAAAAAAAA";
+    private static final String UPDATED_BOARD_ID = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PERSON = "AAAAAAAAAA";
+    private static final String UPDATED_PERSON = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CATEGORY = "AAAAAAAAAA";
+    private static final String UPDATED_CATEGORY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SUB_CATEGORY = "AAAAAAAAAA";
+    private static final String UPDATED_SUB_CATEGORY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SUPPLIER_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_SUPPLIER_STATUS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CAP_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_CAP_STATUS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_QUALIFICATION_SCORE = "AAAAAAAAAA";
+    private static final String UPDATED_QUALIFICATION_SCORE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_BOPE_SCORE = "AAAAAAAAAA";
+    private static final String UPDATED_BOPE_SCORE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_INTERNAL_SUPPLIER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_INTERNAL_SUPPLIER_ID = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CONTACT = "AAAAAAAAAA";
+    private static final String UPDATED_CONTACT = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CONTACT_PHONE_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_CONTACT_PHONE_NUMBER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CONTACT_EMAIL_ADDRESS = "AAAAAAAAAA";
+    private static final String UPDATED_CONTACT_EMAIL_ADDRESS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_COUNTRY = "AAAAAAAAAA";
+    private static final String UPDATED_COUNTRY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_OPERATION_SITE = "AAAAAAAAAA";
+    private static final String UPDATED_OPERATION_SITE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADDRESS = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_WEBSITE = "AAAAAAAAAA";
+    private static final String UPDATED_WEBSITE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PRODUCT_TAXONOMY = "AAAAAAAAAA";
+    private static final String UPDATED_PRODUCT_TAXONOMY = "BBBBBBBBBB";
+
+    private static final String DEFAULT_RELATION_STARTING_YEAR = "AAAAAAAAAA";
+    private static final String UPDATED_RELATION_STARTING_YEAR = "BBBBBBBBBB";
+
+    private static final String DEFAULT_BUSINESS_LICENSE = "AAAAAAAAAA";
+    private static final String UPDATED_BUSINESS_LICENSE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REX_ORIGIN_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_REX_ORIGIN_STATUS = "BBBBBBBBBB";
+
+    private static final LocalDate DEFAULT_CREATE_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_CREATE_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final LocalDate DEFAULT_UPDATE_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_UPDATE_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final String DEFAULT_ITEM = "AAAAAAAAAA";
+    private static final String UPDATED_ITEM = "BBBBBBBBBB";
+
+    private static final String DEFAULT_MIRROR = "AAAAAAAAAA";
+    private static final String UPDATED_MIRROR = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SUB_ITEMS = "AAAAAAAAAA";
+    private static final String UPDATED_SUB_ITEMS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_OWNER = "AAAAAAAAAA";
+    private static final String UPDATED_OWNER = "BBBBBBBBBB";
+
+    private static final String DEFAULT_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_STATUS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DATE = "AAAAAAAAAA";
+    private static final String UPDATED_DATE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_FORMULA = "AAAAAAAAAA";
+    private static final String UPDATED_FORMULA = "BBBBBBBBBB";
+
+    private static final String DEFAULT_KINGDEE_ID = "AAAAAAAAAA";
+    private static final String UPDATED_KINGDEE_ID = "BBBBBBBBBB";
+
+    private static final String ENTITY_API_URL = "/api/suppliers";
+    private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
+
+    private static Random random = new Random();
+    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+
+    @Autowired
+    private SupplierRepository supplierRepository;
+
+    @Autowired
+    private EntityManager em;
+
+    @Autowired
+    private MockMvc restSupplierMockMvc;
+
+    private Supplier supplier;
+
+    /**
+     * Create an entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Supplier createEntity(EntityManager em) {
+        Supplier supplier = new Supplier()
+            .client(DEFAULT_CLIENT)
+            .parentItem(DEFAULT_PARENT_ITEM)
+            .itemId(DEFAULT_ITEM_ID)
+            .boardId(DEFAULT_BOARD_ID)
+            .person(DEFAULT_PERSON)
+            .category(DEFAULT_CATEGORY)
+            .subCategory(DEFAULT_SUB_CATEGORY)
+            .supplierStatus(DEFAULT_SUPPLIER_STATUS)
+            .capStatus(DEFAULT_CAP_STATUS)
+            .qualificationScore(DEFAULT_QUALIFICATION_SCORE)
+            .bopeScore(DEFAULT_BOPE_SCORE)
+            .internalSupplierId(DEFAULT_INTERNAL_SUPPLIER_ID)
+            .contact(DEFAULT_CONTACT)
+            .contactPhoneNumber(DEFAULT_CONTACT_PHONE_NUMBER)
+            .contactEmailAddress(DEFAULT_CONTACT_EMAIL_ADDRESS)
+            .country(DEFAULT_COUNTRY)
+            .operationSite(DEFAULT_OPERATION_SITE)
+            .address(DEFAULT_ADDRESS)
+            .website(DEFAULT_WEBSITE)
+            .productTaxonomy(DEFAULT_PRODUCT_TAXONOMY)
+            .relationStartingYear(DEFAULT_RELATION_STARTING_YEAR)
+            .businessLicense(DEFAULT_BUSINESS_LICENSE)
+            .rexOriginStatus(DEFAULT_REX_ORIGIN_STATUS)
+            .createDate(DEFAULT_CREATE_DATE)
+            .updateDate(DEFAULT_UPDATE_DATE)
+            .item(DEFAULT_ITEM)
+            .mirror(DEFAULT_MIRROR)
+            .subItems(DEFAULT_SUB_ITEMS)
+            .owner(DEFAULT_OWNER)
+            .status(DEFAULT_STATUS)
+            .date(DEFAULT_DATE)
+            .formula(DEFAULT_FORMULA)
+            .kingdeeId(DEFAULT_KINGDEE_ID);
+        return supplier;
+    }
+
+    /**
+     * Create an updated entity for this test.
+     *
+     * This is a static method, as tests for other entities might also need it,
+     * if they test an entity which requires the current entity.
+     */
+    public static Supplier createUpdatedEntity(EntityManager em) {
+        Supplier supplier = new Supplier()
+            .client(UPDATED_CLIENT)
+            .parentItem(UPDATED_PARENT_ITEM)
+            .itemId(UPDATED_ITEM_ID)
+            .boardId(UPDATED_BOARD_ID)
+            .person(UPDATED_PERSON)
+            .category(UPDATED_CATEGORY)
+            .subCategory(UPDATED_SUB_CATEGORY)
+            .supplierStatus(UPDATED_SUPPLIER_STATUS)
+            .capStatus(UPDATED_CAP_STATUS)
+            .qualificationScore(UPDATED_QUALIFICATION_SCORE)
+            .bopeScore(UPDATED_BOPE_SCORE)
+            .internalSupplierId(UPDATED_INTERNAL_SUPPLIER_ID)
+            .contact(UPDATED_CONTACT)
+            .contactPhoneNumber(UPDATED_CONTACT_PHONE_NUMBER)
+            .contactEmailAddress(UPDATED_CONTACT_EMAIL_ADDRESS)
+            .country(UPDATED_COUNTRY)
+            .operationSite(UPDATED_OPERATION_SITE)
+            .address(UPDATED_ADDRESS)
+            .website(UPDATED_WEBSITE)
+            .productTaxonomy(UPDATED_PRODUCT_TAXONOMY)
+            .relationStartingYear(UPDATED_RELATION_STARTING_YEAR)
+            .businessLicense(UPDATED_BUSINESS_LICENSE)
+            .rexOriginStatus(UPDATED_REX_ORIGIN_STATUS)
+            .createDate(UPDATED_CREATE_DATE)
+            .updateDate(UPDATED_UPDATE_DATE)
+            .item(UPDATED_ITEM)
+            .mirror(UPDATED_MIRROR)
+            .subItems(UPDATED_SUB_ITEMS)
+            .owner(UPDATED_OWNER)
+            .status(UPDATED_STATUS)
+            .date(UPDATED_DATE)
+            .formula(UPDATED_FORMULA)
+            .kingdeeId(UPDATED_KINGDEE_ID);
+        return supplier;
+    }
+
+    @BeforeEach
+    public void initTest() {
+        supplier = createEntity(em);
+    }
+
+    @Test
+    @Transactional
+    void createSupplier() throws Exception {
+        int databaseSizeBeforeCreate = supplierRepository.findAll().size();
+        // Create the Supplier
+        restSupplierMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(supplier)))
+            .andExpect(status().isCreated());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeCreate + 1);
+        Supplier testSupplier = supplierList.get(supplierList.size() - 1);
+        assertThat(testSupplier.getClient()).isEqualTo(DEFAULT_CLIENT);
+        assertThat(testSupplier.getParentItem()).isEqualTo(DEFAULT_PARENT_ITEM);
+        assertThat(testSupplier.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
+        assertThat(testSupplier.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
+        assertThat(testSupplier.getPerson()).isEqualTo(DEFAULT_PERSON);
+        assertThat(testSupplier.getCategory()).isEqualTo(DEFAULT_CATEGORY);
+        assertThat(testSupplier.getSubCategory()).isEqualTo(DEFAULT_SUB_CATEGORY);
+        assertThat(testSupplier.getSupplierStatus()).isEqualTo(DEFAULT_SUPPLIER_STATUS);
+        assertThat(testSupplier.getCapStatus()).isEqualTo(DEFAULT_CAP_STATUS);
+        assertThat(testSupplier.getQualificationScore()).isEqualTo(DEFAULT_QUALIFICATION_SCORE);
+        assertThat(testSupplier.getBopeScore()).isEqualTo(DEFAULT_BOPE_SCORE);
+        assertThat(testSupplier.getInternalSupplierId()).isEqualTo(DEFAULT_INTERNAL_SUPPLIER_ID);
+        assertThat(testSupplier.getContact()).isEqualTo(DEFAULT_CONTACT);
+        assertThat(testSupplier.getContactPhoneNumber()).isEqualTo(DEFAULT_CONTACT_PHONE_NUMBER);
+        assertThat(testSupplier.getContactEmailAddress()).isEqualTo(DEFAULT_CONTACT_EMAIL_ADDRESS);
+        assertThat(testSupplier.getCountry()).isEqualTo(DEFAULT_COUNTRY);
+        assertThat(testSupplier.getOperationSite()).isEqualTo(DEFAULT_OPERATION_SITE);
+        assertThat(testSupplier.getAddress()).isEqualTo(DEFAULT_ADDRESS);
+        assertThat(testSupplier.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
+        assertThat(testSupplier.getProductTaxonomy()).isEqualTo(DEFAULT_PRODUCT_TAXONOMY);
+        assertThat(testSupplier.getRelationStartingYear()).isEqualTo(DEFAULT_RELATION_STARTING_YEAR);
+        assertThat(testSupplier.getBusinessLicense()).isEqualTo(DEFAULT_BUSINESS_LICENSE);
+        assertThat(testSupplier.getRexOriginStatus()).isEqualTo(DEFAULT_REX_ORIGIN_STATUS);
+        assertThat(testSupplier.getCreateDate()).isEqualTo(DEFAULT_CREATE_DATE);
+        assertThat(testSupplier.getUpdateDate()).isEqualTo(DEFAULT_UPDATE_DATE);
+        assertThat(testSupplier.getItem()).isEqualTo(DEFAULT_ITEM);
+        assertThat(testSupplier.getMirror()).isEqualTo(DEFAULT_MIRROR);
+        assertThat(testSupplier.getSubItems()).isEqualTo(DEFAULT_SUB_ITEMS);
+        assertThat(testSupplier.getOwner()).isEqualTo(DEFAULT_OWNER);
+        assertThat(testSupplier.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testSupplier.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testSupplier.getFormula()).isEqualTo(DEFAULT_FORMULA);
+        assertThat(testSupplier.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
+    }
+
+    @Test
+    @Transactional
+    void createSupplierWithExistingId() throws Exception {
+        // Create the Supplier with an existing ID
+        supplier.setId(1L);
+
+        int databaseSizeBeforeCreate = supplierRepository.findAll().size();
+
+        // An entity with an existing ID cannot be created, so this API call must fail
+        restSupplierMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(supplier)))
+            .andExpect(status().isBadRequest());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    void getAllSuppliers() throws Exception {
+        // Initialize the database
+        supplierRepository.saveAndFlush(supplier);
+
+        // Get all the supplierList
+        restSupplierMockMvc
+            .perform(get(ENTITY_API_URL + "?sort=id,desc"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.[*].id").value(hasItem(supplier.getId().intValue())))
+            .andExpect(jsonPath("$.[*].client").value(hasItem(DEFAULT_CLIENT)))
+            .andExpect(jsonPath("$.[*].parentItem").value(hasItem(DEFAULT_PARENT_ITEM)))
+            .andExpect(jsonPath("$.[*].itemId").value(hasItem(DEFAULT_ITEM_ID)))
+            .andExpect(jsonPath("$.[*].boardId").value(hasItem(DEFAULT_BOARD_ID)))
+            .andExpect(jsonPath("$.[*].person").value(hasItem(DEFAULT_PERSON)))
+            .andExpect(jsonPath("$.[*].category").value(hasItem(DEFAULT_CATEGORY)))
+            .andExpect(jsonPath("$.[*].subCategory").value(hasItem(DEFAULT_SUB_CATEGORY)))
+            .andExpect(jsonPath("$.[*].supplierStatus").value(hasItem(DEFAULT_SUPPLIER_STATUS)))
+            .andExpect(jsonPath("$.[*].capStatus").value(hasItem(DEFAULT_CAP_STATUS)))
+            .andExpect(jsonPath("$.[*].qualificationScore").value(hasItem(DEFAULT_QUALIFICATION_SCORE)))
+            .andExpect(jsonPath("$.[*].bopeScore").value(hasItem(DEFAULT_BOPE_SCORE)))
+            .andExpect(jsonPath("$.[*].internalSupplierId").value(hasItem(DEFAULT_INTERNAL_SUPPLIER_ID)))
+            .andExpect(jsonPath("$.[*].contact").value(hasItem(DEFAULT_CONTACT)))
+            .andExpect(jsonPath("$.[*].contactPhoneNumber").value(hasItem(DEFAULT_CONTACT_PHONE_NUMBER)))
+            .andExpect(jsonPath("$.[*].contactEmailAddress").value(hasItem(DEFAULT_CONTACT_EMAIL_ADDRESS)))
+            .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
+            .andExpect(jsonPath("$.[*].operationSite").value(hasItem(DEFAULT_OPERATION_SITE)))
+            .andExpect(jsonPath("$.[*].address").value(hasItem(DEFAULT_ADDRESS)))
+            .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE)))
+            .andExpect(jsonPath("$.[*].productTaxonomy").value(hasItem(DEFAULT_PRODUCT_TAXONOMY)))
+            .andExpect(jsonPath("$.[*].relationStartingYear").value(hasItem(DEFAULT_RELATION_STARTING_YEAR)))
+            .andExpect(jsonPath("$.[*].businessLicense").value(hasItem(DEFAULT_BUSINESS_LICENSE)))
+            .andExpect(jsonPath("$.[*].rexOriginStatus").value(hasItem(DEFAULT_REX_ORIGIN_STATUS)))
+            .andExpect(jsonPath("$.[*].createDate").value(hasItem(DEFAULT_CREATE_DATE.toString())))
+            .andExpect(jsonPath("$.[*].updateDate").value(hasItem(DEFAULT_UPDATE_DATE.toString())))
+            .andExpect(jsonPath("$.[*].item").value(hasItem(DEFAULT_ITEM)))
+            .andExpect(jsonPath("$.[*].mirror").value(hasItem(DEFAULT_MIRROR)))
+            .andExpect(jsonPath("$.[*].subItems").value(hasItem(DEFAULT_SUB_ITEMS)))
+            .andExpect(jsonPath("$.[*].owner").value(hasItem(DEFAULT_OWNER)))
+            .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS)))
+            .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE)))
+            .andExpect(jsonPath("$.[*].formula").value(hasItem(DEFAULT_FORMULA)))
+            .andExpect(jsonPath("$.[*].kingdeeId").value(hasItem(DEFAULT_KINGDEE_ID)));
+    }
+
+    @Test
+    @Transactional
+    void getSupplier() throws Exception {
+        // Initialize the database
+        supplierRepository.saveAndFlush(supplier);
+
+        // Get the supplier
+        restSupplierMockMvc
+            .perform(get(ENTITY_API_URL_ID, supplier.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+            .andExpect(jsonPath("$.id").value(supplier.getId().intValue()))
+            .andExpect(jsonPath("$.client").value(DEFAULT_CLIENT))
+            .andExpect(jsonPath("$.parentItem").value(DEFAULT_PARENT_ITEM))
+            .andExpect(jsonPath("$.itemId").value(DEFAULT_ITEM_ID))
+            .andExpect(jsonPath("$.boardId").value(DEFAULT_BOARD_ID))
+            .andExpect(jsonPath("$.person").value(DEFAULT_PERSON))
+            .andExpect(jsonPath("$.category").value(DEFAULT_CATEGORY))
+            .andExpect(jsonPath("$.subCategory").value(DEFAULT_SUB_CATEGORY))
+            .andExpect(jsonPath("$.supplierStatus").value(DEFAULT_SUPPLIER_STATUS))
+            .andExpect(jsonPath("$.capStatus").value(DEFAULT_CAP_STATUS))
+            .andExpect(jsonPath("$.qualificationScore").value(DEFAULT_QUALIFICATION_SCORE))
+            .andExpect(jsonPath("$.bopeScore").value(DEFAULT_BOPE_SCORE))
+            .andExpect(jsonPath("$.internalSupplierId").value(DEFAULT_INTERNAL_SUPPLIER_ID))
+            .andExpect(jsonPath("$.contact").value(DEFAULT_CONTACT))
+            .andExpect(jsonPath("$.contactPhoneNumber").value(DEFAULT_CONTACT_PHONE_NUMBER))
+            .andExpect(jsonPath("$.contactEmailAddress").value(DEFAULT_CONTACT_EMAIL_ADDRESS))
+            .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
+            .andExpect(jsonPath("$.operationSite").value(DEFAULT_OPERATION_SITE))
+            .andExpect(jsonPath("$.address").value(DEFAULT_ADDRESS))
+            .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE))
+            .andExpect(jsonPath("$.productTaxonomy").value(DEFAULT_PRODUCT_TAXONOMY))
+            .andExpect(jsonPath("$.relationStartingYear").value(DEFAULT_RELATION_STARTING_YEAR))
+            .andExpect(jsonPath("$.businessLicense").value(DEFAULT_BUSINESS_LICENSE))
+            .andExpect(jsonPath("$.rexOriginStatus").value(DEFAULT_REX_ORIGIN_STATUS))
+            .andExpect(jsonPath("$.createDate").value(DEFAULT_CREATE_DATE.toString()))
+            .andExpect(jsonPath("$.updateDate").value(DEFAULT_UPDATE_DATE.toString()))
+            .andExpect(jsonPath("$.item").value(DEFAULT_ITEM))
+            .andExpect(jsonPath("$.mirror").value(DEFAULT_MIRROR))
+            .andExpect(jsonPath("$.subItems").value(DEFAULT_SUB_ITEMS))
+            .andExpect(jsonPath("$.owner").value(DEFAULT_OWNER))
+            .andExpect(jsonPath("$.status").value(DEFAULT_STATUS))
+            .andExpect(jsonPath("$.date").value(DEFAULT_DATE))
+            .andExpect(jsonPath("$.formula").value(DEFAULT_FORMULA))
+            .andExpect(jsonPath("$.kingdeeId").value(DEFAULT_KINGDEE_ID));
+    }
+
+    @Test
+    @Transactional
+    void getNonExistingSupplier() throws Exception {
+        // Get the supplier
+        restSupplierMockMvc.perform(get(ENTITY_API_URL_ID, Long.MAX_VALUE)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional
+    void putExistingSupplier() throws Exception {
+        // Initialize the database
+        supplierRepository.saveAndFlush(supplier);
+
+        int databaseSizeBeforeUpdate = supplierRepository.findAll().size();
+
+        // Update the supplier
+        Supplier updatedSupplier = supplierRepository.findById(supplier.getId()).get();
+        // Disconnect from session so that the updates on updatedSupplier are not directly saved in db
+        em.detach(updatedSupplier);
+        updatedSupplier
+            .client(UPDATED_CLIENT)
+            .parentItem(UPDATED_PARENT_ITEM)
+            .itemId(UPDATED_ITEM_ID)
+            .boardId(UPDATED_BOARD_ID)
+            .person(UPDATED_PERSON)
+            .category(UPDATED_CATEGORY)
+            .subCategory(UPDATED_SUB_CATEGORY)
+            .supplierStatus(UPDATED_SUPPLIER_STATUS)
+            .capStatus(UPDATED_CAP_STATUS)
+            .qualificationScore(UPDATED_QUALIFICATION_SCORE)
+            .bopeScore(UPDATED_BOPE_SCORE)
+            .internalSupplierId(UPDATED_INTERNAL_SUPPLIER_ID)
+            .contact(UPDATED_CONTACT)
+            .contactPhoneNumber(UPDATED_CONTACT_PHONE_NUMBER)
+            .contactEmailAddress(UPDATED_CONTACT_EMAIL_ADDRESS)
+            .country(UPDATED_COUNTRY)
+            .operationSite(UPDATED_OPERATION_SITE)
+            .address(UPDATED_ADDRESS)
+            .website(UPDATED_WEBSITE)
+            .productTaxonomy(UPDATED_PRODUCT_TAXONOMY)
+            .relationStartingYear(UPDATED_RELATION_STARTING_YEAR)
+            .businessLicense(UPDATED_BUSINESS_LICENSE)
+            .rexOriginStatus(UPDATED_REX_ORIGIN_STATUS)
+            .createDate(UPDATED_CREATE_DATE)
+            .updateDate(UPDATED_UPDATE_DATE)
+            .item(UPDATED_ITEM)
+            .mirror(UPDATED_MIRROR)
+            .subItems(UPDATED_SUB_ITEMS)
+            .owner(UPDATED_OWNER)
+            .status(UPDATED_STATUS)
+            .date(UPDATED_DATE)
+            .formula(UPDATED_FORMULA)
+            .kingdeeId(UPDATED_KINGDEE_ID);
+
+        restSupplierMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, updatedSupplier.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(updatedSupplier))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeUpdate);
+        Supplier testSupplier = supplierList.get(supplierList.size() - 1);
+        assertThat(testSupplier.getClient()).isEqualTo(UPDATED_CLIENT);
+        assertThat(testSupplier.getParentItem()).isEqualTo(UPDATED_PARENT_ITEM);
+        assertThat(testSupplier.getItemId()).isEqualTo(UPDATED_ITEM_ID);
+        assertThat(testSupplier.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
+        assertThat(testSupplier.getPerson()).isEqualTo(UPDATED_PERSON);
+        assertThat(testSupplier.getCategory()).isEqualTo(UPDATED_CATEGORY);
+        assertThat(testSupplier.getSubCategory()).isEqualTo(UPDATED_SUB_CATEGORY);
+        assertThat(testSupplier.getSupplierStatus()).isEqualTo(UPDATED_SUPPLIER_STATUS);
+        assertThat(testSupplier.getCapStatus()).isEqualTo(UPDATED_CAP_STATUS);
+        assertThat(testSupplier.getQualificationScore()).isEqualTo(UPDATED_QUALIFICATION_SCORE);
+        assertThat(testSupplier.getBopeScore()).isEqualTo(UPDATED_BOPE_SCORE);
+        assertThat(testSupplier.getInternalSupplierId()).isEqualTo(UPDATED_INTERNAL_SUPPLIER_ID);
+        assertThat(testSupplier.getContact()).isEqualTo(UPDATED_CONTACT);
+        assertThat(testSupplier.getContactPhoneNumber()).isEqualTo(UPDATED_CONTACT_PHONE_NUMBER);
+        assertThat(testSupplier.getContactEmailAddress()).isEqualTo(UPDATED_CONTACT_EMAIL_ADDRESS);
+        assertThat(testSupplier.getCountry()).isEqualTo(UPDATED_COUNTRY);
+        assertThat(testSupplier.getOperationSite()).isEqualTo(UPDATED_OPERATION_SITE);
+        assertThat(testSupplier.getAddress()).isEqualTo(UPDATED_ADDRESS);
+        assertThat(testSupplier.getWebsite()).isEqualTo(UPDATED_WEBSITE);
+        assertThat(testSupplier.getProductTaxonomy()).isEqualTo(UPDATED_PRODUCT_TAXONOMY);
+        assertThat(testSupplier.getRelationStartingYear()).isEqualTo(UPDATED_RELATION_STARTING_YEAR);
+        assertThat(testSupplier.getBusinessLicense()).isEqualTo(UPDATED_BUSINESS_LICENSE);
+        assertThat(testSupplier.getRexOriginStatus()).isEqualTo(UPDATED_REX_ORIGIN_STATUS);
+        assertThat(testSupplier.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
+        assertThat(testSupplier.getUpdateDate()).isEqualTo(UPDATED_UPDATE_DATE);
+        assertThat(testSupplier.getItem()).isEqualTo(UPDATED_ITEM);
+        assertThat(testSupplier.getMirror()).isEqualTo(UPDATED_MIRROR);
+        assertThat(testSupplier.getSubItems()).isEqualTo(UPDATED_SUB_ITEMS);
+        assertThat(testSupplier.getOwner()).isEqualTo(UPDATED_OWNER);
+        assertThat(testSupplier.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testSupplier.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testSupplier.getFormula()).isEqualTo(UPDATED_FORMULA);
+        assertThat(testSupplier.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
+    }
+
+    @Test
+    @Transactional
+    void putNonExistingSupplier() throws Exception {
+        int databaseSizeBeforeUpdate = supplierRepository.findAll().size();
+        supplier.setId(count.incrementAndGet());
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restSupplierMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, supplier.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(supplier))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void putWithIdMismatchSupplier() throws Exception {
+        int databaseSizeBeforeUpdate = supplierRepository.findAll().size();
+        supplier.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restSupplierMockMvc
+            .perform(
+                put(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(TestUtil.convertObjectToJsonBytes(supplier))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void putWithMissingIdPathParamSupplier() throws Exception {
+        int databaseSizeBeforeUpdate = supplierRepository.findAll().size();
+        supplier.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restSupplierMockMvc
+            .perform(put(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(supplier)))
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void partialUpdateSupplierWithPatch() throws Exception {
+        // Initialize the database
+        supplierRepository.saveAndFlush(supplier);
+
+        int databaseSizeBeforeUpdate = supplierRepository.findAll().size();
+
+        // Update the supplier using partial update
+        Supplier partialUpdatedSupplier = new Supplier();
+        partialUpdatedSupplier.setId(supplier.getId());
+
+        partialUpdatedSupplier
+            .parentItem(UPDATED_PARENT_ITEM)
+            .boardId(UPDATED_BOARD_ID)
+            .person(UPDATED_PERSON)
+            .subCategory(UPDATED_SUB_CATEGORY)
+            .supplierStatus(UPDATED_SUPPLIER_STATUS)
+            .capStatus(UPDATED_CAP_STATUS)
+            .bopeScore(UPDATED_BOPE_SCORE)
+            .contactEmailAddress(UPDATED_CONTACT_EMAIL_ADDRESS)
+            .country(UPDATED_COUNTRY)
+            .address(UPDATED_ADDRESS)
+            .rexOriginStatus(UPDATED_REX_ORIGIN_STATUS)
+            .createDate(UPDATED_CREATE_DATE)
+            .updateDate(UPDATED_UPDATE_DATE)
+            .item(UPDATED_ITEM)
+            .mirror(UPDATED_MIRROR)
+            .subItems(UPDATED_SUB_ITEMS)
+            .owner(UPDATED_OWNER)
+            .formula(UPDATED_FORMULA)
+            .kingdeeId(UPDATED_KINGDEE_ID);
+
+        restSupplierMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedSupplier.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedSupplier))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeUpdate);
+        Supplier testSupplier = supplierList.get(supplierList.size() - 1);
+        assertThat(testSupplier.getClient()).isEqualTo(DEFAULT_CLIENT);
+        assertThat(testSupplier.getParentItem()).isEqualTo(UPDATED_PARENT_ITEM);
+        assertThat(testSupplier.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
+        assertThat(testSupplier.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
+        assertThat(testSupplier.getPerson()).isEqualTo(UPDATED_PERSON);
+        assertThat(testSupplier.getCategory()).isEqualTo(DEFAULT_CATEGORY);
+        assertThat(testSupplier.getSubCategory()).isEqualTo(UPDATED_SUB_CATEGORY);
+        assertThat(testSupplier.getSupplierStatus()).isEqualTo(UPDATED_SUPPLIER_STATUS);
+        assertThat(testSupplier.getCapStatus()).isEqualTo(UPDATED_CAP_STATUS);
+        assertThat(testSupplier.getQualificationScore()).isEqualTo(DEFAULT_QUALIFICATION_SCORE);
+        assertThat(testSupplier.getBopeScore()).isEqualTo(UPDATED_BOPE_SCORE);
+        assertThat(testSupplier.getInternalSupplierId()).isEqualTo(DEFAULT_INTERNAL_SUPPLIER_ID);
+        assertThat(testSupplier.getContact()).isEqualTo(DEFAULT_CONTACT);
+        assertThat(testSupplier.getContactPhoneNumber()).isEqualTo(DEFAULT_CONTACT_PHONE_NUMBER);
+        assertThat(testSupplier.getContactEmailAddress()).isEqualTo(UPDATED_CONTACT_EMAIL_ADDRESS);
+        assertThat(testSupplier.getCountry()).isEqualTo(UPDATED_COUNTRY);
+        assertThat(testSupplier.getOperationSite()).isEqualTo(DEFAULT_OPERATION_SITE);
+        assertThat(testSupplier.getAddress()).isEqualTo(UPDATED_ADDRESS);
+        assertThat(testSupplier.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
+        assertThat(testSupplier.getProductTaxonomy()).isEqualTo(DEFAULT_PRODUCT_TAXONOMY);
+        assertThat(testSupplier.getRelationStartingYear()).isEqualTo(DEFAULT_RELATION_STARTING_YEAR);
+        assertThat(testSupplier.getBusinessLicense()).isEqualTo(DEFAULT_BUSINESS_LICENSE);
+        assertThat(testSupplier.getRexOriginStatus()).isEqualTo(UPDATED_REX_ORIGIN_STATUS);
+        assertThat(testSupplier.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
+        assertThat(testSupplier.getUpdateDate()).isEqualTo(UPDATED_UPDATE_DATE);
+        assertThat(testSupplier.getItem()).isEqualTo(UPDATED_ITEM);
+        assertThat(testSupplier.getMirror()).isEqualTo(UPDATED_MIRROR);
+        assertThat(testSupplier.getSubItems()).isEqualTo(UPDATED_SUB_ITEMS);
+        assertThat(testSupplier.getOwner()).isEqualTo(UPDATED_OWNER);
+        assertThat(testSupplier.getStatus()).isEqualTo(DEFAULT_STATUS);
+        assertThat(testSupplier.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testSupplier.getFormula()).isEqualTo(UPDATED_FORMULA);
+        assertThat(testSupplier.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
+    }
+
+    @Test
+    @Transactional
+    void fullUpdateSupplierWithPatch() throws Exception {
+        // Initialize the database
+        supplierRepository.saveAndFlush(supplier);
+
+        int databaseSizeBeforeUpdate = supplierRepository.findAll().size();
+
+        // Update the supplier using partial update
+        Supplier partialUpdatedSupplier = new Supplier();
+        partialUpdatedSupplier.setId(supplier.getId());
+
+        partialUpdatedSupplier
+            .client(UPDATED_CLIENT)
+            .parentItem(UPDATED_PARENT_ITEM)
+            .itemId(UPDATED_ITEM_ID)
+            .boardId(UPDATED_BOARD_ID)
+            .person(UPDATED_PERSON)
+            .category(UPDATED_CATEGORY)
+            .subCategory(UPDATED_SUB_CATEGORY)
+            .supplierStatus(UPDATED_SUPPLIER_STATUS)
+            .capStatus(UPDATED_CAP_STATUS)
+            .qualificationScore(UPDATED_QUALIFICATION_SCORE)
+            .bopeScore(UPDATED_BOPE_SCORE)
+            .internalSupplierId(UPDATED_INTERNAL_SUPPLIER_ID)
+            .contact(UPDATED_CONTACT)
+            .contactPhoneNumber(UPDATED_CONTACT_PHONE_NUMBER)
+            .contactEmailAddress(UPDATED_CONTACT_EMAIL_ADDRESS)
+            .country(UPDATED_COUNTRY)
+            .operationSite(UPDATED_OPERATION_SITE)
+            .address(UPDATED_ADDRESS)
+            .website(UPDATED_WEBSITE)
+            .productTaxonomy(UPDATED_PRODUCT_TAXONOMY)
+            .relationStartingYear(UPDATED_RELATION_STARTING_YEAR)
+            .businessLicense(UPDATED_BUSINESS_LICENSE)
+            .rexOriginStatus(UPDATED_REX_ORIGIN_STATUS)
+            .createDate(UPDATED_CREATE_DATE)
+            .updateDate(UPDATED_UPDATE_DATE)
+            .item(UPDATED_ITEM)
+            .mirror(UPDATED_MIRROR)
+            .subItems(UPDATED_SUB_ITEMS)
+            .owner(UPDATED_OWNER)
+            .status(UPDATED_STATUS)
+            .date(UPDATED_DATE)
+            .formula(UPDATED_FORMULA)
+            .kingdeeId(UPDATED_KINGDEE_ID);
+
+        restSupplierMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, partialUpdatedSupplier.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(partialUpdatedSupplier))
+            )
+            .andExpect(status().isOk());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeUpdate);
+        Supplier testSupplier = supplierList.get(supplierList.size() - 1);
+        assertThat(testSupplier.getClient()).isEqualTo(UPDATED_CLIENT);
+        assertThat(testSupplier.getParentItem()).isEqualTo(UPDATED_PARENT_ITEM);
+        assertThat(testSupplier.getItemId()).isEqualTo(UPDATED_ITEM_ID);
+        assertThat(testSupplier.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
+        assertThat(testSupplier.getPerson()).isEqualTo(UPDATED_PERSON);
+        assertThat(testSupplier.getCategory()).isEqualTo(UPDATED_CATEGORY);
+        assertThat(testSupplier.getSubCategory()).isEqualTo(UPDATED_SUB_CATEGORY);
+        assertThat(testSupplier.getSupplierStatus()).isEqualTo(UPDATED_SUPPLIER_STATUS);
+        assertThat(testSupplier.getCapStatus()).isEqualTo(UPDATED_CAP_STATUS);
+        assertThat(testSupplier.getQualificationScore()).isEqualTo(UPDATED_QUALIFICATION_SCORE);
+        assertThat(testSupplier.getBopeScore()).isEqualTo(UPDATED_BOPE_SCORE);
+        assertThat(testSupplier.getInternalSupplierId()).isEqualTo(UPDATED_INTERNAL_SUPPLIER_ID);
+        assertThat(testSupplier.getContact()).isEqualTo(UPDATED_CONTACT);
+        assertThat(testSupplier.getContactPhoneNumber()).isEqualTo(UPDATED_CONTACT_PHONE_NUMBER);
+        assertThat(testSupplier.getContactEmailAddress()).isEqualTo(UPDATED_CONTACT_EMAIL_ADDRESS);
+        assertThat(testSupplier.getCountry()).isEqualTo(UPDATED_COUNTRY);
+        assertThat(testSupplier.getOperationSite()).isEqualTo(UPDATED_OPERATION_SITE);
+        assertThat(testSupplier.getAddress()).isEqualTo(UPDATED_ADDRESS);
+        assertThat(testSupplier.getWebsite()).isEqualTo(UPDATED_WEBSITE);
+        assertThat(testSupplier.getProductTaxonomy()).isEqualTo(UPDATED_PRODUCT_TAXONOMY);
+        assertThat(testSupplier.getRelationStartingYear()).isEqualTo(UPDATED_RELATION_STARTING_YEAR);
+        assertThat(testSupplier.getBusinessLicense()).isEqualTo(UPDATED_BUSINESS_LICENSE);
+        assertThat(testSupplier.getRexOriginStatus()).isEqualTo(UPDATED_REX_ORIGIN_STATUS);
+        assertThat(testSupplier.getCreateDate()).isEqualTo(UPDATED_CREATE_DATE);
+        assertThat(testSupplier.getUpdateDate()).isEqualTo(UPDATED_UPDATE_DATE);
+        assertThat(testSupplier.getItem()).isEqualTo(UPDATED_ITEM);
+        assertThat(testSupplier.getMirror()).isEqualTo(UPDATED_MIRROR);
+        assertThat(testSupplier.getSubItems()).isEqualTo(UPDATED_SUB_ITEMS);
+        assertThat(testSupplier.getOwner()).isEqualTo(UPDATED_OWNER);
+        assertThat(testSupplier.getStatus()).isEqualTo(UPDATED_STATUS);
+        assertThat(testSupplier.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testSupplier.getFormula()).isEqualTo(UPDATED_FORMULA);
+        assertThat(testSupplier.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
+    }
+
+    @Test
+    @Transactional
+    void patchNonExistingSupplier() throws Exception {
+        int databaseSizeBeforeUpdate = supplierRepository.findAll().size();
+        supplier.setId(count.incrementAndGet());
+
+        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        restSupplierMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, supplier.getId())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(supplier))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithIdMismatchSupplier() throws Exception {
+        int databaseSizeBeforeUpdate = supplierRepository.findAll().size();
+        supplier.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restSupplierMockMvc
+            .perform(
+                patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                    .contentType("application/merge-patch+json")
+                    .content(TestUtil.convertObjectToJsonBytes(supplier))
+            )
+            .andExpect(status().isBadRequest());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void patchWithMissingIdPathParamSupplier() throws Exception {
+        int databaseSizeBeforeUpdate = supplierRepository.findAll().size();
+        supplier.setId(count.incrementAndGet());
+
+        // If url ID doesn't match entity ID, it will throw BadRequestAlertException
+        restSupplierMockMvc
+            .perform(patch(ENTITY_API_URL).contentType("application/merge-patch+json").content(TestUtil.convertObjectToJsonBytes(supplier)))
+            .andExpect(status().isMethodNotAllowed());
+
+        // Validate the Supplier in the database
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeUpdate);
+    }
+
+    @Test
+    @Transactional
+    void deleteSupplier() throws Exception {
+        // Initialize the database
+        supplierRepository.saveAndFlush(supplier);
+
+        int databaseSizeBeforeDelete = supplierRepository.findAll().size();
+
+        // Delete the supplier
+        restSupplierMockMvc
+            .perform(delete(ENTITY_API_URL_ID, supplier.getId()).accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        // Validate the database contains one less item
+        List<Supplier> supplierList = supplierRepository.findAll();
+        assertThat(supplierList).hasSize(databaseSizeBeforeDelete - 1);
+    }
+}

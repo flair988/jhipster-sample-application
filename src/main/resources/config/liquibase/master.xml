@@ -11,6 +11,24 @@
     <property name="datetimeType" value="datetime" dbms="postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061446_added_entity_Group.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061447_added_entity_Item.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061448_added_entity_MondayColumn.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061449_added_entity_MondayUser.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061450_added_entity_OperationSite.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061451_added_entity_OrderFollowUp.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061452_added_entity_PI.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061453_added_entity_ProcessLog.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061454_added_entity_ProductTaxmonomy.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061455_added_entity_Supplier.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061456_added_entity_Uom.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061457_added_entity_Client.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061458_added_entity_CommercialInvoice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061459_added_entity_Forwarder.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061500_added_entity_ForwarderBooking.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061501_added_entity_Inspection.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061502_added_entity_ProductFinished.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20230606061503_added_entity_SalesDelivery.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->

@@ -1,0 +1,36 @@
+{
+  "applications": "*",
+  "changelogDate": "20230606061448",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "monday_column",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "boardId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "columnId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "title",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "MondayColumn",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

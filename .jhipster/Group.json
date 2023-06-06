@@ -1,0 +1,40 @@
+{
+  "applications": "*",
+  "changelogDate": "20230606061446",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "jhi_group",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "groupId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "groupNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "parentId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "groupName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Group",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

@@ -1,0 +1,48 @@
+{
+  "applications": "*",
+  "changelogDate": "20230606061453",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "process_log",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "request",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "response",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reason",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "processStartTime",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "processEndTime",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "ProcessLog",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

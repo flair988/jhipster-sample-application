@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <!--
+        Added the entity PI.
+    -->
+    <changeSet id="20230606061452-1" author="jhipster">
+        <createTable tableName="pi">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="item_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="item_code" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="po_number" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="is_new_item" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="category" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="client" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="supplier" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="supplier_code" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="order_date" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="port" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="requested_end_of_prod_date" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="item_quantity" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="country_of_origin" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="country_of_final_destination" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="production_lead_time_commitment" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="consignee" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="carriage_by" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="terms_of_delivery" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="terms_of_payment" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="item_unit" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="rate" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="amount" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="total_amount" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="discount_rate" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="currency" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pi_status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="remarks" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="item_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="board_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="kingdee_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="port_of_discharge" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="port_of_loading" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20230606061452-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/pi.csv"
+                  separator=";"
+                  tableName="pi"
+                  usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="item_name" type="string"/>
+            <column name="item_code" type="string"/>
+            <column name="po_number" type="string"/>
+            <column name="is_new_item" type="string"/>
+            <column name="category" type="string"/>
+            <column name="client" type="string"/>
+            <column name="supplier" type="string"/>
+            <column name="supplier_code" type="string"/>
+            <column name="order_date" type="string"/>
+            <column name="port" type="string"/>
+            <column name="requested_end_of_prod_date" type="string"/>
+            <column name="item_quantity" type="string"/>
+            <column name="country_of_origin" type="string"/>
+            <column name="country_of_final_destination" type="string"/>
+            <column name="production_lead_time_commitment" type="string"/>
+            <column name="consignee" type="string"/>
+            <column name="carriage_by" type="string"/>
+            <column name="terms_of_delivery" type="string"/>
+            <column name="terms_of_payment" type="string"/>
+            <column name="item_unit" type="string"/>
+            <column name="rate" type="string"/>
+            <column name="amount" type="string"/>
+            <column name="total_amount" type="string"/>
+            <column name="discount_rate" type="string"/>
+            <column name="currency" type="string"/>
+            <column name="pi_status" type="string"/>
+            <column name="remarks" type="string"/>
+            <column name="item_id" type="string"/>
+            <column name="board_id" type="string"/>
+            <column name="kingdee_id" type="string"/>
+            <column name="port_of_discharge" type="string"/>
+            <column name="port_of_loading" type="string"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+        </loadData>
+    </changeSet>
+</databaseChangeLog>
