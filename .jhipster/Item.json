@@ -1,0 +1,240 @@
+{
+  "applications": "*",
+  "changelogDate": "20230606061447",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "item",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "people",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "itemStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "itemFranceName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "itemId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "boardId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "kingdeeId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "itemName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "parentItem",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "codeP",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "codeag",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mondayId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dcsMerchandiser",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "stockedInProdex",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "supplier",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "technicalDocuments",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "certification",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "opportunitySheet",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "packingType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "salePackageImage",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cartonLengthMilimeter",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cartonHeightMilimeter",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "portOfDeparture",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "barcode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cartonWeightKg",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cartonWeightGr",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cartonWidthMilimeter",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "productionLeadtimeCommitmentsFromSuppliers",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "negotiatedPrice",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "productDescriptionAndFonctionalities",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "drawing",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "userManual",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "supplierMarketingService",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "palletSize",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "typeOfMarketing",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "productPic",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "updateDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "subItems",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mirror",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "label",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "moqsPcsCommitment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "moqCommitment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "updatedMoqAfterNegotiation",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "uom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "bom",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "priceManagementStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "comment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "juneY",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "commentsJuneY",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "decemberY",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "commentsDecemberY",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "productTaxonomy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "validPeriod",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "withTax",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "unitPrice",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "currency",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Item",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}

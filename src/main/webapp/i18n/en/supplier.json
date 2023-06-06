@@ -1,0 +1,56 @@
+{
+  "jhipsterSampleApplicationApp": {
+    "supplier": {
+      "home": {
+        "title": "Suppliers",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Supplier",
+        "createOrEditLabel": "Create or edit a Supplier",
+        "notFound": "No Suppliers found"
+      },
+      "created": "A new Supplier is created with identifier {{ param }}",
+      "updated": "A Supplier is updated with identifier {{ param }}",
+      "deleted": "A Supplier is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Supplier {{ id }}?"
+      },
+      "detail": {
+        "title": "Supplier"
+      },
+      "id": "Id",
+      "client": "Client",
+      "parentItem": "Parent Item",
+      "itemId": "Item Id",
+      "boardId": "Board Id",
+      "person": "Person",
+      "category": "Category",
+      "subCategory": "Sub Category",
+      "supplierStatus": "Supplier Status",
+      "capStatus": "Cap Status",
+      "qualificationScore": "Qualification Score",
+      "bopeScore": "Bope Score",
+      "internalSupplierId": "Internal Supplier Id",
+      "contact": "Contact",
+      "contactPhoneNumber": "Contact Phone Number",
+      "contactEmailAddress": "Contact Email Address",
+      "country": "Country",
+      "operationSite": "Operation Site",
+      "address": "Address",
+      "website": "Website",
+      "productTaxonomy": "Product Taxonomy",
+      "relationStartingYear": "Relation Starting Year",
+      "businessLicense": "Business License",
+      "rexOriginStatus": "Rex Origin Status",
+      "createDate": "Create Date",
+      "updateDate": "Update Date",
+      "item": "Item",
+      "mirror": "Mirror",
+      "subItems": "Sub Items",
+      "owner": "Owner",
+      "status": "Status",
+      "date": "Date",
+      "formula": "Formula",
+      "kingdeeId": "Kingdee Id"
+    }
+  }
+}

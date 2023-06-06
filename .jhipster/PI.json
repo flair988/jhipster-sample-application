@@ -1,0 +1,148 @@
+{
+  "applications": "*",
+  "changelogDate": "20230606061452",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "pi",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "itemName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "itemCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "poNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "isNewItem",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "category",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "client",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "supplier",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "supplierCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "orderDate",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "port",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "requestedEndOfProdDate",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "itemQuantity",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "countryOfOrigin",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "countryOfFinalDestination",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "productionLeadTimeCommitment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "consignee",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "carriageBy",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "termsOfDelivery",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "termsOfPayment",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "itemUnit",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "rate",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "totalAmount",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "discountRate",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "currency",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "piStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "remarks",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "itemId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "boardId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "kingdeeId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "portOfDischarge",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "portOfLoading",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "PI",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "service": "no"
+}
