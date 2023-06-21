@@ -1,13 +1,9 @@
 export interface ISalesDelivery {
   id?: number;
   itemName?: string | null;
-  itemId?: string | null;
-  boardId?: string | null;
   kingdeeId?: string | null;
   customer?: string | null;
   orderDate?: string | null;
-  totalActualShipQty?: string | null;
-  totalQtyDelivery?: string | null;
   loadingPort?: string | null;
   dischargePort?: string | null;
   transportMode?: string | null;
@@ -19,19 +15,17 @@ export interface ISalesDelivery {
   containerSize?: string | null;
   remark?: string | null;
   kingdeeUniqueId?: string | null;
+  docStatus?: string | null;
+  cateGory?: string | null;
 }
 
 export class SalesDelivery implements ISalesDelivery {
   constructor(
     public id?: number,
     public itemName?: string | null,
-    public itemId?: string | null,
-    public boardId?: string | null,
     public kingdeeId?: string | null,
     public customer?: string | null,
     public orderDate?: string | null,
-    public totalActualShipQty?: string | null,
-    public totalQtyDelivery?: string | null,
     public loadingPort?: string | null,
     public dischargePort?: string | null,
     public transportMode?: string | null,
@@ -42,6 +36,8 @@ export class SalesDelivery implements ISalesDelivery {
     public containerType?: string | null,
     public containerSize?: string | null,
     public remark?: string | null,
-    public kingdeeUniqueId?: string | null
+    public kingdeeUniqueId?: string | null,
+    public docStatus?: string | null,
+    public cateGory?: string | null
   ) {}
 }

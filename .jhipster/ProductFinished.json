@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061502",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "product_finished",
   "fields": [
     {
@@ -11,14 +9,6 @@
     },
     {
       "fieldName": "itemName",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "itemId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "boardId",
       "fieldType": "String"
     },
     {
@@ -48,13 +38,17 @@
     {
       "fieldName": "materialReceiptDate",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "docStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "supplierName",
+      "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "ProductFinished",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

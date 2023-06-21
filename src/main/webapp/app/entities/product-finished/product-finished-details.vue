@@ -3,72 +3,72 @@
     <div class="col-8">
       <div v-if="productFinished">
         <h2 class="jh-entity-heading" data-cy="productFinishedDetailsHeading">
-          <span v-text="$t('jhipsterSampleApplicationApp.productFinished.detail.title')">ProductFinished</span> {{ productFinished.id }}
+          <span v-text="t$('jhipsterSampleApplicationApp.productFinished.detail.title')"></span> {{ productFinished.id }}
         </h2>
         <dl class="row jh-entity-details">
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.itemName')">Item Name</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.itemName')"></span>
           </dt>
           <dd>
             <span>{{ productFinished.itemName }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.itemId')">Item Id</span>
-          </dt>
-          <dd>
-            <span>{{ productFinished.itemId }}</span>
-          </dd>
-          <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.boardId')">Board Id</span>
-          </dt>
-          <dd>
-            <span>{{ productFinished.boardId }}</span>
-          </dd>
-          <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.kingdeeId')">Kingdee Id</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.kingdeeId')"></span>
           </dt>
           <dd>
             <span>{{ productFinished.kingdeeId }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.supplier')">Supplier</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.supplier')"></span>
           </dt>
           <dd>
             <span>{{ productFinished.supplier }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.supplierEmail')">Supplier Email</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.supplierEmail')"></span>
           </dt>
           <dd>
             <span>{{ productFinished.supplierEmail }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.orderDate')">Order Date</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.orderDate')"></span>
           </dt>
           <dd>
             <span>{{ productFinished.orderDate }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.cateGory')">Cate Gory</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.cateGory')"></span>
           </dt>
           <dd>
             <span>{{ productFinished.cateGory }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.remark')">Remark</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.remark')"></span>
           </dt>
           <dd>
             <span>{{ productFinished.remark }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.productFinished.materialReceiptDate')">Material Receipt Date</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.materialReceiptDate')"></span>
           </dt>
           <dd>
             <span>{{ productFinished.materialReceiptDate }}</span>
           </dd>
+          <dt>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.docStatus')"></span>
+          </dt>
+          <dd>
+            <span>{{ productFinished.docStatus }}</span>
+          </dd>
+          <dt>
+            <span v-text="t$('jhipsterSampleApplicationApp.productFinished.supplierName')"></span>
+          </dt>
+          <dd>
+            <span>{{ productFinished.supplierName }}</span>
+          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.back')"></span>
         </button>
         <router-link
           v-if="productFinished.id"
@@ -77,7 +77,7 @@
           v-slot="{ navigate }"
         >
           <button @click="navigate" class="btn btn-primary">
-            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
+            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.edit')"></span>
           </button>
         </router-link>
       </div>

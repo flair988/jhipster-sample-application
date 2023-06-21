@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IGroup } from '@/shared/model/group.model';
 import GroupService from './group.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class GroupDetails extends Vue {
-  @Inject('groupService') private groupService: () => GroupService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'GroupDetails',
+  setup() {
+    const groupService = inject('groupService', () => new GroupService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public group: IGroup = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.groupId) {
-        vm.retrieveGroup(to.params.groupId);
+    const previousState = () => router.go(-1);
+    const group: Ref<IGroup> = ref({});
+
+    const retrieveGroup = async groupId => {
+      try {
+        const res = await groupService().find(groupId);
+        group.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveGroup(groupId) {
-    this.groupService()
-      .find(groupId)
-      .then(res => {
-        this.group = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.groupId) {
+      retrieveGroup(route.params.groupId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      group,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

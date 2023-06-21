@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IItem } from '@/shared/model/item.model';
 import ItemService from './item.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class ItemDetails extends Vue {
-  @Inject('itemService') private itemService: () => ItemService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ItemDetails',
+  setup() {
+    const itemService = inject('itemService', () => new ItemService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public item: IItem = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.itemId) {
-        vm.retrieveItem(to.params.itemId);
+    const previousState = () => router.go(-1);
+    const item: Ref<IItem> = ref({});
+
+    const retrieveItem = async itemId => {
+      try {
+        const res = await itemService().find(itemId);
+        item.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveItem(itemId) {
-    this.itemService()
-      .find(itemId)
-      .then(res => {
-        this.item = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.itemId) {
+      retrieveItem(route.params.itemId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      item,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

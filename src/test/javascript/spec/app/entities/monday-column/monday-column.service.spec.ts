@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import MondayColumnService from '@/entities/monday-column/monday-column.service';
-import { MondayColumn } from '@/shared/model/monday-column.model';
+import MondayColumnService from '../../../../../../main/webapp/app/entities/monday-column/monday-column.service';
+import { MondayColumn } from '../../../../../../main/webapp/app/shared/model/monday-column.model';
 
 const error = {
   response: {

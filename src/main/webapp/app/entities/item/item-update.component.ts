@@ -1,156 +1,119 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import { IItem, Item } from '@/shared/model/item.model';
 import ItemService from './item.service';
 
-const validations: any = {
-  item: {
-    people: {},
-    itemStatus: {},
-    itemFranceName: {},
-    itemId: {},
-    boardId: {},
-    kingdeeId: {},
-    itemName: {},
-    parentItem: {},
-    codeP: {},
-    codeag: {},
-    mondayId: {},
-    dcsMerchandiser: {},
-    stockedInProdex: {},
-    supplier: {},
-    technicalDocuments: {},
-    certification: {},
-    opportunitySheet: {},
-    packingType: {},
-    salePackageImage: {},
-    cartonLengthMilimeter: {},
-    cartonHeightMilimeter: {},
-    portOfDeparture: {},
-    barcode: {},
-    cartonWeightKg: {},
-    cartonWeightGr: {},
-    cartonWidthMilimeter: {},
-    productionLeadtimeCommitmentsFromSuppliers: {},
-    negotiatedPrice: {},
-    productDescriptionAndFonctionalities: {},
-    drawing: {},
-    userManual: {},
-    supplierMarketingService: {},
-    palletSize: {},
-    typeOfMarketing: {},
-    productPic: {},
-    updateDate: {},
-    subItems: {},
-    mirror: {},
-    label: {},
-    moqsPcsCommitment: {},
-    moqCommitment: {},
-    updatedMoqAfterNegotiation: {},
-    uom: {},
-    bom: {},
-    priceManagementStatus: {},
-    comment: {},
-    juneY: {},
-    commentsJuneY: {},
-    decemberY: {},
-    commentsDecemberY: {},
-    productTaxonomy: {},
-    validPeriod: {},
-    withTax: {},
-    unitPrice: {},
-    currency: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ItemUpdate',
+  setup() {
+    const itemService = inject('itemService', () => new ItemService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-})
-export default class ItemUpdate extends Vue {
-  @Inject('itemService') private itemService: () => ItemService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const item: Ref<IItem> = ref(new Item());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  public item: IItem = new Item();
-  public isSaving = false;
-  public currentLanguage = '';
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.itemId) {
-        vm.retrieveItem(to.params.itemId);
+    const previousState = () => router.go(-1);
+
+    const retrieveItem = async itemId => {
+      try {
+        const res = await itemService().find(itemId);
+        item.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.item.id) {
-      this.itemService()
-        .update(this.item)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.item.updated', { param: param.id });
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.itemService()
-        .create(this.item)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.item.created', { param: param.id });
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.itemId) {
+      retrieveItem(route.params.itemId);
     }
-  }
 
-  public retrieveItem(itemId): void {
-    this.itemService()
-      .find(itemId)
-      .then(res => {
-        this.item = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const { t: t$ } = useI18n();
+    const validations = useValidation();
+    const validationRules = {
+      itemStatus: {},
+      itemFranceName: {},
+      kingdeeId: {},
+      itemName: {},
+      codeag: {},
+      technicalDocuments: {},
+      certification: {},
+      opportunitySheet: {},
+      packingType: {},
+      salePackageImage: {},
+      cartonLengthMilimeter: {},
+      cartonHeightMilimeter: {},
+      barcode: {},
+      cartonWeightKg: {},
+      cartonWeightGr: {},
+      cartonWidthMilimeter: {},
+      productDescriptionAndFonctionalities: {},
+      drawing: {},
+      userManual: {},
+      palletSize: {},
+      typeOfMarketing: {},
+      productPic: {},
+      label: {},
+      comment: {},
+      productTaxonomy: {},
+      netWeight: {},
+      grossWeight: {},
+      unitOfWeight: {},
+      cartonVolumeMilimeter: {},
+    };
+    const v$ = useVuelidate(validationRules, item as any);
+    v$.value.$validate();
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {}
-}
+    return {
+      itemService,
+      alertService,
+      item,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+      t$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.item.id) {
+        this.itemService()
+          .update(this.item)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo(this.t$('jhipsterSampleApplicationApp.item.updated', { param: param.id }));
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.itemService()
+          .create(this.item)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess(this.t$('jhipsterSampleApplicationApp.item.created', { param: param.id }).toString());
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

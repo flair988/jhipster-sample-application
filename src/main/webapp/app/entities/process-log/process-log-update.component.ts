@@ -1,108 +1,97 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import { IProcessLog, ProcessLog } from '@/shared/model/process-log.model';
 import ProcessLogService from './process-log.service';
 
-const validations: any = {
-  processLog: {
-    type: {},
-    request: {},
-    response: {},
-    status: {},
-    reason: {},
-    processStartTime: {},
-    processEndTime: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ProcessLogUpdate',
+  setup() {
+    const processLogService = inject('processLogService', () => new ProcessLogService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-})
-export default class ProcessLogUpdate extends Vue {
-  @Inject('processLogService') private processLogService: () => ProcessLogService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const processLog: Ref<IProcessLog> = ref(new ProcessLog());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  public processLog: IProcessLog = new ProcessLog();
-  public isSaving = false;
-  public currentLanguage = '';
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.processLogId) {
-        vm.retrieveProcessLog(to.params.processLogId);
+    const previousState = () => router.go(-1);
+
+    const retrieveProcessLog = async processLogId => {
+      try {
+        const res = await processLogService().find(processLogId);
+        processLog.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.processLog.id) {
-      this.processLogService()
-        .update(this.processLog)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.processLog.updated', { param: param.id });
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.processLogService()
-        .create(this.processLog)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.processLog.created', { param: param.id });
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.processLogId) {
+      retrieveProcessLog(route.params.processLogId);
     }
-  }
 
-  public retrieveProcessLog(processLogId): void {
-    this.processLogService()
-      .find(processLogId)
-      .then(res => {
-        this.processLog = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const { t: t$ } = useI18n();
+    const validations = useValidation();
+    const validationRules = {
+      type: {},
+      request: {},
+      response: {},
+      status: {},
+      reason: {},
+      processStartTime: {},
+      processEndTime: {},
+    };
+    const v$ = useVuelidate(validationRules, processLog as any);
+    v$.value.$validate();
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {}
-}
+    return {
+      processLogService,
+      alertService,
+      processLog,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+      t$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.processLog.id) {
+        this.processLogService()
+          .update(this.processLog)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo(this.t$('jhipsterSampleApplicationApp.processLog.updated', { param: param.id }));
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.processLogService()
+          .create(this.processLog)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess(this.t$('jhipsterSampleApplicationApp.processLog.created', { param: param.id }).toString());
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

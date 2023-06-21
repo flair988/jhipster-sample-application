@@ -1,25 +1,13 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 
-import * as config from '@/shared/config/config';
-import UomComponent from '@/entities/uom/uom.vue';
-import UomClass from '@/entities/uom/uom.component';
-import UomService from '@/entities/uom/uom.service';
-import AlertService from '@/shared/alert/alert.service';
+import Uom from '../../../../../../main/webapp/app/entities/uom/uom.vue';
+import UomService from '../../../../../../main/webapp/app/entities/uom/uom.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(ToastPlugin);
-
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-badge', {});
-localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
+type UomComponentType = InstanceType<typeof Uom>;
 
 const bModalStub = {
   render: () => {},
@@ -30,54 +18,84 @@ const bModalStub = {
 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
   describe('Uom Management Component', () => {
-    let wrapper: Wrapper<UomClass>;
-    let comp: UomClass;
     let uomServiceStub: SinonStubbedInstance<UomService>;
+    let mountOptions: MountingOptions<UomComponentType>['global'];
 
     beforeEach(() => {
       uomServiceStub = sinon.createStubInstance<UomService>(UomService);
       uomServiceStub.retrieve.resolves({ headers: {} });
 
-      wrapper = shallowMount<UomClass>(UomComponent, {
-        store,
-        i18n,
-        localVue,
-        stubs: { bModal: bModalStub as any },
-        provide: {
-          uomService: () => uomServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          uomService: () => uomServiceStub,
+        },
+      };
     });
 
-    it('Should call load all on init', async () => {
-      // GIVEN
-      uomServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        uomServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
-      // WHEN
-      comp.retrieveAllUoms();
-      await comp.$nextTick();
+        // WHEN
+        const wrapper = shallowMount(Uom, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
 
-      // THEN
-      expect(uomServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.uoms[0]).toEqual(expect.objectContaining({ id: 123 }));
+        // THEN
+        expect(uomServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.uoms[0]).toEqual(expect.objectContaining({ id: 123 }));
+      });
     });
-    it('Should call delete service on confirmDelete', async () => {
-      // GIVEN
-      uomServiceStub.delete.resolves({});
+    describe('Handles', () => {
+      let comp: UomComponentType;
 
-      // WHEN
-      comp.prepareRemove({ id: 123 });
-      expect(uomServiceStub.retrieve.callCount).toEqual(1);
+      beforeEach(async () => {
+        const wrapper = shallowMount(Uom, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        uomServiceStub.retrieve.reset();
+        uomServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
 
-      comp.removeUom();
-      await comp.$nextTick();
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        uomServiceStub.delete.resolves({});
 
-      // THEN
-      expect(uomServiceStub.delete.called).toBeTruthy();
-      expect(uomServiceStub.retrieve.callCount).toEqual(2);
+        // WHEN
+        comp.prepareRemove({ id: 123 });
+
+        comp.removeUom();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(uomServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(uomServiceStub.retrieve.callCount).toEqual(1);
+      });
     });
   });
 });

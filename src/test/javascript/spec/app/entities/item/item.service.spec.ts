@@ -1,11 +1,9 @@
 /* tslint:disable max-line-length */
 import axios from 'axios';
 import sinon from 'sinon';
-import dayjs from 'dayjs';
 
-import { DATE_FORMAT } from '@/shared/date/filters';
-import ItemService from '@/entities/item/item.service';
-import { Item } from '@/shared/model/item.model';
+import ItemService from '../../../../../../main/webapp/app/entities/item/item.service';
+import { Item } from '../../../../../../main/webapp/app/shared/model/item.model';
 
 const error = {
   response: {
@@ -28,11 +26,9 @@ describe('Service Tests', () => {
   describe('Item Service', () => {
     let service: ItemService;
     let elemDefault;
-    let currentDate: Date;
 
     beforeEach(() => {
       service = new ItemService();
-      currentDate = new Date();
       elemDefault = new Item(
         123,
         'AAAAAAA',
@@ -63,44 +59,13 @@ describe('Service Tests', () => {
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        currentDate,
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
         'AAAAAAA'
       );
     });
 
     describe('Service methods', () => {
       it('should find an element', async () => {
-        const returnedFromService = Object.assign(
-          {
-            updateDate: dayjs(currentDate).format(DATE_FORMAT),
-          },
-          elemDefault
-        );
+        const returnedFromService = Object.assign({}, elemDefault);
         axiosStub.get.resolves({ data: returnedFromService });
 
         return service.find(123).then(res => {
@@ -122,16 +87,10 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 123,
-            updateDate: dayjs(currentDate).format(DATE_FORMAT),
           },
           elemDefault
         );
-        const expected = Object.assign(
-          {
-            updateDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
 
         axiosStub.post.resolves({ data: returnedFromService });
         return service.create({}).then(res => {
@@ -153,20 +112,11 @@ describe('Service Tests', () => {
       it('should update a Item', async () => {
         const returnedFromService = Object.assign(
           {
-            people: 'BBBBBB',
             itemStatus: 'BBBBBB',
             itemFranceName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             itemName: 'BBBBBB',
-            parentItem: 'BBBBBB',
-            codeP: 'BBBBBB',
             codeag: 'BBBBBB',
-            mondayId: 'BBBBBB',
-            dcsMerchandiser: 'BBBBBB',
-            stockedInProdex: 'BBBBBB',
-            supplier: 'BBBBBB',
             technicalDocuments: 'BBBBBB',
             certification: 'BBBBBB',
             opportunitySheet: 'BBBBBB',
@@ -174,50 +124,28 @@ describe('Service Tests', () => {
             salePackageImage: 'BBBBBB',
             cartonLengthMilimeter: 'BBBBBB',
             cartonHeightMilimeter: 'BBBBBB',
-            portOfDeparture: 'BBBBBB',
             barcode: 'BBBBBB',
             cartonWeightKg: 'BBBBBB',
             cartonWeightGr: 'BBBBBB',
             cartonWidthMilimeter: 'BBBBBB',
-            productionLeadtimeCommitmentsFromSuppliers: 'BBBBBB',
-            negotiatedPrice: 'BBBBBB',
             productDescriptionAndFonctionalities: 'BBBBBB',
             drawing: 'BBBBBB',
             userManual: 'BBBBBB',
-            supplierMarketingService: 'BBBBBB',
             palletSize: 'BBBBBB',
             typeOfMarketing: 'BBBBBB',
             productPic: 'BBBBBB',
-            updateDate: dayjs(currentDate).format(DATE_FORMAT),
-            subItems: 'BBBBBB',
-            mirror: 'BBBBBB',
             label: 'BBBBBB',
-            moqsPcsCommitment: 'BBBBBB',
-            moqCommitment: 'BBBBBB',
-            updatedMoqAfterNegotiation: 'BBBBBB',
-            uom: 'BBBBBB',
-            bom: 'BBBBBB',
-            priceManagementStatus: 'BBBBBB',
             comment: 'BBBBBB',
-            juneY: 'BBBBBB',
-            commentsJuneY: 'BBBBBB',
-            decemberY: 'BBBBBB',
-            commentsDecemberY: 'BBBBBB',
             productTaxonomy: 'BBBBBB',
-            validPeriod: 'BBBBBB',
-            withTax: 'BBBBBB',
-            unitPrice: 'BBBBBB',
-            currency: 'BBBBBB',
+            netWeight: 'BBBBBB',
+            grossWeight: 'BBBBBB',
+            unitOfWeight: 'BBBBBB',
+            cartonVolumeMilimeter: 'BBBBBB',
           },
           elemDefault
         );
 
-        const expected = Object.assign(
-          {
-            updateDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
         axiosStub.put.resolves({ data: returnedFromService });
 
         return service.update(expected).then(res => {
@@ -239,45 +167,22 @@ describe('Service Tests', () => {
       it('should partial update a Item', async () => {
         const patchObject = Object.assign(
           {
-            people: 'BBBBBB',
-            boardId: 'BBBBBB',
-            kingdeeId: 'BBBBBB',
-            parentItem: 'BBBBBB',
-            codeP: 'BBBBBB',
             codeag: 'BBBBBB',
-            mondayId: 'BBBBBB',
+            technicalDocuments: 'BBBBBB',
+            certification: 'BBBBBB',
             packingType: 'BBBBBB',
-            cartonLengthMilimeter: 'BBBBBB',
+            salePackageImage: 'BBBBBB',
             cartonHeightMilimeter: 'BBBBBB',
-            cartonWeightKg: 'BBBBBB',
             cartonWidthMilimeter: 'BBBBBB',
-            negotiatedPrice: 'BBBBBB',
-            supplierMarketingService: 'BBBBBB',
-            typeOfMarketing: 'BBBBBB',
-            updateDate: dayjs(currentDate).format(DATE_FORMAT),
-            subItems: 'BBBBBB',
-            mirror: 'BBBBBB',
-            moqsPcsCommitment: 'BBBBBB',
-            moqCommitment: 'BBBBBB',
-            uom: 'BBBBBB',
-            bom: 'BBBBBB',
-            priceManagementStatus: 'BBBBBB',
-            decemberY: 'BBBBBB',
-            productTaxonomy: 'BBBBBB',
-            validPeriod: 'BBBBBB',
-            unitPrice: 'BBBBBB',
-            currency: 'BBBBBB',
+            drawing: 'BBBBBB',
+            productPic: 'BBBBBB',
+            cartonVolumeMilimeter: 'BBBBBB',
           },
           new Item()
         );
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
-        const expected = Object.assign(
-          {
-            updateDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
         axiosStub.patch.resolves({ data: returnedFromService });
 
         return service.partialUpdate(patchObject).then(res => {
@@ -299,20 +204,11 @@ describe('Service Tests', () => {
       it('should return a list of Item', async () => {
         const returnedFromService = Object.assign(
           {
-            people: 'BBBBBB',
             itemStatus: 'BBBBBB',
             itemFranceName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             itemName: 'BBBBBB',
-            parentItem: 'BBBBBB',
-            codeP: 'BBBBBB',
             codeag: 'BBBBBB',
-            mondayId: 'BBBBBB',
-            dcsMerchandiser: 'BBBBBB',
-            stockedInProdex: 'BBBBBB',
-            supplier: 'BBBBBB',
             technicalDocuments: 'BBBBBB',
             certification: 'BBBBBB',
             opportunitySheet: 'BBBBBB',
@@ -320,49 +216,27 @@ describe('Service Tests', () => {
             salePackageImage: 'BBBBBB',
             cartonLengthMilimeter: 'BBBBBB',
             cartonHeightMilimeter: 'BBBBBB',
-            portOfDeparture: 'BBBBBB',
             barcode: 'BBBBBB',
             cartonWeightKg: 'BBBBBB',
             cartonWeightGr: 'BBBBBB',
             cartonWidthMilimeter: 'BBBBBB',
-            productionLeadtimeCommitmentsFromSuppliers: 'BBBBBB',
-            negotiatedPrice: 'BBBBBB',
             productDescriptionAndFonctionalities: 'BBBBBB',
             drawing: 'BBBBBB',
             userManual: 'BBBBBB',
-            supplierMarketingService: 'BBBBBB',
             palletSize: 'BBBBBB',
             typeOfMarketing: 'BBBBBB',
             productPic: 'BBBBBB',
-            updateDate: dayjs(currentDate).format(DATE_FORMAT),
-            subItems: 'BBBBBB',
-            mirror: 'BBBBBB',
             label: 'BBBBBB',
-            moqsPcsCommitment: 'BBBBBB',
-            moqCommitment: 'BBBBBB',
-            updatedMoqAfterNegotiation: 'BBBBBB',
-            uom: 'BBBBBB',
-            bom: 'BBBBBB',
-            priceManagementStatus: 'BBBBBB',
             comment: 'BBBBBB',
-            juneY: 'BBBBBB',
-            commentsJuneY: 'BBBBBB',
-            decemberY: 'BBBBBB',
-            commentsDecemberY: 'BBBBBB',
             productTaxonomy: 'BBBBBB',
-            validPeriod: 'BBBBBB',
-            withTax: 'BBBBBB',
-            unitPrice: 'BBBBBB',
-            currency: 'BBBBBB',
+            netWeight: 'BBBBBB',
+            grossWeight: 'BBBBBB',
+            unitOfWeight: 'BBBBBB',
+            cartonVolumeMilimeter: 'BBBBBB',
           },
           elemDefault
         );
-        const expected = Object.assign(
-          {
-            updateDate: currentDate,
-          },
-          returnedFromService
-        );
+        const expected = Object.assign({}, returnedFromService);
         axiosStub.get.resolves([returnedFromService]);
         return service.retrieve().then(res => {
           expect(res).toContainEqual(expected);

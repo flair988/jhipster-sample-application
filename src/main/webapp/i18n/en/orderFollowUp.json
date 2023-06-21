@@ -8,19 +8,17 @@
         "createOrEditLabel": "Create or edit a Order Follow Up",
         "notFound": "No Order Follow Ups found"
       },
-      "created": "A new Order Follow Up is created with identifier {{ param }}",
-      "updated": "A Order Follow Up is updated with identifier {{ param }}",
-      "deleted": "A Order Follow Up is deleted with identifier {{ param }}",
+      "created": "A new Order Follow Up is created with identifier { param }",
+      "updated": "A Order Follow Up is updated with identifier { param }",
+      "deleted": "A Order Follow Up is deleted with identifier { param }",
       "delete": {
-        "question": "Are you sure you want to delete Order Follow Up {{ id }}?"
+        "question": "Are you sure you want to delete Order Follow Up { id }?"
       },
       "detail": {
         "title": "Order Follow Up"
       },
       "id": "Id",
-      "itemId": "Item Id",
       "poNumber": "Po Number",
-      "customer": "Customer",
       "supplier": "Supplier",
       "orderDate": "Order Date",
       "cateGory": "Cate Gory",
@@ -34,7 +32,6 @@
       "atd": "Atd",
       "eta": "Eta",
       "updatedEta": "Updated Eta",
-      "forwarder": "Forwarder",
       "documentStatus": "Document Status",
       "customInstruction": "Custom Instruction",
       "customInspection": "Custom Inspection",
@@ -45,16 +42,12 @@
       "dcMember": "Dc Member",
       "comment": "Comment",
       "itemName": "Item Name",
-      "boardId": "Board Id",
       "kingdeeId": "Kingdee Id",
       "parentKingdeeId": "Parent Kingdee Id",
-      "parentMondayId": "Parent Monday Id",
       "qty": "Qty",
       "itemCode": "Item Code",
-      "amount": "Amount",
-      "discount": "Discount",
-      "unit": "Unit",
-      "contractEndOfProdDate": "Contract End Of Prod Date"
+      "contractEndOfProdDate": "Contract End Of Prod Date",
+      "supplierId": "Supplier Id"
     }
   }
 }

@@ -1,7 +1,7 @@
 package com.mycompany.myapp.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -42,9 +42,6 @@ public class ProductTaxmonomy implements Serializable {
 
     @Column(name = "description")
     private String description;
-
-    @Column(name = "board_id")
-    private String boardId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -152,19 +149,6 @@ public class ProductTaxmonomy implements Serializable {
         this.description = description;
     }
 
-    public String getBoardId() {
-        return this.boardId;
-    }
-
-    public ProductTaxmonomy boardId(String boardId) {
-        this.setBoardId(boardId);
-        return this;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -196,7 +180,6 @@ public class ProductTaxmonomy implements Serializable {
             ", parentGroupName='" + getParentGroupName() + "'" +
             ", subGroupName='" + getSubGroupName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", boardId='" + getBoardId() + "'" +
             "}";
     }
 }

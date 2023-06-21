@@ -5,126 +5,122 @@
         <h2
           id="jhipsterSampleApplicationApp.forwarder.home.createOrEditLabel"
           data-cy="ForwarderCreateUpdateHeading"
-          v-text="$t('jhipsterSampleApplicationApp.forwarder.home.createOrEditLabel')"
-        >
-          Create or edit a Forwarder
-        </h2>
+          v-text="t$('jhipsterSampleApplicationApp.forwarder.home.createOrEditLabel')"
+        ></h2>
         <div>
           <div class="form-group" v-if="forwarder.id">
-            <label for="id" v-text="$t('global.field.id')">ID</label>
+            <label for="id" v-text="t$('global.field.id')"></label>
             <input type="text" class="form-control" id="id" name="id" v-model="forwarder.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.forwarder.itemName')" for="forwarder-itemName"
-              >Item Name</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.forwarder.itemName')"
+              for="forwarder-itemName"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="itemName"
               id="forwarder-itemName"
               data-cy="itemName"
-              :class="{ valid: !$v.forwarder.itemName.$invalid, invalid: $v.forwarder.itemName.$invalid }"
-              v-model="$v.forwarder.itemName.$model"
+              :class="{ valid: !v$.itemName.$invalid, invalid: v$.itemName.$invalid }"
+              v-model="v$.itemName.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.forwarder.itemId')" for="forwarder-itemId"
-              >Item Id</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.forwarder.itemId')" for="forwarder-itemId"></label>
             <input
               type="text"
               class="form-control"
               name="itemId"
               id="forwarder-itemId"
               data-cy="itemId"
-              :class="{ valid: !$v.forwarder.itemId.$invalid, invalid: $v.forwarder.itemId.$invalid }"
-              v-model="$v.forwarder.itemId.$model"
+              :class="{ valid: !v$.itemId.$invalid, invalid: v$.itemId.$invalid }"
+              v-model="v$.itemId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.forwarder.boardId')" for="forwarder-boardId"
-              >Board Id</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.forwarder.boardId')" for="forwarder-boardId"></label>
             <input
               type="text"
               class="form-control"
               name="boardId"
               id="forwarder-boardId"
               data-cy="boardId"
-              :class="{ valid: !$v.forwarder.boardId.$invalid, invalid: $v.forwarder.boardId.$invalid }"
-              v-model="$v.forwarder.boardId.$model"
+              :class="{ valid: !v$.boardId.$invalid, invalid: v$.boardId.$invalid }"
+              v-model="v$.boardId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.forwarder.kingdeeId')" for="forwarder-kingdeeId"
-              >Kingdee Id</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.forwarder.kingdeeId')"
+              for="forwarder-kingdeeId"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="kingdeeId"
               id="forwarder-kingdeeId"
               data-cy="kingdeeId"
-              :class="{ valid: !$v.forwarder.kingdeeId.$invalid, invalid: $v.forwarder.kingdeeId.$invalid }"
-              v-model="$v.forwarder.kingdeeId.$model"
+              :class="{ valid: !v$.kingdeeId.$invalid, invalid: v$.kingdeeId.$invalid }"
+              v-model="v$.kingdeeId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.forwarder.contact')" for="forwarder-contact"
-              >Contact</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.forwarder.contact')" for="forwarder-contact"></label>
             <input
               type="text"
               class="form-control"
               name="contact"
               id="forwarder-contact"
               data-cy="contact"
-              :class="{ valid: !$v.forwarder.contact.$invalid, invalid: $v.forwarder.contact.$invalid }"
-              v-model="$v.forwarder.contact.$model"
+              :class="{ valid: !v$.contact.$invalid, invalid: v$.contact.$invalid }"
+              v-model="v$.contact.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.forwarder.email')" for="forwarder-email"
-              >Email</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.forwarder.email')" for="forwarder-email"></label>
             <input
               type="text"
               class="form-control"
               name="email"
               id="forwarder-email"
               data-cy="email"
-              :class="{ valid: !$v.forwarder.email.$invalid, invalid: $v.forwarder.email.$invalid }"
-              v-model="$v.forwarder.email.$model"
+              :class="{ valid: !v$.email.$invalid, invalid: v$.email.$invalid }"
+              v-model="v$.email.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.forwarder.telephone')" for="forwarder-telephone"
-              >Telephone</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.forwarder.telephone')"
+              for="forwarder-telephone"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="telephone"
               id="forwarder-telephone"
               data-cy="telephone"
-              :class="{ valid: !$v.forwarder.telephone.$invalid, invalid: $v.forwarder.telephone.$invalid }"
-              v-model="$v.forwarder.telephone.$model"
+              :class="{ valid: !v$.telephone.$invalid, invalid: v$.telephone.$invalid }"
+              v-model="v$.telephone.$model"
             />
           </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
-            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
+            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')"></span>
           </button>
           <button
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.forwarder.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
-            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
+            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.save')"></span>
           </button>
         </div>
       </form>

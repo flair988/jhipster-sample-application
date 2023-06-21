@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import PIService from '@/entities/pi/pi.service';
-import { PI } from '@/shared/model/pi.model';
+import PIService from '../../../../../../main/webapp/app/entities/pi/pi.service';
+import { PI } from '../../../../../../main/webapp/app/shared/model/pi.model';
 
 const error = {
   response: {
@@ -31,20 +31,6 @@ describe('Service Tests', () => {
       service = new PIService();
       elemDefault = new PI(
         123,
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
@@ -116,37 +102,23 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemCode: 'BBBBBB',
             poNumber: 'BBBBBB',
-            isNewItem: 'BBBBBB',
             category: 'BBBBBB',
             client: 'BBBBBB',
-            supplier: 'BBBBBB',
-            supplierCode: 'BBBBBB',
             orderDate: 'BBBBBB',
-            port: 'BBBBBB',
             requestedEndOfProdDate: 'BBBBBB',
-            itemQuantity: 'BBBBBB',
             countryOfOrigin: 'BBBBBB',
             countryOfFinalDestination: 'BBBBBB',
-            productionLeadTimeCommitment: 'BBBBBB',
             consignee: 'BBBBBB',
             carriageBy: 'BBBBBB',
             termsOfDelivery: 'BBBBBB',
             termsOfPayment: 'BBBBBB',
-            itemUnit: 'BBBBBB',
-            rate: 'BBBBBB',
-            amount: 'BBBBBB',
-            totalAmount: 'BBBBBB',
-            discountRate: 'BBBBBB',
             currency: 'BBBBBB',
-            piStatus: 'BBBBBB',
             remarks: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             portOfDischarge: 'BBBBBB',
             portOfLoading: 'BBBBBB',
+            docStatus: 'BBBBBB',
           },
           elemDefault
         );
@@ -173,19 +145,15 @@ describe('Service Tests', () => {
       it('should partial update a PI', async () => {
         const patchObject = Object.assign(
           {
-            itemName: 'BBBBBB',
-            isNewItem: 'BBBBBB',
+            poNumber: 'BBBBBB',
             orderDate: 'BBBBBB',
             countryOfOrigin: 'BBBBBB',
             consignee: 'BBBBBB',
-            termsOfPayment: 'BBBBBB',
-            itemUnit: 'BBBBBB',
-            totalAmount: 'BBBBBB',
             currency: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
+            kingdeeId: 'BBBBBB',
             portOfDischarge: 'BBBBBB',
             portOfLoading: 'BBBBBB',
+            docStatus: 'BBBBBB',
           },
           new PI()
         );
@@ -214,37 +182,23 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemCode: 'BBBBBB',
             poNumber: 'BBBBBB',
-            isNewItem: 'BBBBBB',
             category: 'BBBBBB',
             client: 'BBBBBB',
-            supplier: 'BBBBBB',
-            supplierCode: 'BBBBBB',
             orderDate: 'BBBBBB',
-            port: 'BBBBBB',
             requestedEndOfProdDate: 'BBBBBB',
-            itemQuantity: 'BBBBBB',
             countryOfOrigin: 'BBBBBB',
             countryOfFinalDestination: 'BBBBBB',
-            productionLeadTimeCommitment: 'BBBBBB',
             consignee: 'BBBBBB',
             carriageBy: 'BBBBBB',
             termsOfDelivery: 'BBBBBB',
             termsOfPayment: 'BBBBBB',
-            itemUnit: 'BBBBBB',
-            rate: 'BBBBBB',
-            amount: 'BBBBBB',
-            totalAmount: 'BBBBBB',
-            discountRate: 'BBBBBB',
             currency: 'BBBBBB',
-            piStatus: 'BBBBBB',
             remarks: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             portOfDischarge: 'BBBBBB',
             portOfLoading: 'BBBBBB',
+            docStatus: 'BBBBBB',
           },
           elemDefault
         );

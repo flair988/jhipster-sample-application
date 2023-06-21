@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Client;
 import com.mycompany.myapp.repository.ClientRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -331,7 +331,7 @@ class ClientResourceIT {
             .itemId(UPDATED_ITEM_ID)
             .itemName(UPDATED_ITEM_NAME)
             .boardId(UPDATED_BOARD_ID)
-            .customerCode(UPDATED_CUSTOMER_CODE)
+            .subItems(UPDATED_SUB_ITEMS)
             .comment(UPDATED_COMMENT);
 
         restClientMockMvc
@@ -349,10 +349,10 @@ class ClientResourceIT {
         assertThat(testClient.getItemId()).isEqualTo(UPDATED_ITEM_ID);
         assertThat(testClient.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
         assertThat(testClient.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
-        assertThat(testClient.getSubItems()).isEqualTo(DEFAULT_SUB_ITEMS);
+        assertThat(testClient.getSubItems()).isEqualTo(UPDATED_SUB_ITEMS);
         assertThat(testClient.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
         assertThat(testClient.getCustomerName()).isEqualTo(DEFAULT_CUSTOMER_NAME);
-        assertThat(testClient.getCustomerCode()).isEqualTo(UPDATED_CUSTOMER_CODE);
+        assertThat(testClient.getCustomerCode()).isEqualTo(DEFAULT_CUSTOMER_CODE);
         assertThat(testClient.getCustomerFrenceName()).isEqualTo(DEFAULT_CUSTOMER_FRENCE_NAME);
         assertThat(testClient.getComment()).isEqualTo(UPDATED_COMMENT);
     }

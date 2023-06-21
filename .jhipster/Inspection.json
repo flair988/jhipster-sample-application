@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061501",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "inspection",
   "fields": [
     {
@@ -11,14 +9,6 @@
     },
     {
       "fieldName": "itemName",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "itemId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "boardId",
       "fieldType": "String"
     },
     {
@@ -38,15 +28,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "endOfProductionDate",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "cateGory",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "technicalFile",
       "fieldType": "String"
     },
     {
@@ -58,23 +40,27 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "goodsReadyForPickUpDate",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "inspectionType",
       "fieldType": "String"
     },
     {
       "fieldName": "inspectionBookingStatus",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "inspectionEndDate",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "supplierId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "reportNumber",
+      "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Inspection",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

@@ -66,7 +66,7 @@
     "websocket": false,
     "withAdminUi": true
   },
-  "git-provider": "GitHub",
   "git-company": "flair988",
+  "git-provider": "GitHub",
   "repository-name": "jhipster-sample-application"
 }

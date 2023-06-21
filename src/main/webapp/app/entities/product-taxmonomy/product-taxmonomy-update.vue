@@ -5,164 +5,138 @@
         <h2
           id="jhipsterSampleApplicationApp.productTaxmonomy.home.createOrEditLabel"
           data-cy="ProductTaxmonomyCreateUpdateHeading"
-          v-text="$t('jhipsterSampleApplicationApp.productTaxmonomy.home.createOrEditLabel')"
-        >
-          Create or edit a ProductTaxmonomy
-        </h2>
+          v-text="t$('jhipsterSampleApplicationApp.productTaxmonomy.home.createOrEditLabel')"
+        ></h2>
         <div>
           <div class="form-group" v-if="productTaxmonomy.id">
-            <label for="id" v-text="$t('global.field.id')">ID</label>
+            <label for="id" v-text="t$('global.field.id')"></label>
             <input type="text" class="form-control" id="id" name="id" v-model="productTaxmonomy.id" readonly />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.productTaxmonomy.itemId')"
+              v-text="t$('jhipsterSampleApplicationApp.productTaxmonomy.itemId')"
               for="product-taxmonomy-itemId"
-              >Item Id</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="itemId"
               id="product-taxmonomy-itemId"
               data-cy="itemId"
-              :class="{ valid: !$v.productTaxmonomy.itemId.$invalid, invalid: $v.productTaxmonomy.itemId.$invalid }"
-              v-model="$v.productTaxmonomy.itemId.$model"
+              :class="{ valid: !v$.itemId.$invalid, invalid: v$.itemId.$invalid }"
+              v-model="v$.itemId.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.productTaxmonomy.kingdeeId')"
+              v-text="t$('jhipsterSampleApplicationApp.productTaxmonomy.kingdeeId')"
               for="product-taxmonomy-kingdeeId"
-              >Kingdee Id</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="kingdeeId"
               id="product-taxmonomy-kingdeeId"
               data-cy="kingdeeId"
-              :class="{ valid: !$v.productTaxmonomy.kingdeeId.$invalid, invalid: $v.productTaxmonomy.kingdeeId.$invalid }"
-              v-model="$v.productTaxmonomy.kingdeeId.$model"
+              :class="{ valid: !v$.kingdeeId.$invalid, invalid: v$.kingdeeId.$invalid }"
+              v-model="v$.kingdeeId.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.productTaxmonomy.itemName')"
+              v-text="t$('jhipsterSampleApplicationApp.productTaxmonomy.itemName')"
               for="product-taxmonomy-itemName"
-              >Item Name</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="itemName"
               id="product-taxmonomy-itemName"
               data-cy="itemName"
-              :class="{ valid: !$v.productTaxmonomy.itemName.$invalid, invalid: $v.productTaxmonomy.itemName.$invalid }"
-              v-model="$v.productTaxmonomy.itemName.$model"
+              :class="{ valid: !v$.itemName.$invalid, invalid: v$.itemName.$invalid }"
+              v-model="v$.itemName.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.productTaxmonomy.groupName')"
+              v-text="t$('jhipsterSampleApplicationApp.productTaxmonomy.groupName')"
               for="product-taxmonomy-groupName"
-              >Group Name</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="groupName"
               id="product-taxmonomy-groupName"
               data-cy="groupName"
-              :class="{ valid: !$v.productTaxmonomy.groupName.$invalid, invalid: $v.productTaxmonomy.groupName.$invalid }"
-              v-model="$v.productTaxmonomy.groupName.$model"
+              :class="{ valid: !v$.groupName.$invalid, invalid: v$.groupName.$invalid }"
+              v-model="v$.groupName.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.productTaxmonomy.parentGroupName')"
+              v-text="t$('jhipsterSampleApplicationApp.productTaxmonomy.parentGroupName')"
               for="product-taxmonomy-parentGroupName"
-              >Parent Group Name</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="parentGroupName"
               id="product-taxmonomy-parentGroupName"
               data-cy="parentGroupName"
-              :class="{ valid: !$v.productTaxmonomy.parentGroupName.$invalid, invalid: $v.productTaxmonomy.parentGroupName.$invalid }"
-              v-model="$v.productTaxmonomy.parentGroupName.$model"
+              :class="{ valid: !v$.parentGroupName.$invalid, invalid: v$.parentGroupName.$invalid }"
+              v-model="v$.parentGroupName.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.productTaxmonomy.subGroupName')"
+              v-text="t$('jhipsterSampleApplicationApp.productTaxmonomy.subGroupName')"
               for="product-taxmonomy-subGroupName"
-              >Sub Group Name</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="subGroupName"
               id="product-taxmonomy-subGroupName"
               data-cy="subGroupName"
-              :class="{ valid: !$v.productTaxmonomy.subGroupName.$invalid, invalid: $v.productTaxmonomy.subGroupName.$invalid }"
-              v-model="$v.productTaxmonomy.subGroupName.$model"
+              :class="{ valid: !v$.subGroupName.$invalid, invalid: v$.subGroupName.$invalid }"
+              v-model="v$.subGroupName.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.productTaxmonomy.description')"
+              v-text="t$('jhipsterSampleApplicationApp.productTaxmonomy.description')"
               for="product-taxmonomy-description"
-              >Description</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="description"
               id="product-taxmonomy-description"
               data-cy="description"
-              :class="{ valid: !$v.productTaxmonomy.description.$invalid, invalid: $v.productTaxmonomy.description.$invalid }"
-              v-model="$v.productTaxmonomy.description.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label
-              class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.productTaxmonomy.boardId')"
-              for="product-taxmonomy-boardId"
-              >Board Id</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              name="boardId"
-              id="product-taxmonomy-boardId"
-              data-cy="boardId"
-              :class="{ valid: !$v.productTaxmonomy.boardId.$invalid, invalid: $v.productTaxmonomy.boardId.$invalid }"
-              v-model="$v.productTaxmonomy.boardId.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
           </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
-            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
+            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')"></span>
           </button>
           <button
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.productTaxmonomy.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
-            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
+            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.save')"></span>
           </button>
         </div>
       </form>

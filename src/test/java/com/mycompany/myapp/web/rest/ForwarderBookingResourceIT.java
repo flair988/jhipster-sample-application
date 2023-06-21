@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.ForwarderBooking;
 import com.mycompany.myapp.repository.ForwarderBookingRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +31,6 @@ class ForwarderBookingResourceIT {
 
     private static final String DEFAULT_ITEM_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ITEM_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_ITEM_ID = "AAAAAAAAAA";
-    private static final String UPDATED_ITEM_ID = "BBBBBBBBBB";
-
-    private static final String DEFAULT_BOARD_ID = "AAAAAAAAAA";
-    private static final String UPDATED_BOARD_ID = "BBBBBBBBBB";
 
     private static final String DEFAULT_KINGDEE_ID = "AAAAAAAAAA";
     private static final String UPDATED_KINGDEE_ID = "BBBBBBBBBB";
@@ -130,8 +124,6 @@ class ForwarderBookingResourceIT {
     public static ForwarderBooking createEntity(EntityManager em) {
         ForwarderBooking forwarderBooking = new ForwarderBooking()
             .itemName(DEFAULT_ITEM_NAME)
-            .itemId(DEFAULT_ITEM_ID)
-            .boardId(DEFAULT_BOARD_ID)
             .kingdeeId(DEFAULT_KINGDEE_ID)
             .customer(DEFAULT_CUSTOMER)
             .orderDate(DEFAULT_ORDER_DATE)
@@ -166,8 +158,6 @@ class ForwarderBookingResourceIT {
     public static ForwarderBooking createUpdatedEntity(EntityManager em) {
         ForwarderBooking forwarderBooking = new ForwarderBooking()
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .customer(UPDATED_CUSTOMER)
             .orderDate(UPDATED_ORDER_DATE)
@@ -214,8 +204,6 @@ class ForwarderBookingResourceIT {
         assertThat(forwarderBookingList).hasSize(databaseSizeBeforeCreate + 1);
         ForwarderBooking testForwarderBooking = forwarderBookingList.get(forwarderBookingList.size() - 1);
         assertThat(testForwarderBooking.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
-        assertThat(testForwarderBooking.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
-        assertThat(testForwarderBooking.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
         assertThat(testForwarderBooking.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
         assertThat(testForwarderBooking.getCustomer()).isEqualTo(DEFAULT_CUSTOMER);
         assertThat(testForwarderBooking.getOrderDate()).isEqualTo(DEFAULT_ORDER_DATE);
@@ -273,8 +261,6 @@ class ForwarderBookingResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(forwarderBooking.getId().intValue())))
             .andExpect(jsonPath("$.[*].itemName").value(hasItem(DEFAULT_ITEM_NAME)))
-            .andExpect(jsonPath("$.[*].itemId").value(hasItem(DEFAULT_ITEM_ID)))
-            .andExpect(jsonPath("$.[*].boardId").value(hasItem(DEFAULT_BOARD_ID)))
             .andExpect(jsonPath("$.[*].kingdeeId").value(hasItem(DEFAULT_KINGDEE_ID)))
             .andExpect(jsonPath("$.[*].customer").value(hasItem(DEFAULT_CUSTOMER)))
             .andExpect(jsonPath("$.[*].orderDate").value(hasItem(DEFAULT_ORDER_DATE)))
@@ -312,8 +298,6 @@ class ForwarderBookingResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(forwarderBooking.getId().intValue()))
             .andExpect(jsonPath("$.itemName").value(DEFAULT_ITEM_NAME))
-            .andExpect(jsonPath("$.itemId").value(DEFAULT_ITEM_ID))
-            .andExpect(jsonPath("$.boardId").value(DEFAULT_BOARD_ID))
             .andExpect(jsonPath("$.kingdeeId").value(DEFAULT_KINGDEE_ID))
             .andExpect(jsonPath("$.customer").value(DEFAULT_CUSTOMER))
             .andExpect(jsonPath("$.orderDate").value(DEFAULT_ORDER_DATE))
@@ -359,8 +343,6 @@ class ForwarderBookingResourceIT {
         em.detach(updatedForwarderBooking);
         updatedForwarderBooking
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .customer(UPDATED_CUSTOMER)
             .orderDate(UPDATED_ORDER_DATE)
@@ -397,8 +379,6 @@ class ForwarderBookingResourceIT {
         assertThat(forwarderBookingList).hasSize(databaseSizeBeforeUpdate);
         ForwarderBooking testForwarderBooking = forwarderBookingList.get(forwarderBookingList.size() - 1);
         assertThat(testForwarderBooking.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testForwarderBooking.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testForwarderBooking.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testForwarderBooking.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testForwarderBooking.getCustomer()).isEqualTo(UPDATED_CUSTOMER);
         assertThat(testForwarderBooking.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
@@ -495,19 +475,16 @@ class ForwarderBookingResourceIT {
 
         partialUpdatedForwarderBooking
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
-            .kingdeeId(UPDATED_KINGDEE_ID)
-            .forwarder(UPDATED_FORWARDER)
             .totalQty(UPDATED_TOTAL_QTY)
-            .loadingPort(UPDATED_LOADING_PORT)
-            .dischargePort(UPDATED_DISCHARGE_PORT)
+            .containerSize(UPDATED_CONTAINER_SIZE)
             .containerNumber(UPDATED_CONTAINER_NUMBER)
             .supplier(UPDATED_SUPPLIER)
-            .eta(UPDATED_ETA)
+            .supplierEmail(UPDATED_SUPPLIER_EMAIL)
             .etd(UPDATED_ETD)
+            .transportMode(UPDATED_TRANSPORT_MODE)
             .numberOfCartons(UPDATED_NUMBER_OF_CARTONS)
-            .totalWeight(UPDATED_TOTAL_WEIGHT);
+            .numberOfRef(UPDATED_NUMBER_OF_REF)
+            .kingdeeUniqueId(UPDATED_KINGDEE_UNIQUE_ID);
 
         restForwarderBookingMockMvc
             .perform(
@@ -522,30 +499,28 @@ class ForwarderBookingResourceIT {
         assertThat(forwarderBookingList).hasSize(databaseSizeBeforeUpdate);
         ForwarderBooking testForwarderBooking = forwarderBookingList.get(forwarderBookingList.size() - 1);
         assertThat(testForwarderBooking.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testForwarderBooking.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testForwarderBooking.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
-        assertThat(testForwarderBooking.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
+        assertThat(testForwarderBooking.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
         assertThat(testForwarderBooking.getCustomer()).isEqualTo(DEFAULT_CUSTOMER);
         assertThat(testForwarderBooking.getOrderDate()).isEqualTo(DEFAULT_ORDER_DATE);
-        assertThat(testForwarderBooking.getForwarder()).isEqualTo(UPDATED_FORWARDER);
+        assertThat(testForwarderBooking.getForwarder()).isEqualTo(DEFAULT_FORWARDER);
         assertThat(testForwarderBooking.getTotalQty()).isEqualTo(UPDATED_TOTAL_QTY);
-        assertThat(testForwarderBooking.getLoadingPort()).isEqualTo(UPDATED_LOADING_PORT);
-        assertThat(testForwarderBooking.getDischargePort()).isEqualTo(UPDATED_DISCHARGE_PORT);
+        assertThat(testForwarderBooking.getLoadingPort()).isEqualTo(DEFAULT_LOADING_PORT);
+        assertThat(testForwarderBooking.getDischargePort()).isEqualTo(DEFAULT_DISCHARGE_PORT);
         assertThat(testForwarderBooking.getContainerType()).isEqualTo(DEFAULT_CONTAINER_TYPE);
-        assertThat(testForwarderBooking.getContainerSize()).isEqualTo(DEFAULT_CONTAINER_SIZE);
+        assertThat(testForwarderBooking.getContainerSize()).isEqualTo(UPDATED_CONTAINER_SIZE);
         assertThat(testForwarderBooking.getContainerNumber()).isEqualTo(UPDATED_CONTAINER_NUMBER);
         assertThat(testForwarderBooking.getSupplier()).isEqualTo(UPDATED_SUPPLIER);
-        assertThat(testForwarderBooking.getSupplierEmail()).isEqualTo(DEFAULT_SUPPLIER_EMAIL);
-        assertThat(testForwarderBooking.getEta()).isEqualTo(UPDATED_ETA);
+        assertThat(testForwarderBooking.getSupplierEmail()).isEqualTo(UPDATED_SUPPLIER_EMAIL);
+        assertThat(testForwarderBooking.getEta()).isEqualTo(DEFAULT_ETA);
         assertThat(testForwarderBooking.getEtd()).isEqualTo(UPDATED_ETD);
-        assertThat(testForwarderBooking.getTransportMode()).isEqualTo(DEFAULT_TRANSPORT_MODE);
+        assertThat(testForwarderBooking.getTransportMode()).isEqualTo(UPDATED_TRANSPORT_MODE);
         assertThat(testForwarderBooking.getNumberOfCartons()).isEqualTo(UPDATED_NUMBER_OF_CARTONS);
-        assertThat(testForwarderBooking.getNumberOfRef()).isEqualTo(DEFAULT_NUMBER_OF_REF);
+        assertThat(testForwarderBooking.getNumberOfRef()).isEqualTo(UPDATED_NUMBER_OF_REF);
         assertThat(testForwarderBooking.getTotalVolume()).isEqualTo(DEFAULT_TOTAL_VOLUME);
-        assertThat(testForwarderBooking.getTotalWeight()).isEqualTo(UPDATED_TOTAL_WEIGHT);
+        assertThat(testForwarderBooking.getTotalWeight()).isEqualTo(DEFAULT_TOTAL_WEIGHT);
         assertThat(testForwarderBooking.getRemark()).isEqualTo(DEFAULT_REMARK);
         assertThat(testForwarderBooking.getClient()).isEqualTo(DEFAULT_CLIENT);
-        assertThat(testForwarderBooking.getKingdeeUniqueId()).isEqualTo(DEFAULT_KINGDEE_UNIQUE_ID);
+        assertThat(testForwarderBooking.getKingdeeUniqueId()).isEqualTo(UPDATED_KINGDEE_UNIQUE_ID);
     }
 
     @Test
@@ -562,8 +537,6 @@ class ForwarderBookingResourceIT {
 
         partialUpdatedForwarderBooking
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .customer(UPDATED_CUSTOMER)
             .orderDate(UPDATED_ORDER_DATE)
@@ -600,8 +573,6 @@ class ForwarderBookingResourceIT {
         assertThat(forwarderBookingList).hasSize(databaseSizeBeforeUpdate);
         ForwarderBooking testForwarderBooking = forwarderBookingList.get(forwarderBookingList.size() - 1);
         assertThat(testForwarderBooking.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testForwarderBooking.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testForwarderBooking.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testForwarderBooking.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testForwarderBooking.getCustomer()).isEqualTo(UPDATED_CUSTOMER);
         assertThat(testForwarderBooking.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);

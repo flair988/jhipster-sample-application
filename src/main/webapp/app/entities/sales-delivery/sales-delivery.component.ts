@@ -1,80 +1,78 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
+import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import { ISalesDelivery } from '@/shared/model/sales-delivery.model';
-
 import SalesDeliveryService from './sales-delivery.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class SalesDelivery extends Vue {
-  @Inject('salesDeliveryService') private salesDeliveryService: () => SalesDeliveryService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'SalesDelivery',
+  setup() {
+    const { t: t$ } = useI18n();
+    const salesDeliveryService = inject('salesDeliveryService', () => new SalesDeliveryService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const salesDeliveries: Ref<ISalesDelivery[]> = ref([]);
 
-  public salesDeliveries: ISalesDelivery[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllSalesDeliverys();
-  }
+    const retrieveSalesDeliverys = async () => {
+      isFetching.value = true;
+      try {
+        const res = await salesDeliveryService().retrieve();
+        salesDeliveries.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllSalesDeliverys();
-  }
+    const handleSyncList = () => {
+      retrieveSalesDeliverys();
+    };
 
-  public retrieveAllSalesDeliverys(): void {
-    this.isFetching = true;
-    this.salesDeliveryService()
-      .retrieve()
-      .then(
-        res => {
-          this.salesDeliveries = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveSalesDeliverys();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: ISalesDelivery) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeSalesDelivery = async () => {
+      try {
+        await salesDeliveryService().delete(removeId.value);
+        const message = t$('jhipsterSampleApplicationApp.salesDelivery.deleted', { param: removeId.value }).toString();
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveSalesDeliverys();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: ISalesDelivery): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeSalesDelivery(): void {
-    this.salesDeliveryService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = this.$t('jhipsterSampleApplicationApp.salesDelivery.deleted', { param: this.removeId });
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllSalesDeliverys();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      salesDeliveries,
+      handleSyncList,
+      isFetching,
+      retrieveSalesDeliverys,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeSalesDelivery,
+      t$,
+    };
+  },
+});

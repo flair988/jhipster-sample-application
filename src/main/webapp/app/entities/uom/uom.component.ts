@@ -1,80 +1,78 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
+import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import { IUom } from '@/shared/model/uom.model';
-
 import UomService from './uom.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class Uom extends Vue {
-  @Inject('uomService') private uomService: () => UomService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'Uom',
+  setup() {
+    const { t: t$ } = useI18n();
+    const uomService = inject('uomService', () => new UomService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const uoms: Ref<IUom[]> = ref([]);
 
-  public uoms: IUom[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllUoms();
-  }
+    const retrieveUoms = async () => {
+      isFetching.value = true;
+      try {
+        const res = await uomService().retrieve();
+        uoms.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllUoms();
-  }
+    const handleSyncList = () => {
+      retrieveUoms();
+    };
 
-  public retrieveAllUoms(): void {
-    this.isFetching = true;
-    this.uomService()
-      .retrieve()
-      .then(
-        res => {
-          this.uoms = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveUoms();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IUom) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeUom = async () => {
+      try {
+        await uomService().delete(removeId.value);
+        const message = t$('jhipsterSampleApplicationApp.uom.deleted', { param: removeId.value }).toString();
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveUoms();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: IUom): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeUom(): void {
-    this.uomService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = this.$t('jhipsterSampleApplicationApp.uom.deleted', { param: this.removeId });
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllUoms();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      uoms,
+      handleSyncList,
+      isFetching,
+      retrieveUoms,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeUom,
+      t$,
+    };
+  },
+});

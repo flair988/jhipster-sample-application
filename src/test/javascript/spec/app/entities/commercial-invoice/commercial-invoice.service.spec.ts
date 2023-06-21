@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import CommercialInvoiceService from '@/entities/commercial-invoice/commercial-invoice.service';
-import { CommercialInvoice } from '@/shared/model/commercial-invoice.model';
+import CommercialInvoiceService from '../../../../../../main/webapp/app/entities/commercial-invoice/commercial-invoice.service';
+import { CommercialInvoice } from '../../../../../../main/webapp/app/shared/model/commercial-invoice.model';
 
 const error = {
   response: {
@@ -94,8 +94,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             date: 'BBBBBB',
             client: 'BBBBBB',
@@ -103,6 +101,8 @@ describe('Service Tests', () => {
             totalPrice: 'BBBBBB',
             currency: 'BBBBBB',
             remarks: 'BBBBBB',
+            clientId: 'BBBBBB',
+            docStatus: 'BBBBBB',
           },
           elemDefault
         );
@@ -129,12 +129,13 @@ describe('Service Tests', () => {
       it('should partial update a CommercialInvoice', async () => {
         const patchObject = Object.assign(
           {
+            itemName: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             date: 'BBBBBB',
             client: 'BBBBBB',
-            cateGory: 'BBBBBB',
             currency: 'BBBBBB',
             remarks: 'BBBBBB',
+            docStatus: 'BBBBBB',
           },
           new CommercialInvoice()
         );
@@ -163,8 +164,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             date: 'BBBBBB',
             client: 'BBBBBB',
@@ -172,6 +171,8 @@ describe('Service Tests', () => {
             totalPrice: 'BBBBBB',
             currency: 'BBBBBB',
             remarks: 'BBBBBB',
+            clientId: 'BBBBBB',
+            docStatus: 'BBBBBB',
           },
           elemDefault
         );

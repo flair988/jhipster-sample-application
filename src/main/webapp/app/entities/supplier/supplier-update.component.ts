@@ -1,134 +1,117 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import { ISupplier, Supplier } from '@/shared/model/supplier.model';
 import SupplierService from './supplier.service';
 
-const validations: any = {
-  supplier: {
-    client: {},
-    parentItem: {},
-    itemId: {},
-    boardId: {},
-    person: {},
-    category: {},
-    subCategory: {},
-    supplierStatus: {},
-    capStatus: {},
-    qualificationScore: {},
-    bopeScore: {},
-    internalSupplierId: {},
-    contact: {},
-    contactPhoneNumber: {},
-    contactEmailAddress: {},
-    country: {},
-    operationSite: {},
-    address: {},
-    website: {},
-    productTaxonomy: {},
-    relationStartingYear: {},
-    businessLicense: {},
-    rexOriginStatus: {},
-    createDate: {},
-    updateDate: {},
-    item: {},
-    mirror: {},
-    subItems: {},
-    owner: {},
-    status: {},
-    date: {},
-    formula: {},
-    kingdeeId: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'SupplierUpdate',
+  setup() {
+    const supplierService = inject('supplierService', () => new SupplierService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-})
-export default class SupplierUpdate extends Vue {
-  @Inject('supplierService') private supplierService: () => SupplierService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const supplier: Ref<ISupplier> = ref(new Supplier());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  public supplier: ISupplier = new Supplier();
-  public isSaving = false;
-  public currentLanguage = '';
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.supplierId) {
-        vm.retrieveSupplier(to.params.supplierId);
+    const previousState = () => router.go(-1);
+
+    const retrieveSupplier = async supplierId => {
+      try {
+        const res = await supplierService().find(supplierId);
+        supplier.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.supplier.id) {
-      this.supplierService()
-        .update(this.supplier)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.supplier.updated', { param: param.id });
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.supplierService()
-        .create(this.supplier)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.supplier.created', { param: param.id });
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.supplierId) {
+      retrieveSupplier(route.params.supplierId);
     }
-  }
 
-  public retrieveSupplier(supplierId): void {
-    this.supplierService()
-      .find(supplierId)
-      .then(res => {
-        this.supplier = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const { t: t$ } = useI18n();
+    const validations = useValidation();
+    const validationRules = {
+      client: {},
+      category: {},
+      subCategory: {},
+      capStatus: {},
+      supplierStatus: {},
+      qualificationScore: {},
+      bopeScore: {},
+      internalSupplierId: {},
+      contact: {},
+      contactPhoneNumber: {},
+      contactEmailAddress: {},
+      operationSite: {},
+      address: {},
+      website: {},
+      relationStartingYear: {},
+      businessLicense: {},
+      rexOriginStatus: {},
+      createDate: {},
+      updateDate: {},
+      item: {},
+      subItems: {},
+      date: {},
+      kingdeeId: {},
+      region: {},
+      supplierType: {},
+      remark: {},
+      frenchName: {},
+    };
+    const v$ = useVuelidate(validationRules, supplier as any);
+    v$.value.$validate();
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {}
-}
+    return {
+      supplierService,
+      alertService,
+      supplier,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+      t$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.supplier.id) {
+        this.supplierService()
+          .update(this.supplier)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo(this.t$('jhipsterSampleApplicationApp.supplier.updated', { param: param.id }));
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.supplierService()
+          .create(this.supplier)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess(this.t$('jhipsterSampleApplicationApp.supplier.created', { param: param.id }).toString());
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

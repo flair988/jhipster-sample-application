@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import OrderFollowUpService from '@/entities/order-follow-up/order-follow-up.service';
-import { OrderFollowUp } from '@/shared/model/order-follow-up.model';
+import OrderFollowUpService from '../../../../../../main/webapp/app/entities/order-follow-up/order-follow-up.service';
+import { OrderFollowUp } from '../../../../../../main/webapp/app/shared/model/order-follow-up.model';
 
 const error = {
   response: {
@@ -31,13 +31,6 @@ describe('Service Tests', () => {
       service = new OrderFollowUpService();
       elemDefault = new OrderFollowUp(
         123,
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
@@ -120,9 +113,7 @@ describe('Service Tests', () => {
       it('should update a OrderFollowUp', async () => {
         const returnedFromService = Object.assign(
           {
-            itemId: 'BBBBBB',
             poNumber: 'BBBBBB',
-            customer: 'BBBBBB',
             supplier: 'BBBBBB',
             orderDate: 'BBBBBB',
             cateGory: 'BBBBBB',
@@ -136,7 +127,6 @@ describe('Service Tests', () => {
             atd: 'BBBBBB',
             eta: 'BBBBBB',
             updatedEta: 'BBBBBB',
-            forwarder: 'BBBBBB',
             documentStatus: 'BBBBBB',
             customInstruction: 'BBBBBB',
             customInspection: 'BBBBBB',
@@ -147,16 +137,12 @@ describe('Service Tests', () => {
             dcMember: 'BBBBBB',
             comment: 'BBBBBB',
             itemName: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             parentKingdeeId: 'BBBBBB',
-            parentMondayId: 'BBBBBB',
             qty: 'BBBBBB',
             itemCode: 'BBBBBB',
-            amount: 'BBBBBB',
-            discount: 'BBBBBB',
-            unit: 'BBBBBB',
             contractEndOfProdDate: 'BBBBBB',
+            supplierId: 'BBBBBB',
           },
           elemDefault
         );
@@ -183,26 +169,22 @@ describe('Service Tests', () => {
       it('should partial update a OrderFollowUp', async () => {
         const patchObject = Object.assign(
           {
-            itemId: 'BBBBBB',
-            customer: 'BBBBBB',
+            poNumber: 'BBBBBB',
+            supplier: 'BBBBBB',
             orderDate: 'BBBBBB',
-            inspectionDate: 'BBBBBB',
-            totalDiscount: 'BBBBBB',
+            totalAmount: 'BBBBBB',
             disCountRate: 'BBBBBB',
-            atd: 'BBBBBB',
-            forwarder: 'BBBBBB',
+            etd: 'BBBBBB',
+            documentStatus: 'BBBBBB',
             customInspection: 'BBBBBB',
-            depositPaymentDate: 'BBBBBB',
             balanceOfTotalPaymentDate: 'BBBBBB',
             amountPayment: 'BBBBBB',
-            comment: 'BBBBBB',
             itemName: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
-            parentMondayId: 'BBBBBB',
+            parentKingdeeId: 'BBBBBB',
             qty: 'BBBBBB',
-            itemCode: 'BBBBBB',
-            amount: 'BBBBBB',
+            contractEndOfProdDate: 'BBBBBB',
+            supplierId: 'BBBBBB',
           },
           new OrderFollowUp()
         );
@@ -230,9 +212,7 @@ describe('Service Tests', () => {
       it('should return a list of OrderFollowUp', async () => {
         const returnedFromService = Object.assign(
           {
-            itemId: 'BBBBBB',
             poNumber: 'BBBBBB',
-            customer: 'BBBBBB',
             supplier: 'BBBBBB',
             orderDate: 'BBBBBB',
             cateGory: 'BBBBBB',
@@ -246,7 +226,6 @@ describe('Service Tests', () => {
             atd: 'BBBBBB',
             eta: 'BBBBBB',
             updatedEta: 'BBBBBB',
-            forwarder: 'BBBBBB',
             documentStatus: 'BBBBBB',
             customInstruction: 'BBBBBB',
             customInspection: 'BBBBBB',
@@ -257,16 +236,12 @@ describe('Service Tests', () => {
             dcMember: 'BBBBBB',
             comment: 'BBBBBB',
             itemName: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             parentKingdeeId: 'BBBBBB',
-            parentMondayId: 'BBBBBB',
             qty: 'BBBBBB',
             itemCode: 'BBBBBB',
-            amount: 'BBBBBB',
-            discount: 'BBBBBB',
-            unit: 'BBBBBB',
             contractEndOfProdDate: 'BBBBBB',
+            supplierId: 'BBBBBB',
           },
           elemDefault
         );

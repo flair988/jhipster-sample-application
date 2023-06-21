@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IProcessLog } from '@/shared/model/process-log.model';
 import ProcessLogService from './process-log.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class ProcessLogDetails extends Vue {
-  @Inject('processLogService') private processLogService: () => ProcessLogService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ProcessLogDetails',
+  setup() {
+    const processLogService = inject('processLogService', () => new ProcessLogService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public processLog: IProcessLog = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.processLogId) {
-        vm.retrieveProcessLog(to.params.processLogId);
+    const previousState = () => router.go(-1);
+    const processLog: Ref<IProcessLog> = ref({});
+
+    const retrieveProcessLog = async processLogId => {
+      try {
+        const res = await processLogService().find(processLogId);
+        processLog.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveProcessLog(processLogId) {
-    this.processLogService()
-      .find(processLogId)
-      .then(res => {
-        this.processLog = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.processLogId) {
+      retrieveProcessLog(route.params.processLogId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      processLog,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

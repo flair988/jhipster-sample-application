@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.MondayColumn;
 import com.mycompany.myapp.repository.MondayColumnRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -273,7 +273,7 @@ class MondayColumnResourceIT {
         MondayColumn partialUpdatedMondayColumn = new MondayColumn();
         partialUpdatedMondayColumn.setId(mondayColumn.getId());
 
-        partialUpdatedMondayColumn.boardId(UPDATED_BOARD_ID).columnId(UPDATED_COLUMN_ID).type(UPDATED_TYPE);
+        partialUpdatedMondayColumn.boardId(UPDATED_BOARD_ID).columnId(UPDATED_COLUMN_ID);
 
         restMondayColumnMockMvc
             .perform(
@@ -290,7 +290,7 @@ class MondayColumnResourceIT {
         assertThat(testMondayColumn.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testMondayColumn.getColumnId()).isEqualTo(UPDATED_COLUMN_ID);
         assertThat(testMondayColumn.getTitle()).isEqualTo(DEFAULT_TITLE);
-        assertThat(testMondayColumn.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testMondayColumn.getType()).isEqualTo(DEFAULT_TYPE);
     }
 
     @Test

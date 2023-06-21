@@ -7,9 +7,7 @@ export interface IOperationSite {
   siteAddress?: string | null;
   cateGory?: string | null;
   country?: string | null;
-  boardId?: string | null;
   kingdeeId?: string | null;
-  itemId?: string | null;
   businessLicense?: string | null;
   sasDate?: Date | null;
   iso900ValidUtil?: Date | null;
@@ -39,9 +37,7 @@ export class OperationSite implements IOperationSite {
     public siteAddress?: string | null,
     public cateGory?: string | null,
     public country?: string | null,
-    public boardId?: string | null,
     public kingdeeId?: string | null,
-    public itemId?: string | null,
     public businessLicense?: string | null,
     public sasDate?: Date | null,
     public iso900ValidUtil?: Date | null,

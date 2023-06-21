@@ -1,79 +1,89 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import ClientDetailComponent from '@/entities/client/client-details.vue';
-import ClientClass from '@/entities/client/client-details.component';
-import ClientService from '@/entities/client/client.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+import ClientDetails from '../../../../../../main/webapp/app/entities/client/client-details.vue';
+import ClientService from '../../../../../../main/webapp/app/entities/client/client.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+type ClientDetailsComponentType = InstanceType<typeof ClientDetails>;
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const clientSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('Client Management Detail Component', () => {
-    let wrapper: Wrapper<ClientClass>;
-    let comp: ClientClass;
     let clientServiceStub: SinonStubbedInstance<ClientService>;
+    let mountOptions: MountingOptions<ClientDetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       clientServiceStub = sinon.createStubInstance<ClientService>(ClientService);
 
-      wrapper = shallowMount<ClientClass>(ClientDetailComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: { clientService: () => clientServiceStub, alertService: () => new AlertService() },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          clientService: () => clientServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundClient = { id: 123 };
-        clientServiceStub.find.resolves(foundClient);
-
+        clientServiceStub.find.resolves(clientSample);
+        route = {
+          params: {
+            clientId: '' + 123,
+          },
+        };
+        const wrapper = shallowMount(ClientDetails, { global: mountOptions });
+        const comp = wrapper.vm;
         // WHEN
-        comp.retrieveClient(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.client).toBe(foundClient);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const foundClient = { id: 123 };
-        clientServiceStub.find.resolves(foundClient);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { clientId: 123 } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.client).toBe(foundClient);
+        expect(comp.client).toMatchObject(clientSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        clientServiceStub.find.resolves(clientSample);
+        const wrapper = shallowMount(ClientDetails, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

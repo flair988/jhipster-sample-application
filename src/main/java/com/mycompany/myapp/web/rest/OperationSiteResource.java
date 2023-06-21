@@ -144,14 +144,8 @@ public class OperationSiteResource {
                 if (operationSite.getCountry() != null) {
                     existingOperationSite.setCountry(operationSite.getCountry());
                 }
-                if (operationSite.getBoardId() != null) {
-                    existingOperationSite.setBoardId(operationSite.getBoardId());
-                }
                 if (operationSite.getKingdeeId() != null) {
                     existingOperationSite.setKingdeeId(operationSite.getKingdeeId());
-                }
-                if (operationSite.getItemId() != null) {
-                    existingOperationSite.setItemId(operationSite.getItemId());
                 }
                 if (operationSite.getBusinessLicense() != null) {
                     existingOperationSite.setBusinessLicense(operationSite.getBusinessLicense());

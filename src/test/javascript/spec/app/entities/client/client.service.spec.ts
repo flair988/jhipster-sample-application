@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import ClientService from '@/entities/client/client.service';
-import { Client } from '@/shared/model/client.model';
+import ClientService from '../../../../../../main/webapp/app/entities/client/client.service';
+import { Client } from '../../../../../../main/webapp/app/shared/model/client.model';
 
 const error = {
   response: {
@@ -116,12 +116,10 @@ describe('Service Tests', () => {
       it('should partial update a Client', async () => {
         const patchObject = Object.assign(
           {
+            itemId: 'BBBBBB',
             itemName: 'BBBBBB',
-            boardId: 'BBBBBB',
             subItems: 'BBBBBB',
-            kingdeeId: 'BBBBBB',
             customerName: 'BBBBBB',
-            comment: 'BBBBBB',
           },
           new Client()
         );

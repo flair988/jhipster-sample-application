@@ -14,13 +14,7 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="item_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="po_number" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="customer" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="supplier" type="varchar(255)">
@@ -62,9 +56,6 @@
             <column name="updated_eta" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="forwarder" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="document_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -95,16 +86,10 @@
             <column name="item_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="board_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="kingdee_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="parent_kingdee_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="parent_monday_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="qty" type="varchar(255)">
@@ -113,16 +98,10 @@
             <column name="item_code" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="amount" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="discount" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="unit" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="contract_end_of_prod_date" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="supplier_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -146,9 +125,7 @@
                   tableName="order_follow_up"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="item_id" type="string"/>
             <column name="po_number" type="string"/>
-            <column name="customer" type="string"/>
             <column name="supplier" type="string"/>
             <column name="order_date" type="string"/>
             <column name="cate_gory" type="string"/>
@@ -162,7 +139,6 @@
             <column name="atd" type="string"/>
             <column name="eta" type="string"/>
             <column name="updated_eta" type="string"/>
-            <column name="forwarder" type="string"/>
             <column name="document_status" type="string"/>
             <column name="custom_instruction" type="string"/>
             <column name="custom_inspection" type="string"/>
@@ -173,16 +149,12 @@
             <column name="dc_member" type="string"/>
             <column name="comment" type="string"/>
             <column name="item_name" type="string"/>
-            <column name="board_id" type="string"/>
             <column name="kingdee_id" type="string"/>
             <column name="parent_kingdee_id" type="string"/>
-            <column name="parent_monday_id" type="string"/>
             <column name="qty" type="string"/>
             <column name="item_code" type="string"/>
-            <column name="amount" type="string"/>
-            <column name="discount" type="string"/>
-            <column name="unit" type="string"/>
             <column name="contract_end_of_prod_date" type="string"/>
+            <column name="supplier_id" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

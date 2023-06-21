@@ -1,79 +1,89 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import ItemDetailComponent from '@/entities/item/item-details.vue';
-import ItemClass from '@/entities/item/item-details.component';
-import ItemService from '@/entities/item/item.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+import ItemDetails from '../../../../../../main/webapp/app/entities/item/item-details.vue';
+import ItemService from '../../../../../../main/webapp/app/entities/item/item.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+type ItemDetailsComponentType = InstanceType<typeof ItemDetails>;
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const itemSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('Item Management Detail Component', () => {
-    let wrapper: Wrapper<ItemClass>;
-    let comp: ItemClass;
     let itemServiceStub: SinonStubbedInstance<ItemService>;
+    let mountOptions: MountingOptions<ItemDetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       itemServiceStub = sinon.createStubInstance<ItemService>(ItemService);
 
-      wrapper = shallowMount<ItemClass>(ItemDetailComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: { itemService: () => itemServiceStub, alertService: () => new AlertService() },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          itemService: () => itemServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundItem = { id: 123 };
-        itemServiceStub.find.resolves(foundItem);
-
+        itemServiceStub.find.resolves(itemSample);
+        route = {
+          params: {
+            itemId: '' + 123,
+          },
+        };
+        const wrapper = shallowMount(ItemDetails, { global: mountOptions });
+        const comp = wrapper.vm;
         // WHEN
-        comp.retrieveItem(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.item).toBe(foundItem);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const foundItem = { id: 123 };
-        itemServiceStub.find.resolves(foundItem);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { itemId: 123 } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.item).toBe(foundItem);
+        expect(comp.item).toMatchObject(itemSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        itemServiceStub.find.resolves(itemSample);
+        const wrapper = shallowMount(ItemDetails, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

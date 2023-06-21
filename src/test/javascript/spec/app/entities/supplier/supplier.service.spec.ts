@@ -3,9 +3,9 @@ import axios from 'axios';
 import sinon from 'sinon';
 import dayjs from 'dayjs';
 
-import { DATE_FORMAT } from '@/shared/date/filters';
-import SupplierService from '@/entities/supplier/supplier.service';
-import { Supplier } from '@/shared/model/supplier.model';
+import { DATE_FORMAT } from '../../../../../../main/webapp/app/shared/composables/date-format';
+import SupplierService from '../../../../../../main/webapp/app/entities/supplier/supplier.service';
+import { Supplier } from '../../../../../../main/webapp/app/shared/model/supplier.model';
 
 const error = {
   response: {
@@ -35,12 +35,6 @@ describe('Service Tests', () => {
       currentDate = new Date();
       elemDefault = new Supplier(
         123,
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
-        'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
@@ -135,38 +129,32 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             client: 'BBBBBB',
-            parentItem: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
-            person: 'BBBBBB',
             category: 'BBBBBB',
             subCategory: 'BBBBBB',
-            supplierStatus: 'BBBBBB',
             capStatus: 'BBBBBB',
+            supplierStatus: 'BBBBBB',
             qualificationScore: 'BBBBBB',
             bopeScore: 'BBBBBB',
             internalSupplierId: 'BBBBBB',
             contact: 'BBBBBB',
             contactPhoneNumber: 'BBBBBB',
             contactEmailAddress: 'BBBBBB',
-            country: 'BBBBBB',
             operationSite: 'BBBBBB',
             address: 'BBBBBB',
             website: 'BBBBBB',
-            productTaxonomy: 'BBBBBB',
             relationStartingYear: 'BBBBBB',
             businessLicense: 'BBBBBB',
             rexOriginStatus: 'BBBBBB',
             createDate: dayjs(currentDate).format(DATE_FORMAT),
             updateDate: dayjs(currentDate).format(DATE_FORMAT),
             item: 'BBBBBB',
-            mirror: 'BBBBBB',
             subItems: 'BBBBBB',
-            owner: 'BBBBBB',
-            status: 'BBBBBB',
             date: 'BBBBBB',
-            formula: 'BBBBBB',
             kingdeeId: 'BBBBBB',
+            region: 'BBBBBB',
+            supplierType: 'BBBBBB',
+            remark: 'BBBBBB',
+            frenchName: 'BBBBBB',
           },
           elemDefault
         );
@@ -199,21 +187,17 @@ describe('Service Tests', () => {
       it('should partial update a Supplier', async () => {
         const patchObject = Object.assign(
           {
-            client: 'BBBBBB',
-            parentItem: 'BBBBBB',
-            person: 'BBBBBB',
-            subCategory: 'BBBBBB',
+            category: 'BBBBBB',
+            capStatus: 'BBBBBB',
+            supplierStatus: 'BBBBBB',
             internalSupplierId: 'BBBBBB',
-            contact: 'BBBBBB',
-            contactPhoneNumber: 'BBBBBB',
             contactEmailAddress: 'BBBBBB',
-            productTaxonomy: 'BBBBBB',
+            address: 'BBBBBB',
             businessLicense: 'BBBBBB',
-            rexOriginStatus: 'BBBBBB',
             createDate: dayjs(currentDate).format(DATE_FORMAT),
-            mirror: 'BBBBBB',
-            owner: 'BBBBBB',
+            updateDate: dayjs(currentDate).format(DATE_FORMAT),
             date: 'BBBBBB',
+            region: 'BBBBBB',
           },
           new Supplier()
         );
@@ -248,38 +232,32 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             client: 'BBBBBB',
-            parentItem: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
-            person: 'BBBBBB',
             category: 'BBBBBB',
             subCategory: 'BBBBBB',
-            supplierStatus: 'BBBBBB',
             capStatus: 'BBBBBB',
+            supplierStatus: 'BBBBBB',
             qualificationScore: 'BBBBBB',
             bopeScore: 'BBBBBB',
             internalSupplierId: 'BBBBBB',
             contact: 'BBBBBB',
             contactPhoneNumber: 'BBBBBB',
             contactEmailAddress: 'BBBBBB',
-            country: 'BBBBBB',
             operationSite: 'BBBBBB',
             address: 'BBBBBB',
             website: 'BBBBBB',
-            productTaxonomy: 'BBBBBB',
             relationStartingYear: 'BBBBBB',
             businessLicense: 'BBBBBB',
             rexOriginStatus: 'BBBBBB',
             createDate: dayjs(currentDate).format(DATE_FORMAT),
             updateDate: dayjs(currentDate).format(DATE_FORMAT),
             item: 'BBBBBB',
-            mirror: 'BBBBBB',
             subItems: 'BBBBBB',
-            owner: 'BBBBBB',
-            status: 'BBBBBB',
             date: 'BBBBBB',
-            formula: 'BBBBBB',
             kingdeeId: 'BBBBBB',
+            region: 'BBBBBB',
+            supplierType: 'BBBBBB',
+            remark: 'BBBBBB',
+            frenchName: 'BBBBBB',
           },
           elemDefault
         );

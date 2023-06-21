@@ -1,80 +1,78 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
+import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import { IProductFinished } from '@/shared/model/product-finished.model';
-
 import ProductFinishedService from './product-finished.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class ProductFinished extends Vue {
-  @Inject('productFinishedService') private productFinishedService: () => ProductFinishedService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ProductFinished',
+  setup() {
+    const { t: t$ } = useI18n();
+    const productFinishedService = inject('productFinishedService', () => new ProductFinishedService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const productFinisheds: Ref<IProductFinished[]> = ref([]);
 
-  public productFinisheds: IProductFinished[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllProductFinisheds();
-  }
+    const retrieveProductFinisheds = async () => {
+      isFetching.value = true;
+      try {
+        const res = await productFinishedService().retrieve();
+        productFinisheds.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllProductFinisheds();
-  }
+    const handleSyncList = () => {
+      retrieveProductFinisheds();
+    };
 
-  public retrieveAllProductFinisheds(): void {
-    this.isFetching = true;
-    this.productFinishedService()
-      .retrieve()
-      .then(
-        res => {
-          this.productFinisheds = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveProductFinisheds();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IProductFinished) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeProductFinished = async () => {
+      try {
+        await productFinishedService().delete(removeId.value);
+        const message = t$('jhipsterSampleApplicationApp.productFinished.deleted', { param: removeId.value }).toString();
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveProductFinisheds();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: IProductFinished): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeProductFinished(): void {
-    this.productFinishedService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = this.$t('jhipsterSampleApplicationApp.productFinished.deleted', { param: this.removeId });
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllProductFinisheds();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      productFinisheds,
+      handleSyncList,
+      isFetching,
+      retrieveProductFinisheds,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeProductFinished,
+      t$,
+    };
+  },
+});

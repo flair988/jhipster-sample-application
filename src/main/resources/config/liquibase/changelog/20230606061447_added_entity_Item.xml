@@ -14,19 +14,10 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="people" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="item_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="item_france_name" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="item_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="board_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="kingdee_id" type="varchar(255)">
@@ -35,25 +26,7 @@
             <column name="item_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="parent_item" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="code_p" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="codeag" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="monday_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="dcs_merchandiser" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="stocked_in_prodex" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="supplier" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="technical_documents" type="varchar(255)">
@@ -77,9 +50,6 @@
             <column name="carton_height_milimeter" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="port_of_departure" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="barcode" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -92,12 +62,6 @@
             <column name="carton_width_milimeter" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="production_leadtime_commitments_from_suppliers" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="negotiated_price" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="product_description_and_fonctionalities" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -105,9 +69,6 @@
                 <constraints nullable="true" />
             </column>
             <column name="user_manual" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="supplier_marketing_service" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="pallet_size" type="varchar(255)">
@@ -119,64 +80,25 @@
             <column name="product_pic" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="update_date" type="date">
-                <constraints nullable="true" />
-            </column>
-            <column name="sub_items" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="mirror" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="label" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="moqs_pcs_commitment" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="moq_commitment" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="updated_moq_after_negotiation" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="uom" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="bom" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="price_management_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="comment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="june_y" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="comments_june_y" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="december_y" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="comments_december_y" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="product_taxonomy" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="valid_period" type="varchar(255)">
+            <column name="net_weight" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="with_tax" type="varchar(255)">
+            <column name="gross_weight" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="unit_price" type="varchar(255)">
+            <column name="unit_of_weight" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="currency" type="varchar(255)">
+            <column name="carton_volume_milimeter" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -200,20 +122,11 @@
                   tableName="item"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="people" type="string"/>
             <column name="item_status" type="string"/>
             <column name="item_france_name" type="string"/>
-            <column name="item_id" type="string"/>
-            <column name="board_id" type="string"/>
             <column name="kingdee_id" type="string"/>
             <column name="item_name" type="string"/>
-            <column name="parent_item" type="string"/>
-            <column name="code_p" type="string"/>
             <column name="codeag" type="string"/>
-            <column name="monday_id" type="string"/>
-            <column name="dcs_merchandiser" type="string"/>
-            <column name="stocked_in_prodex" type="string"/>
-            <column name="supplier" type="string"/>
             <column name="technical_documents" type="string"/>
             <column name="certification" type="string"/>
             <column name="opportunity_sheet" type="string"/>
@@ -221,40 +134,23 @@
             <column name="sale_package_image" type="string"/>
             <column name="carton_length_milimeter" type="string"/>
             <column name="carton_height_milimeter" type="string"/>
-            <column name="port_of_departure" type="string"/>
             <column name="barcode" type="string"/>
             <column name="carton_weight_kg" type="string"/>
             <column name="carton_weight_gr" type="string"/>
             <column name="carton_width_milimeter" type="string"/>
-            <column name="production_leadtime_commitments_from_suppliers" type="string"/>
-            <column name="negotiated_price" type="string"/>
             <column name="product_description_and_fonctionalities" type="string"/>
             <column name="drawing" type="string"/>
             <column name="user_manual" type="string"/>
-            <column name="supplier_marketing_service" type="string"/>
             <column name="pallet_size" type="string"/>
             <column name="type_of_marketing" type="string"/>
             <column name="product_pic" type="string"/>
-            <column name="update_date" type="date"/>
-            <column name="sub_items" type="string"/>
-            <column name="mirror" type="string"/>
             <column name="label" type="string"/>
-            <column name="moqs_pcs_commitment" type="string"/>
-            <column name="moq_commitment" type="string"/>
-            <column name="updated_moq_after_negotiation" type="string"/>
-            <column name="uom" type="string"/>
-            <column name="bom" type="string"/>
-            <column name="price_management_status" type="string"/>
             <column name="comment" type="string"/>
-            <column name="june_y" type="string"/>
-            <column name="comments_june_y" type="string"/>
-            <column name="december_y" type="string"/>
-            <column name="comments_december_y" type="string"/>
             <column name="product_taxonomy" type="string"/>
-            <column name="valid_period" type="string"/>
-            <column name="with_tax" type="string"/>
-            <column name="unit_price" type="string"/>
-            <column name="currency" type="string"/>
+            <column name="net_weight" type="string"/>
+            <column name="gross_weight" type="string"/>
+            <column name="unit_of_weight" type="string"/>
+            <column name="carton_volume_milimeter" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

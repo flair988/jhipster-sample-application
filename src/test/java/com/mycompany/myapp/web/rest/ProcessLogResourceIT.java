@@ -8,12 +8,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.ProcessLog;
 import com.mycompany.myapp.repository.ProcessLogRepository;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -309,13 +309,7 @@ class ProcessLogResourceIT {
         ProcessLog partialUpdatedProcessLog = new ProcessLog();
         partialUpdatedProcessLog.setId(processLog.getId());
 
-        partialUpdatedProcessLog
-            .type(UPDATED_TYPE)
-            .response(UPDATED_RESPONSE)
-            .status(UPDATED_STATUS)
-            .reason(UPDATED_REASON)
-            .processStartTime(UPDATED_PROCESS_START_TIME)
-            .processEndTime(UPDATED_PROCESS_END_TIME);
+        partialUpdatedProcessLog.type(UPDATED_TYPE).status(UPDATED_STATUS).processEndTime(UPDATED_PROCESS_END_TIME);
 
         restProcessLogMockMvc
             .perform(
@@ -331,10 +325,10 @@ class ProcessLogResourceIT {
         ProcessLog testProcessLog = processLogList.get(processLogList.size() - 1);
         assertThat(testProcessLog.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testProcessLog.getRequest()).isEqualTo(DEFAULT_REQUEST);
-        assertThat(testProcessLog.getResponse()).isEqualTo(UPDATED_RESPONSE);
+        assertThat(testProcessLog.getResponse()).isEqualTo(DEFAULT_RESPONSE);
         assertThat(testProcessLog.getStatus()).isEqualTo(UPDATED_STATUS);
-        assertThat(testProcessLog.getReason()).isEqualTo(UPDATED_REASON);
-        assertThat(testProcessLog.getProcessStartTime()).isEqualTo(UPDATED_PROCESS_START_TIME);
+        assertThat(testProcessLog.getReason()).isEqualTo(DEFAULT_REASON);
+        assertThat(testProcessLog.getProcessStartTime()).isEqualTo(DEFAULT_PROCESS_START_TIME);
         assertThat(testProcessLog.getProcessEndTime()).isEqualTo(UPDATED_PROCESS_END_TIME);
     }
 

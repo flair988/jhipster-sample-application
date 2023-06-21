@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { ISalesDelivery } from '@/shared/model/sales-delivery.model';
 import SalesDeliveryService from './sales-delivery.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class SalesDeliveryDetails extends Vue {
-  @Inject('salesDeliveryService') private salesDeliveryService: () => SalesDeliveryService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'SalesDeliveryDetails',
+  setup() {
+    const salesDeliveryService = inject('salesDeliveryService', () => new SalesDeliveryService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public salesDelivery: ISalesDelivery = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.salesDeliveryId) {
-        vm.retrieveSalesDelivery(to.params.salesDeliveryId);
+    const previousState = () => router.go(-1);
+    const salesDelivery: Ref<ISalesDelivery> = ref({});
+
+    const retrieveSalesDelivery = async salesDeliveryId => {
+      try {
+        const res = await salesDeliveryService().find(salesDeliveryId);
+        salesDelivery.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveSalesDelivery(salesDeliveryId) {
-    this.salesDeliveryService()
-      .find(salesDeliveryId)
-      .then(res => {
-        this.salesDelivery = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.salesDeliveryId) {
+      retrieveSalesDelivery(route.params.salesDeliveryId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      salesDelivery,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

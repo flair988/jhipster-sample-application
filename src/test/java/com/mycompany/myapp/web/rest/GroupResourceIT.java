@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Group;
 import com.mycompany.myapp.repository.GroupRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -287,6 +287,8 @@ class GroupResourceIT {
         Group partialUpdatedGroup = new Group();
         partialUpdatedGroup.setId(group.getId());
 
+        partialUpdatedGroup.groupId(UPDATED_GROUP_ID).groupNumber(UPDATED_GROUP_NUMBER);
+
         restGroupMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedGroup.getId())
@@ -299,8 +301,8 @@ class GroupResourceIT {
         List<Group> groupList = groupRepository.findAll();
         assertThat(groupList).hasSize(databaseSizeBeforeUpdate);
         Group testGroup = groupList.get(groupList.size() - 1);
-        assertThat(testGroup.getGroupId()).isEqualTo(DEFAULT_GROUP_ID);
-        assertThat(testGroup.getGroupNumber()).isEqualTo(DEFAULT_GROUP_NUMBER);
+        assertThat(testGroup.getGroupId()).isEqualTo(UPDATED_GROUP_ID);
+        assertThat(testGroup.getGroupNumber()).isEqualTo(UPDATED_GROUP_NUMBER);
         assertThat(testGroup.getParentId()).isEqualTo(DEFAULT_PARENT_ID);
         assertThat(testGroup.getGroupName()).isEqualTo(DEFAULT_GROUP_NAME);
         assertThat(testGroup.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);

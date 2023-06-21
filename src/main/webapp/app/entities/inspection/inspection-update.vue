@@ -5,259 +5,230 @@
         <h2
           id="jhipsterSampleApplicationApp.inspection.home.createOrEditLabel"
           data-cy="InspectionCreateUpdateHeading"
-          v-text="$t('jhipsterSampleApplicationApp.inspection.home.createOrEditLabel')"
-        >
-          Create or edit a Inspection
-        </h2>
+          v-text="t$('jhipsterSampleApplicationApp.inspection.home.createOrEditLabel')"
+        ></h2>
         <div>
           <div class="form-group" v-if="inspection.id">
-            <label for="id" v-text="$t('global.field.id')">ID</label>
+            <label for="id" v-text="t$('global.field.id')"></label>
             <input type="text" class="form-control" id="id" name="id" v-model="inspection.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.inspection.itemName')" for="inspection-itemName"
-              >Item Name</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.itemName')"
+              for="inspection-itemName"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="itemName"
               id="inspection-itemName"
               data-cy="itemName"
-              :class="{ valid: !$v.inspection.itemName.$invalid, invalid: $v.inspection.itemName.$invalid }"
-              v-model="$v.inspection.itemName.$model"
+              :class="{ valid: !v$.itemName.$invalid, invalid: v$.itemName.$invalid }"
+              v-model="v$.itemName.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.inspection.itemId')" for="inspection-itemId"
-              >Item Id</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              name="itemId"
-              id="inspection-itemId"
-              data-cy="itemId"
-              :class="{ valid: !$v.inspection.itemId.$invalid, invalid: $v.inspection.itemId.$invalid }"
-              v-model="$v.inspection.itemId.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.inspection.boardId')" for="inspection-boardId"
-              >Board Id</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              name="boardId"
-              id="inspection-boardId"
-              data-cy="boardId"
-              :class="{ valid: !$v.inspection.boardId.$invalid, invalid: $v.inspection.boardId.$invalid }"
-              v-model="$v.inspection.boardId.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.inspection.kingdeeId')" for="inspection-kingdeeId"
-              >Kingdee Id</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.kingdeeId')"
+              for="inspection-kingdeeId"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="kingdeeId"
               id="inspection-kingdeeId"
               data-cy="kingdeeId"
-              :class="{ valid: !$v.inspection.kingdeeId.$invalid, invalid: $v.inspection.kingdeeId.$invalid }"
-              v-model="$v.inspection.kingdeeId.$model"
+              :class="{ valid: !v$.kingdeeId.$invalid, invalid: v$.kingdeeId.$invalid }"
+              v-model="v$.kingdeeId.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.inspection.supplierName')"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.supplierName')"
               for="inspection-supplierName"
-              >Supplier Name</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="supplierName"
               id="inspection-supplierName"
               data-cy="supplierName"
-              :class="{ valid: !$v.inspection.supplierName.$invalid, invalid: $v.inspection.supplierName.$invalid }"
-              v-model="$v.inspection.supplierName.$model"
+              :class="{ valid: !v$.supplierName.$invalid, invalid: v$.supplierName.$invalid }"
+              v-model="v$.supplierName.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.inspection.email')" for="inspection-email"
-              >Email</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.inspection.email')" for="inspection-email"></label>
             <input
               type="text"
               class="form-control"
               name="email"
               id="inspection-email"
               data-cy="email"
-              :class="{ valid: !$v.inspection.email.$invalid, invalid: $v.inspection.email.$invalid }"
-              v-model="$v.inspection.email.$model"
+              :class="{ valid: !v$.email.$invalid, invalid: v$.email.$invalid }"
+              v-model="v$.email.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.inspection.inspectionDate')"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.inspectionDate')"
               for="inspection-inspectionDate"
-              >Inspection Date</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="inspectionDate"
               id="inspection-inspectionDate"
               data-cy="inspectionDate"
-              :class="{ valid: !$v.inspection.inspectionDate.$invalid, invalid: $v.inspection.inspectionDate.$invalid }"
-              v-model="$v.inspection.inspectionDate.$model"
+              :class="{ valid: !v$.inspectionDate.$invalid, invalid: v$.inspectionDate.$invalid }"
+              v-model="v$.inspectionDate.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.inspection.endOfProductionDate')"
-              for="inspection-endOfProductionDate"
-              >End Of Production Date</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              name="endOfProductionDate"
-              id="inspection-endOfProductionDate"
-              data-cy="endOfProductionDate"
-              :class="{ valid: !$v.inspection.endOfProductionDate.$invalid, invalid: $v.inspection.endOfProductionDate.$invalid }"
-              v-model="$v.inspection.endOfProductionDate.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.inspection.cateGory')" for="inspection-cateGory"
-              >Cate Gory</label
-            >
+              v-text="t$('jhipsterSampleApplicationApp.inspection.cateGory')"
+              for="inspection-cateGory"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="cateGory"
               id="inspection-cateGory"
               data-cy="cateGory"
-              :class="{ valid: !$v.inspection.cateGory.$invalid, invalid: $v.inspection.cateGory.$invalid }"
-              v-model="$v.inspection.cateGory.$model"
+              :class="{ valid: !v$.cateGory.$invalid, invalid: v$.cateGory.$invalid }"
+              v-model="v$.cateGory.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.inspection.technicalFile')"
-              for="inspection-technicalFile"
-              >Technical File</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              name="technicalFile"
-              id="inspection-technicalFile"
-              data-cy="technicalFile"
-              :class="{ valid: !$v.inspection.technicalFile.$invalid, invalid: $v.inspection.technicalFile.$invalid }"
-              v-model="$v.inspection.technicalFile.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.inspection.qCResult')" for="inspection-qCResult"
-              >Q C Result</label
-            >
+              v-text="t$('jhipsterSampleApplicationApp.inspection.qCResult')"
+              for="inspection-qCResult"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="qCResult"
               id="inspection-qCResult"
               data-cy="qCResult"
-              :class="{ valid: !$v.inspection.qCResult.$invalid, invalid: $v.inspection.qCResult.$invalid }"
-              v-model="$v.inspection.qCResult.$model"
+              :class="{ valid: !v$.qCResult.$invalid, invalid: v$.qCResult.$invalid }"
+              v-model="v$.qCResult.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.inspection.docStatus')" for="inspection-docStatus"
-              >Doc Status</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.docStatus')"
+              for="inspection-docStatus"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="docStatus"
               id="inspection-docStatus"
               data-cy="docStatus"
-              :class="{ valid: !$v.inspection.docStatus.$invalid, invalid: $v.inspection.docStatus.$invalid }"
-              v-model="$v.inspection.docStatus.$model"
+              :class="{ valid: !v$.docStatus.$invalid, invalid: v$.docStatus.$invalid }"
+              v-model="v$.docStatus.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.inspection.goodsReadyForPickUpDate')"
-              for="inspection-goodsReadyForPickUpDate"
-              >Goods Ready For Pick Up Date</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              name="goodsReadyForPickUpDate"
-              id="inspection-goodsReadyForPickUpDate"
-              data-cy="goodsReadyForPickUpDate"
-              :class="{ valid: !$v.inspection.goodsReadyForPickUpDate.$invalid, invalid: $v.inspection.goodsReadyForPickUpDate.$invalid }"
-              v-model="$v.inspection.goodsReadyForPickUpDate.$model"
-            />
-          </div>
-          <div class="form-group">
-            <label
-              class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.inspection.inspectionType')"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.inspectionType')"
               for="inspection-inspectionType"
-              >Inspection Type</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="inspectionType"
               id="inspection-inspectionType"
               data-cy="inspectionType"
-              :class="{ valid: !$v.inspection.inspectionType.$invalid, invalid: $v.inspection.inspectionType.$invalid }"
-              v-model="$v.inspection.inspectionType.$model"
+              :class="{ valid: !v$.inspectionType.$invalid, invalid: v$.inspectionType.$invalid }"
+              v-model="v$.inspectionType.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.inspection.inspectionBookingStatus')"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.inspectionBookingStatus')"
               for="inspection-inspectionBookingStatus"
-              >Inspection Booking Status</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="inspectionBookingStatus"
               id="inspection-inspectionBookingStatus"
               data-cy="inspectionBookingStatus"
-              :class="{ valid: !$v.inspection.inspectionBookingStatus.$invalid, invalid: $v.inspection.inspectionBookingStatus.$invalid }"
-              v-model="$v.inspection.inspectionBookingStatus.$model"
+              :class="{ valid: !v$.inspectionBookingStatus.$invalid, invalid: v$.inspectionBookingStatus.$invalid }"
+              v-model="v$.inspectionBookingStatus.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.inspectionEndDate')"
+              for="inspection-inspectionEndDate"
+            ></label>
+            <input
+              type="text"
+              class="form-control"
+              name="inspectionEndDate"
+              id="inspection-inspectionEndDate"
+              data-cy="inspectionEndDate"
+              :class="{ valid: !v$.inspectionEndDate.$invalid, invalid: v$.inspectionEndDate.$invalid }"
+              v-model="v$.inspectionEndDate.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.supplierId')"
+              for="inspection-supplierId"
+            ></label>
+            <input
+              type="text"
+              class="form-control"
+              name="supplierId"
+              id="inspection-supplierId"
+              data-cy="supplierId"
+              :class="{ valid: !v$.supplierId.$invalid, invalid: v$.supplierId.$invalid }"
+              v-model="v$.supplierId.$model"
+            />
+          </div>
+          <div class="form-group">
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.inspection.reportNumber')"
+              for="inspection-reportNumber"
+            ></label>
+            <input
+              type="text"
+              class="form-control"
+              name="reportNumber"
+              id="inspection-reportNumber"
+              data-cy="reportNumber"
+              :class="{ valid: !v$.reportNumber.$invalid, invalid: v$.reportNumber.$invalid }"
+              v-model="v$.reportNumber.$model"
             />
           </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
-            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
+            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')"></span>
           </button>
           <button
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.inspection.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
-            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
+            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.save')"></span>
           </button>
         </div>
       </form>

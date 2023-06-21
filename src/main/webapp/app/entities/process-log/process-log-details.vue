@@ -3,54 +3,54 @@
     <div class="col-8">
       <div v-if="processLog">
         <h2 class="jh-entity-heading" data-cy="processLogDetailsHeading">
-          <span v-text="$t('jhipsterSampleApplicationApp.processLog.detail.title')">ProcessLog</span> {{ processLog.id }}
+          <span v-text="t$('jhipsterSampleApplicationApp.processLog.detail.title')"></span> {{ processLog.id }}
         </h2>
         <dl class="row jh-entity-details">
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.processLog.type')">Type</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.processLog.type')"></span>
           </dt>
           <dd>
             <span>{{ processLog.type }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.processLog.request')">Request</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.processLog.request')"></span>
           </dt>
           <dd>
             <span>{{ processLog.request }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.processLog.response')">Response</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.processLog.response')"></span>
           </dt>
           <dd>
             <span>{{ processLog.response }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.processLog.status')">Status</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.processLog.status')"></span>
           </dt>
           <dd>
             <span>{{ processLog.status }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.processLog.reason')">Reason</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.processLog.reason')"></span>
           </dt>
           <dd>
             <span>{{ processLog.reason }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.processLog.processStartTime')">Process Start Time</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.processLog.processStartTime')"></span>
           </dt>
           <dd>
             <span>{{ processLog.processStartTime }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.processLog.processEndTime')">Process End Time</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.processLog.processEndTime')"></span>
           </dt>
           <dd>
             <span>{{ processLog.processEndTime }}</span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.back')"></span>
         </button>
         <router-link
           v-if="processLog.id"
@@ -59,7 +59,7 @@
           v-slot="{ navigate }"
         >
           <button @click="navigate" class="btn btn-primary">
-            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
+            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.edit')"></span>
           </button>
         </router-link>
       </div>

@@ -5,96 +5,86 @@
         <h2
           id="jhipsterSampleApplicationApp.group.home.createOrEditLabel"
           data-cy="GroupCreateUpdateHeading"
-          v-text="$t('jhipsterSampleApplicationApp.group.home.createOrEditLabel')"
-        >
-          Create or edit a Group
-        </h2>
+          v-text="t$('jhipsterSampleApplicationApp.group.home.createOrEditLabel')"
+        ></h2>
         <div>
           <div class="form-group" v-if="group.id">
-            <label for="id" v-text="$t('global.field.id')">ID</label>
+            <label for="id" v-text="t$('global.field.id')"></label>
             <input type="text" class="form-control" id="id" name="id" v-model="group.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.group.groupId')" for="group-groupId">Group Id</label>
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.group.groupId')" for="group-groupId"></label>
             <input
               type="number"
               class="form-control"
               name="groupId"
               id="group-groupId"
               data-cy="groupId"
-              :class="{ valid: !$v.group.groupId.$invalid, invalid: $v.group.groupId.$invalid }"
-              v-model.number="$v.group.groupId.$model"
+              :class="{ valid: !v$.groupId.$invalid, invalid: v$.groupId.$invalid }"
+              v-model.number="v$.groupId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.group.groupNumber')" for="group-groupNumber"
-              >Group Number</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.group.groupNumber')" for="group-groupNumber"></label>
             <input
               type="text"
               class="form-control"
               name="groupNumber"
               id="group-groupNumber"
               data-cy="groupNumber"
-              :class="{ valid: !$v.group.groupNumber.$invalid, invalid: $v.group.groupNumber.$invalid }"
-              v-model="$v.group.groupNumber.$model"
+              :class="{ valid: !v$.groupNumber.$invalid, invalid: v$.groupNumber.$invalid }"
+              v-model="v$.groupNumber.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.group.parentId')" for="group-parentId"
-              >Parent Id</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.group.parentId')" for="group-parentId"></label>
             <input
               type="number"
               class="form-control"
               name="parentId"
               id="group-parentId"
               data-cy="parentId"
-              :class="{ valid: !$v.group.parentId.$invalid, invalid: $v.group.parentId.$invalid }"
-              v-model.number="$v.group.parentId.$model"
+              :class="{ valid: !v$.parentId.$invalid, invalid: v$.parentId.$invalid }"
+              v-model.number="v$.parentId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.group.groupName')" for="group-groupName"
-              >Group Name</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.group.groupName')" for="group-groupName"></label>
             <input
               type="text"
               class="form-control"
               name="groupName"
               id="group-groupName"
               data-cy="groupName"
-              :class="{ valid: !$v.group.groupName.$invalid, invalid: $v.group.groupName.$invalid }"
-              v-model="$v.group.groupName.$model"
+              :class="{ valid: !v$.groupName.$invalid, invalid: v$.groupName.$invalid }"
+              v-model="v$.groupName.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.group.description')" for="group-description"
-              >Description</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.group.description')" for="group-description"></label>
             <input
               type="text"
               class="form-control"
               name="description"
               id="group-description"
               data-cy="description"
-              :class="{ valid: !$v.group.description.$invalid, invalid: $v.group.description.$invalid }"
-              v-model="$v.group.description.$model"
+              :class="{ valid: !v$.description.$invalid, invalid: v$.description.$invalid }"
+              v-model="v$.description.$model"
             />
           </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
-            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
+            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')"></span>
           </button>
           <button
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.group.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
-            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
+            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.save')"></span>
           </button>
         </div>
       </form>

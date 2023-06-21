@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061457",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "client",
   "fields": [
     {
@@ -46,11 +44,7 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Client",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

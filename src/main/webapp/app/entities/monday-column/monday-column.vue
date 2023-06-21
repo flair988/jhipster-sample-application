@@ -1,11 +1,11 @@
 <template>
   <div>
     <h2 id="page-heading" data-cy="MondayColumnHeading">
-      <span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.home.title')" id="monday-column-heading">Monday Columns</span>
+      <span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.home.title')" id="monday-column-heading"></span>
       <div class="d-flex justify-content-end">
         <button class="btn btn-info mr-2" v-on:click="handleSyncList" :disabled="isFetching">
           <font-awesome-icon icon="sync" :spin="isFetching"></font-awesome-icon>
-          <span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.home.refreshListLabel')">Refresh List</span>
+          <span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.home.refreshListLabel')"></span>
         </button>
         <router-link :to="{ name: 'MondayColumnCreate' }" custom v-slot="{ navigate }">
           <button
@@ -15,24 +15,24 @@
             class="btn btn-primary jh-create-entity create-monday-column"
           >
             <font-awesome-icon icon="plus"></font-awesome-icon>
-            <span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.home.createLabel')"> Create a new Monday Column </span>
+            <span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.home.createLabel')"></span>
           </button>
         </router-link>
       </div>
     </h2>
     <br />
     <div class="alert alert-warning" v-if="!isFetching && mondayColumns && mondayColumns.length === 0">
-      <span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.home.notFound')">No mondayColumns found</span>
+      <span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.home.notFound')"></span>
     </div>
     <div class="table-responsive" v-if="mondayColumns && mondayColumns.length > 0">
       <table class="table table-striped" aria-describedby="mondayColumns">
         <thead>
           <tr>
-            <th scope="row"><span v-text="$t('global.field.id')">ID</span></th>
-            <th scope="row"><span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.boardId')">Board Id</span></th>
-            <th scope="row"><span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.columnId')">Column Id</span></th>
-            <th scope="row"><span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.title')">Title</span></th>
-            <th scope="row"><span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.type')">Type</span></th>
+            <th scope="row"><span v-text="t$('global.field.id')"></span></th>
+            <th scope="row"><span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.boardId')"></span></th>
+            <th scope="row"><span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.columnId')"></span></th>
+            <th scope="row"><span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.title')"></span></th>
+            <th scope="row"><span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.type')"></span></th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -52,13 +52,13 @@
                 <router-link :to="{ name: 'MondayColumnView', params: { mondayColumnId: mondayColumn.id } }" custom v-slot="{ navigate }">
                   <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
                     <font-awesome-icon icon="eye"></font-awesome-icon>
-                    <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
+                    <span class="d-none d-md-inline" v-text="t$('entity.action.view')"></span>
                   </button>
                 </router-link>
                 <router-link :to="{ name: 'MondayColumnEdit', params: { mondayColumnId: mondayColumn.id } }" custom v-slot="{ navigate }">
                   <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                    <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
+                    <span class="d-none d-md-inline" v-text="t$('entity.action.edit')"></span>
                   </button>
                 </router-link>
                 <b-button
@@ -69,7 +69,7 @@
                   v-b-modal.removeEntity
                 >
                   <font-awesome-icon icon="times"></font-awesome-icon>
-                  <span class="d-none d-md-inline" v-text="$t('entity.action.delete')">Delete</span>
+                  <span class="d-none d-md-inline" v-text="t$('entity.action.delete')"></span>
                 </b-button>
               </div>
             </td>
@@ -78,32 +78,32 @@
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
-      <span slot="modal-title"
-        ><span
+      <template #modal-title>
+        <span
           id="jhipsterSampleApplicationApp.mondayColumn.delete.question"
           data-cy="mondayColumnDeleteDialogHeading"
-          v-text="$t('entity.delete.title')"
-          >Confirm delete operation</span
-        ></span
-      >
+          v-text="t$('entity.delete.title')"
+        ></span>
+      </template>
       <div class="modal-body">
-        <p id="jhi-delete-mondayColumn-heading" v-text="$t('jhipsterSampleApplicationApp.mondayColumn.delete.question', { id: removeId })">
-          Are you sure you want to delete this Monday Column?
-        </p>
+        <p
+          id="jhi-delete-mondayColumn-heading"
+          v-text="t$('jhipsterSampleApplicationApp.mondayColumn.delete.question', { id: removeId })"
+        ></p>
       </div>
-      <div slot="modal-footer">
-        <button type="button" class="btn btn-secondary" v-text="$t('entity.action.cancel')" v-on:click="closeDialog()">Cancel</button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="jhi-confirm-delete-mondayColumn"
-          data-cy="entityConfirmDeleteButton"
-          v-text="$t('entity.action.delete')"
-          v-on:click="removeMondayColumn()"
-        >
-          Delete
-        </button>
-      </div>
+      <template #modal-footer>
+        <div>
+          <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" v-on:click="closeDialog()"></button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="jhi-confirm-delete-mondayColumn"
+            data-cy="entityConfirmDeleteButton"
+            v-text="t$('entity.action.delete')"
+            v-on:click="removeMondayColumn()"
+          ></button>
+        </div>
+      </template>
     </b-modal>
   </div>
 </template>

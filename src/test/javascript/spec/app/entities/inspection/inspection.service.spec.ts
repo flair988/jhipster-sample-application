@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import InspectionService from '@/entities/inspection/inspection.service';
-import { Inspection } from '@/shared/model/inspection.model';
+import InspectionService from '../../../../../../main/webapp/app/entities/inspection/inspection.service';
+import { Inspection } from '../../../../../../main/webapp/app/shared/model/inspection.model';
 
 const error = {
   response: {
@@ -31,8 +31,6 @@ describe('Service Tests', () => {
       service = new InspectionService();
       elemDefault = new Inspection(
         123,
-        'AAAAAAA',
-        'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
@@ -99,20 +97,18 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             supplierName: 'BBBBBB',
             email: 'BBBBBB',
             inspectionDate: 'BBBBBB',
-            endOfProductionDate: 'BBBBBB',
             cateGory: 'BBBBBB',
-            technicalFile: 'BBBBBB',
             qCResult: 'BBBBBB',
             docStatus: 'BBBBBB',
-            goodsReadyForPickUpDate: 'BBBBBB',
             inspectionType: 'BBBBBB',
             inspectionBookingStatus: 'BBBBBB',
+            inspectionEndDate: 'BBBBBB',
+            supplierId: 'BBBBBB',
+            reportNumber: 'BBBBBB',
           },
           elemDefault
         );
@@ -139,14 +135,12 @@ describe('Service Tests', () => {
       it('should partial update a Inspection', async () => {
         const patchObject = Object.assign(
           {
-            boardId: 'BBBBBB',
+            itemName: 'BBBBBB',
             kingdeeId: 'BBBBBB',
-            supplierName: 'BBBBBB',
             email: 'BBBBBB',
-            cateGory: 'BBBBBB',
-            technicalFile: 'BBBBBB',
-            qCResult: 'BBBBBB',
             docStatus: 'BBBBBB',
+            inspectionType: 'BBBBBB',
+            reportNumber: 'BBBBBB',
           },
           new Inspection()
         );
@@ -175,20 +169,18 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             supplierName: 'BBBBBB',
             email: 'BBBBBB',
             inspectionDate: 'BBBBBB',
-            endOfProductionDate: 'BBBBBB',
             cateGory: 'BBBBBB',
-            technicalFile: 'BBBBBB',
             qCResult: 'BBBBBB',
             docStatus: 'BBBBBB',
-            goodsReadyForPickUpDate: 'BBBBBB',
             inspectionType: 'BBBBBB',
             inspectionBookingStatus: 'BBBBBB',
+            inspectionEndDate: 'BBBBBB',
+            supplierId: 'BBBBBB',
+            reportNumber: 'BBBBBB',
           },
           elemDefault
         );

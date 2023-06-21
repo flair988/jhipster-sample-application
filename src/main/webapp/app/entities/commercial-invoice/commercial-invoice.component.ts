@@ -1,80 +1,78 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
+import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import { ICommercialInvoice } from '@/shared/model/commercial-invoice.model';
-
 import CommercialInvoiceService from './commercial-invoice.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class CommercialInvoice extends Vue {
-  @Inject('commercialInvoiceService') private commercialInvoiceService: () => CommercialInvoiceService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'CommercialInvoice',
+  setup() {
+    const { t: t$ } = useI18n();
+    const commercialInvoiceService = inject('commercialInvoiceService', () => new CommercialInvoiceService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const commercialInvoices: Ref<ICommercialInvoice[]> = ref([]);
 
-  public commercialInvoices: ICommercialInvoice[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllCommercialInvoices();
-  }
+    const retrieveCommercialInvoices = async () => {
+      isFetching.value = true;
+      try {
+        const res = await commercialInvoiceService().retrieve();
+        commercialInvoices.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllCommercialInvoices();
-  }
+    const handleSyncList = () => {
+      retrieveCommercialInvoices();
+    };
 
-  public retrieveAllCommercialInvoices(): void {
-    this.isFetching = true;
-    this.commercialInvoiceService()
-      .retrieve()
-      .then(
-        res => {
-          this.commercialInvoices = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveCommercialInvoices();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: ICommercialInvoice) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeCommercialInvoice = async () => {
+      try {
+        await commercialInvoiceService().delete(removeId.value);
+        const message = t$('jhipsterSampleApplicationApp.commercialInvoice.deleted', { param: removeId.value }).toString();
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveCommercialInvoices();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: ICommercialInvoice): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeCommercialInvoice(): void {
-    this.commercialInvoiceService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = this.$t('jhipsterSampleApplicationApp.commercialInvoice.deleted', { param: this.removeId });
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllCommercialInvoices();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      commercialInvoices,
+      handleSyncList,
+      isFetching,
+      retrieveCommercialInvoices,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeCommercialInvoice,
+      t$,
+    };
+  },
+});

@@ -3,9 +3,9 @@ import axios from 'axios';
 import sinon from 'sinon';
 import dayjs from 'dayjs';
 
-import { DATE_FORMAT } from '@/shared/date/filters';
-import ProcessLogService from '@/entities/process-log/process-log.service';
-import { ProcessLog } from '@/shared/model/process-log.model';
+import { DATE_FORMAT } from '../../../../../../main/webapp/app/shared/composables/date-format';
+import ProcessLogService from '../../../../../../main/webapp/app/entities/process-log/process-log.service';
+import { ProcessLog } from '../../../../../../main/webapp/app/shared/model/process-log.model';
 
 const error = {
   response: {
@@ -139,9 +139,9 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             type: 'BBBBBB',
-            request: 'BBBBBB',
             response: 'BBBBBB',
             reason: 'BBBBBB',
+            processStartTime: dayjs(currentDate).format(DATE_FORMAT),
           },
           new ProcessLog()
         );

@@ -1,25 +1,13 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 
-import * as config from '@/shared/config/config';
-import SalesDeliveryComponent from '@/entities/sales-delivery/sales-delivery.vue';
-import SalesDeliveryClass from '@/entities/sales-delivery/sales-delivery.component';
-import SalesDeliveryService from '@/entities/sales-delivery/sales-delivery.service';
-import AlertService from '@/shared/alert/alert.service';
+import SalesDelivery from '../../../../../../main/webapp/app/entities/sales-delivery/sales-delivery.vue';
+import SalesDeliveryService from '../../../../../../main/webapp/app/entities/sales-delivery/sales-delivery.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(ToastPlugin);
-
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-badge', {});
-localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
+type SalesDeliveryComponentType = InstanceType<typeof SalesDelivery>;
 
 const bModalStub = {
   render: () => {},
@@ -30,54 +18,84 @@ const bModalStub = {
 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
   describe('SalesDelivery Management Component', () => {
-    let wrapper: Wrapper<SalesDeliveryClass>;
-    let comp: SalesDeliveryClass;
     let salesDeliveryServiceStub: SinonStubbedInstance<SalesDeliveryService>;
+    let mountOptions: MountingOptions<SalesDeliveryComponentType>['global'];
 
     beforeEach(() => {
       salesDeliveryServiceStub = sinon.createStubInstance<SalesDeliveryService>(SalesDeliveryService);
       salesDeliveryServiceStub.retrieve.resolves({ headers: {} });
 
-      wrapper = shallowMount<SalesDeliveryClass>(SalesDeliveryComponent, {
-        store,
-        i18n,
-        localVue,
-        stubs: { bModal: bModalStub as any },
-        provide: {
-          salesDeliveryService: () => salesDeliveryServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          salesDeliveryService: () => salesDeliveryServiceStub,
+        },
+      };
     });
 
-    it('Should call load all on init', async () => {
-      // GIVEN
-      salesDeliveryServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        salesDeliveryServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
-      // WHEN
-      comp.retrieveAllSalesDeliverys();
-      await comp.$nextTick();
+        // WHEN
+        const wrapper = shallowMount(SalesDelivery, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
 
-      // THEN
-      expect(salesDeliveryServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.salesDeliveries[0]).toEqual(expect.objectContaining({ id: 123 }));
+        // THEN
+        expect(salesDeliveryServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.salesDeliveries[0]).toEqual(expect.objectContaining({ id: 123 }));
+      });
     });
-    it('Should call delete service on confirmDelete', async () => {
-      // GIVEN
-      salesDeliveryServiceStub.delete.resolves({});
+    describe('Handles', () => {
+      let comp: SalesDeliveryComponentType;
 
-      // WHEN
-      comp.prepareRemove({ id: 123 });
-      expect(salesDeliveryServiceStub.retrieve.callCount).toEqual(1);
+      beforeEach(async () => {
+        const wrapper = shallowMount(SalesDelivery, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        salesDeliveryServiceStub.retrieve.reset();
+        salesDeliveryServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
 
-      comp.removeSalesDelivery();
-      await comp.$nextTick();
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        salesDeliveryServiceStub.delete.resolves({});
 
-      // THEN
-      expect(salesDeliveryServiceStub.delete.called).toBeTruthy();
-      expect(salesDeliveryServiceStub.retrieve.callCount).toEqual(2);
+        // WHEN
+        comp.prepareRemove({ id: 123 });
+
+        comp.removeSalesDelivery();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(salesDeliveryServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(salesDeliveryServiceStub.retrieve.callCount).toEqual(1);
+      });
     });
   });
 });

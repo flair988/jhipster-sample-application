@@ -1,79 +1,89 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import SupplierDetailComponent from '@/entities/supplier/supplier-details.vue';
-import SupplierClass from '@/entities/supplier/supplier-details.component';
-import SupplierService from '@/entities/supplier/supplier.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+import SupplierDetails from '../../../../../../main/webapp/app/entities/supplier/supplier-details.vue';
+import SupplierService from '../../../../../../main/webapp/app/entities/supplier/supplier.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+type SupplierDetailsComponentType = InstanceType<typeof SupplierDetails>;
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const supplierSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('Supplier Management Detail Component', () => {
-    let wrapper: Wrapper<SupplierClass>;
-    let comp: SupplierClass;
     let supplierServiceStub: SinonStubbedInstance<SupplierService>;
+    let mountOptions: MountingOptions<SupplierDetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       supplierServiceStub = sinon.createStubInstance<SupplierService>(SupplierService);
 
-      wrapper = shallowMount<SupplierClass>(SupplierDetailComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: { supplierService: () => supplierServiceStub, alertService: () => new AlertService() },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          supplierService: () => supplierServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundSupplier = { id: 123 };
-        supplierServiceStub.find.resolves(foundSupplier);
-
+        supplierServiceStub.find.resolves(supplierSample);
+        route = {
+          params: {
+            supplierId: '' + 123,
+          },
+        };
+        const wrapper = shallowMount(SupplierDetails, { global: mountOptions });
+        const comp = wrapper.vm;
         // WHEN
-        comp.retrieveSupplier(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.supplier).toBe(foundSupplier);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const foundSupplier = { id: 123 };
-        supplierServiceStub.find.resolves(foundSupplier);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { supplierId: 123 } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.supplier).toBe(foundSupplier);
+        expect(comp.supplier).toMatchObject(supplierSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        supplierServiceStub.find.resolves(supplierSample);
+        const wrapper = shallowMount(SupplierDetails, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

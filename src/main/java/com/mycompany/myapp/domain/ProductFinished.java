@@ -1,7 +1,7 @@
 package com.mycompany.myapp.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -25,12 +25,6 @@ public class ProductFinished implements Serializable {
     @Column(name = "item_name")
     private String itemName;
 
-    @Column(name = "item_id")
-    private String itemId;
-
-    @Column(name = "board_id")
-    private String boardId;
-
     @Column(name = "kingdee_id")
     private String kingdeeId;
 
@@ -51,6 +45,12 @@ public class ProductFinished implements Serializable {
 
     @Column(name = "material_receipt_date")
     private String materialReceiptDate;
+
+    @Column(name = "doc_status")
+    private String docStatus;
+
+    @Column(name = "supplier_name")
+    private String supplierName;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -78,32 +78,6 @@ public class ProductFinished implements Serializable {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
-    }
-
-    public String getItemId() {
-        return this.itemId;
-    }
-
-    public ProductFinished itemId(String itemId) {
-        this.setItemId(itemId);
-        return this;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getBoardId() {
-        return this.boardId;
-    }
-
-    public ProductFinished boardId(String boardId) {
-        this.setBoardId(boardId);
-        return this;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
     }
 
     public String getKingdeeId() {
@@ -197,6 +171,32 @@ public class ProductFinished implements Serializable {
         this.materialReceiptDate = materialReceiptDate;
     }
 
+    public String getDocStatus() {
+        return this.docStatus;
+    }
+
+    public ProductFinished docStatus(String docStatus) {
+        this.setDocStatus(docStatus);
+        return this;
+    }
+
+    public void setDocStatus(String docStatus) {
+        this.docStatus = docStatus;
+    }
+
+    public String getSupplierName() {
+        return this.supplierName;
+    }
+
+    public ProductFinished supplierName(String supplierName) {
+        this.setSupplierName(supplierName);
+        return this;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -222,8 +222,6 @@ public class ProductFinished implements Serializable {
         return "ProductFinished{" +
             "id=" + getId() +
             ", itemName='" + getItemName() + "'" +
-            ", itemId='" + getItemId() + "'" +
-            ", boardId='" + getBoardId() + "'" +
             ", kingdeeId='" + getKingdeeId() + "'" +
             ", supplier='" + getSupplier() + "'" +
             ", supplierEmail='" + getSupplierEmail() + "'" +
@@ -231,6 +229,8 @@ public class ProductFinished implements Serializable {
             ", cateGory='" + getCateGory() + "'" +
             ", remark='" + getRemark() + "'" +
             ", materialReceiptDate='" + getMaterialReceiptDate() + "'" +
+            ", docStatus='" + getDocStatus() + "'" +
+            ", supplierName='" + getSupplierName() + "'" +
             "}";
     }
 }

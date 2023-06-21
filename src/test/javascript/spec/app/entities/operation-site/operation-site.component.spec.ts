@@ -1,25 +1,13 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 
-import * as config from '@/shared/config/config';
-import OperationSiteComponent from '@/entities/operation-site/operation-site.vue';
-import OperationSiteClass from '@/entities/operation-site/operation-site.component';
-import OperationSiteService from '@/entities/operation-site/operation-site.service';
-import AlertService from '@/shared/alert/alert.service';
+import OperationSite from '../../../../../../main/webapp/app/entities/operation-site/operation-site.vue';
+import OperationSiteService from '../../../../../../main/webapp/app/entities/operation-site/operation-site.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(ToastPlugin);
-
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-badge', {});
-localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
+type OperationSiteComponentType = InstanceType<typeof OperationSite>;
 
 const bModalStub = {
   render: () => {},
@@ -30,54 +18,84 @@ const bModalStub = {
 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
   describe('OperationSite Management Component', () => {
-    let wrapper: Wrapper<OperationSiteClass>;
-    let comp: OperationSiteClass;
     let operationSiteServiceStub: SinonStubbedInstance<OperationSiteService>;
+    let mountOptions: MountingOptions<OperationSiteComponentType>['global'];
 
     beforeEach(() => {
       operationSiteServiceStub = sinon.createStubInstance<OperationSiteService>(OperationSiteService);
       operationSiteServiceStub.retrieve.resolves({ headers: {} });
 
-      wrapper = shallowMount<OperationSiteClass>(OperationSiteComponent, {
-        store,
-        i18n,
-        localVue,
-        stubs: { bModal: bModalStub as any },
-        provide: {
-          operationSiteService: () => operationSiteServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          operationSiteService: () => operationSiteServiceStub,
+        },
+      };
     });
 
-    it('Should call load all on init', async () => {
-      // GIVEN
-      operationSiteServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        operationSiteServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
-      // WHEN
-      comp.retrieveAllOperationSites();
-      await comp.$nextTick();
+        // WHEN
+        const wrapper = shallowMount(OperationSite, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
 
-      // THEN
-      expect(operationSiteServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.operationSites[0]).toEqual(expect.objectContaining({ id: 123 }));
+        // THEN
+        expect(operationSiteServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.operationSites[0]).toEqual(expect.objectContaining({ id: 123 }));
+      });
     });
-    it('Should call delete service on confirmDelete', async () => {
-      // GIVEN
-      operationSiteServiceStub.delete.resolves({});
+    describe('Handles', () => {
+      let comp: OperationSiteComponentType;
 
-      // WHEN
-      comp.prepareRemove({ id: 123 });
-      expect(operationSiteServiceStub.retrieve.callCount).toEqual(1);
+      beforeEach(async () => {
+        const wrapper = shallowMount(OperationSite, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        operationSiteServiceStub.retrieve.reset();
+        operationSiteServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
 
-      comp.removeOperationSite();
-      await comp.$nextTick();
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        operationSiteServiceStub.delete.resolves({});
 
-      // THEN
-      expect(operationSiteServiceStub.delete.called).toBeTruthy();
-      expect(operationSiteServiceStub.retrieve.callCount).toEqual(2);
+        // WHEN
+        comp.prepareRemove({ id: 123 });
+
+        comp.removeOperationSite();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(operationSiteServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(operationSiteServiceStub.retrieve.callCount).toEqual(1);
+      });
     });
   });
 });

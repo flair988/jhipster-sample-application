@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061459",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "forwarder",
   "fields": [
     {
@@ -38,11 +36,7 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Forwarder",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

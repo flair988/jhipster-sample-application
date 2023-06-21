@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061447",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "item",
   "fields": [
     {
@@ -10,23 +8,11 @@
       "fieldType": "Long"
     },
     {
-      "fieldName": "people",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "itemStatus",
       "fieldType": "String"
     },
     {
       "fieldName": "itemFranceName",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "itemId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "boardId",
       "fieldType": "String"
     },
     {
@@ -38,31 +24,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "parentItem",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "codeP",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "codeag",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "mondayId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "dcsMerchandiser",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "stockedInProdex",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "supplier",
       "fieldType": "String"
     },
     {
@@ -94,10 +56,6 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "portOfDeparture",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "barcode",
       "fieldType": "String"
     },
@@ -114,14 +72,6 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "productionLeadtimeCommitmentsFromSuppliers",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "negotiatedPrice",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "productDescriptionAndFonctionalities",
       "fieldType": "String"
     },
@@ -131,10 +81,6 @@
     },
     {
       "fieldName": "userManual",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "supplierMarketingService",
       "fieldType": "String"
     },
     {
@@ -150,43 +96,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "updateDate",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "subItems",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "mirror",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "label",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "moqsPcsCommitment",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "moqCommitment",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "updatedMoqAfterNegotiation",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "uom",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "bom",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "priceManagementStatus",
       "fieldType": "String"
     },
     {
@@ -194,47 +104,27 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "juneY",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "commentsJuneY",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "decemberY",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "commentsDecemberY",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "productTaxonomy",
       "fieldType": "String"
     },
     {
-      "fieldName": "validPeriod",
+      "fieldName": "netWeight",
       "fieldType": "String"
     },
     {
-      "fieldName": "withTax",
+      "fieldName": "grossWeight",
       "fieldType": "String"
     },
     {
-      "fieldName": "unitPrice",
+      "fieldName": "unitOfWeight",
       "fieldType": "String"
     },
     {
-      "fieldName": "currency",
+      "fieldName": "cartonVolumeMilimeter",
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Item",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

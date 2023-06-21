@@ -1,73 +1,87 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import CommercialInvoiceUpdateComponent from '@/entities/commercial-invoice/commercial-invoice-update.vue';
-import CommercialInvoiceClass from '@/entities/commercial-invoice/commercial-invoice-update.component';
-import CommercialInvoiceService from '@/entities/commercial-invoice/commercial-invoice.service';
+import CommercialInvoiceUpdate from '../../../../../../main/webapp/app/entities/commercial-invoice/commercial-invoice-update.vue';
+import CommercialInvoiceService from '../../../../../../main/webapp/app/entities/commercial-invoice/commercial-invoice.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-import AlertService from '@/shared/alert/alert.service';
+type CommercialInvoiceUpdateComponentType = InstanceType<typeof CommercialInvoiceUpdate>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const commercialInvoiceSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let mountOptions: MountingOptions<CommercialInvoiceUpdateComponentType>['global'];
+  let alertService: AlertService;
+
   describe('CommercialInvoice Management Update Component', () => {
-    let wrapper: Wrapper<CommercialInvoiceClass>;
-    let comp: CommercialInvoiceClass;
+    let comp: CommercialInvoiceUpdateComponentType;
     let commercialInvoiceServiceStub: SinonStubbedInstance<CommercialInvoiceService>;
 
     beforeEach(() => {
+      route = {};
       commercialInvoiceServiceStub = sinon.createStubInstance<CommercialInvoiceService>(CommercialInvoiceService);
 
-      wrapper = shallowMount<CommercialInvoiceClass>(CommercialInvoiceUpdateComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: {
-          commercialInvoiceService: () => commercialInvoiceServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          commercialInvoiceService: () => commercialInvoiceServiceStub,
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 123 };
-        comp.commercialInvoice = entity;
-        commercialInvoiceServiceStub.update.resolves(entity);
+        const wrapper = shallowMount(CommercialInvoiceUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.commercialInvoice = commercialInvoiceSample;
+        commercialInvoiceServiceStub.update.resolves(commercialInvoiceSample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(commercialInvoiceServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(commercialInvoiceServiceStub.update.calledWith(commercialInvoiceSample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.commercialInvoice = entity;
         commercialInvoiceServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(CommercialInvoiceUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.commercialInvoice = entity;
 
         // WHEN
         comp.save();
@@ -82,25 +96,35 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundCommercialInvoice = { id: 123 };
-        commercialInvoiceServiceStub.find.resolves(foundCommercialInvoice);
-        commercialInvoiceServiceStub.retrieve.resolves([foundCommercialInvoice]);
+        commercialInvoiceServiceStub.find.resolves(commercialInvoiceSample);
+        commercialInvoiceServiceStub.retrieve.resolves([commercialInvoiceSample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { commercialInvoiceId: 123 } }, null, cb => cb(comp));
+        route = {
+          params: {
+            commercialInvoiceId: '' + commercialInvoiceSample.id,
+          },
+        };
+        const wrapper = shallowMount(CommercialInvoiceUpdate, { global: mountOptions });
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.commercialInvoice).toBe(foundCommercialInvoice);
+        expect(comp.commercialInvoice).toMatchObject(commercialInvoiceSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        commercialInvoiceServiceStub.find.resolves(commercialInvoiceSample);
+        const wrapper = shallowMount(CommercialInvoiceUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

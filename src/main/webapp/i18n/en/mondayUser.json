@@ -8,11 +8,11 @@
         "createOrEditLabel": "Create or edit a Monday User",
         "notFound": "No Monday Users found"
       },
-      "created": "A new Monday User is created with identifier {{ param }}",
-      "updated": "A Monday User is updated with identifier {{ param }}",
-      "deleted": "A Monday User is deleted with identifier {{ param }}",
+      "created": "A new Monday User is created with identifier { param }",
+      "updated": "A Monday User is updated with identifier { param }",
+      "deleted": "A Monday User is deleted with identifier { param }",
       "delete": {
-        "question": "Are you sure you want to delete Monday User {{ id }}?"
+        "question": "Are you sure you want to delete Monday User { id }?"
       },
       "detail": {
         "title": "Monday User"

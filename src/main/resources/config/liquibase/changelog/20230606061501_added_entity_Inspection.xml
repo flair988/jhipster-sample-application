@@ -17,12 +17,6 @@
             <column name="item_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="item_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="board_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="kingdee_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -35,13 +29,7 @@
             <column name="inspection_date" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="end_of_production_date" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="cate_gory" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="technical_file" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="q_c_result" type="varchar(255)">
@@ -50,13 +38,19 @@
             <column name="doc_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="goods_ready_for_pick_up_date" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="inspection_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="inspection_booking_status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="inspection_end_date" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="supplier_id" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="report_number" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -81,20 +75,18 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="item_name" type="string"/>
-            <column name="item_id" type="string"/>
-            <column name="board_id" type="string"/>
             <column name="kingdee_id" type="string"/>
             <column name="supplier_name" type="string"/>
             <column name="email" type="string"/>
             <column name="inspection_date" type="string"/>
-            <column name="end_of_production_date" type="string"/>
             <column name="cate_gory" type="string"/>
-            <column name="technical_file" type="string"/>
             <column name="q_c_result" type="string"/>
             <column name="doc_status" type="string"/>
-            <column name="goods_ready_for_pick_up_date" type="string"/>
             <column name="inspection_type" type="string"/>
             <column name="inspection_booking_status" type="string"/>
+            <column name="inspection_end_date" type="string"/>
+            <column name="supplier_id" type="string"/>
+            <column name="report_number" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

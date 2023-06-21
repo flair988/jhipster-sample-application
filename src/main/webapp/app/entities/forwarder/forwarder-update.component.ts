@@ -1,108 +1,97 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import { IForwarder, Forwarder } from '@/shared/model/forwarder.model';
 import ForwarderService from './forwarder.service';
 
-const validations: any = {
-  forwarder: {
-    itemName: {},
-    itemId: {},
-    boardId: {},
-    kingdeeId: {},
-    contact: {},
-    email: {},
-    telephone: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ForwarderUpdate',
+  setup() {
+    const forwarderService = inject('forwarderService', () => new ForwarderService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-})
-export default class ForwarderUpdate extends Vue {
-  @Inject('forwarderService') private forwarderService: () => ForwarderService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const forwarder: Ref<IForwarder> = ref(new Forwarder());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  public forwarder: IForwarder = new Forwarder();
-  public isSaving = false;
-  public currentLanguage = '';
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.forwarderId) {
-        vm.retrieveForwarder(to.params.forwarderId);
+    const previousState = () => router.go(-1);
+
+    const retrieveForwarder = async forwarderId => {
+      try {
+        const res = await forwarderService().find(forwarderId);
+        forwarder.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.forwarder.id) {
-      this.forwarderService()
-        .update(this.forwarder)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.forwarder.updated', { param: param.id });
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.forwarderService()
-        .create(this.forwarder)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.forwarder.created', { param: param.id });
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.forwarderId) {
+      retrieveForwarder(route.params.forwarderId);
     }
-  }
 
-  public retrieveForwarder(forwarderId): void {
-    this.forwarderService()
-      .find(forwarderId)
-      .then(res => {
-        this.forwarder = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const { t: t$ } = useI18n();
+    const validations = useValidation();
+    const validationRules = {
+      itemName: {},
+      itemId: {},
+      boardId: {},
+      kingdeeId: {},
+      contact: {},
+      email: {},
+      telephone: {},
+    };
+    const v$ = useVuelidate(validationRules, forwarder as any);
+    v$.value.$validate();
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {}
-}
+    return {
+      forwarderService,
+      alertService,
+      forwarder,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+      t$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.forwarder.id) {
+        this.forwarderService()
+          .update(this.forwarder)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo(this.t$('jhipsterSampleApplicationApp.forwarder.updated', { param: param.id }));
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.forwarderService()
+          .create(this.forwarder)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess(this.t$('jhipsterSampleApplicationApp.forwarder.created', { param: param.id }).toString());
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

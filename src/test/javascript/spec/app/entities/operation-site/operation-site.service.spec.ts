@@ -3,9 +3,9 @@ import axios from 'axios';
 import sinon from 'sinon';
 import dayjs from 'dayjs';
 
-import { DATE_FORMAT } from '@/shared/date/filters';
-import OperationSiteService from '@/entities/operation-site/operation-site.service';
-import { OperationSite } from '@/shared/model/operation-site.model';
+import { DATE_FORMAT } from '../../../../../../main/webapp/app/shared/composables/date-format';
+import OperationSiteService from '../../../../../../main/webapp/app/entities/operation-site/operation-site.service';
+import { OperationSite } from '../../../../../../main/webapp/app/shared/model/operation-site.model';
 
 const error = {
   response: {
@@ -35,8 +35,6 @@ describe('Service Tests', () => {
       currentDate = new Date();
       elemDefault = new OperationSite(
         123,
-        'AAAAAAA',
-        'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
@@ -138,9 +136,7 @@ describe('Service Tests', () => {
             siteAddress: 'BBBBBB',
             cateGory: 'BBBBBB',
             country: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
-            itemId: 'BBBBBB',
             businessLicense: 'BBBBBB',
             sasDate: dayjs(currentDate).format(DATE_FORMAT),
             iso900ValidUtil: dayjs(currentDate).format(DATE_FORMAT),
@@ -191,19 +187,18 @@ describe('Service Tests', () => {
       it('should partial update a OperationSite', async () => {
         const patchObject = Object.assign(
           {
-            linkSupplierFactory: 'BBBBBB',
             typeOfSite: 'BBBBBB',
-            siteAddress: 'BBBBBB',
-            country: 'BBBBBB',
+            contact: 'BBBBBB',
+            cateGory: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             iso900ValidUtil: dayjs(currentDate).format(DATE_FORMAT),
-            iso14001ValidUtil: dayjs(currentDate).format(DATE_FORMAT),
-            qualificationScore: 'BBBBBB',
+            siteQualification: 'BBBBBB',
             pqvScore: 'BBBBBB',
             pqvDate: 'BBBBBB',
-            pqvDecision: 'BBBBBB',
             technicalAuditDate: 'BBBBBB',
             technicalAuditScore: 'BBBBBB',
+            bopeDate: 'BBBBBB',
+            bopeScore: 'BBBBBB',
           },
           new OperationSite()
         );
@@ -245,9 +240,7 @@ describe('Service Tests', () => {
             siteAddress: 'BBBBBB',
             cateGory: 'BBBBBB',
             country: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
-            itemId: 'BBBBBB',
             businessLicense: 'BBBBBB',
             sasDate: dayjs(currentDate).format(DATE_FORMAT),
             iso900ValidUtil: dayjs(currentDate).format(DATE_FORMAT),

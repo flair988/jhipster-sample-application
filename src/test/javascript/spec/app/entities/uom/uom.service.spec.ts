@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import UomService from '@/entities/uom/uom.service';
-import { Uom } from '@/shared/model/uom.model';
+import UomService from '../../../../../../main/webapp/app/entities/uom/uom.service';
+import { Uom } from '../../../../../../main/webapp/app/shared/model/uom.model';
 
 const error = {
   response: {
@@ -115,10 +115,8 @@ describe('Service Tests', () => {
       it('should partial update a Uom', async () => {
         const patchObject = Object.assign(
           {
-            itemId: 'BBBBBB',
             uom: 'BBBBBB',
-            boardId: 'BBBBBB',
-            kingdeeId: 'BBBBBB',
+            description: 'BBBBBB',
           },
           new Uom()
         );

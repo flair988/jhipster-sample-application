@@ -1,73 +1,87 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import SupplierUpdateComponent from '@/entities/supplier/supplier-update.vue';
-import SupplierClass from '@/entities/supplier/supplier-update.component';
-import SupplierService from '@/entities/supplier/supplier.service';
+import SupplierUpdate from '../../../../../../main/webapp/app/entities/supplier/supplier-update.vue';
+import SupplierService from '../../../../../../main/webapp/app/entities/supplier/supplier.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-import AlertService from '@/shared/alert/alert.service';
+type SupplierUpdateComponentType = InstanceType<typeof SupplierUpdate>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const supplierSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let mountOptions: MountingOptions<SupplierUpdateComponentType>['global'];
+  let alertService: AlertService;
+
   describe('Supplier Management Update Component', () => {
-    let wrapper: Wrapper<SupplierClass>;
-    let comp: SupplierClass;
+    let comp: SupplierUpdateComponentType;
     let supplierServiceStub: SinonStubbedInstance<SupplierService>;
 
     beforeEach(() => {
+      route = {};
       supplierServiceStub = sinon.createStubInstance<SupplierService>(SupplierService);
 
-      wrapper = shallowMount<SupplierClass>(SupplierUpdateComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: {
-          supplierService: () => supplierServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          supplierService: () => supplierServiceStub,
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 123 };
-        comp.supplier = entity;
-        supplierServiceStub.update.resolves(entity);
+        const wrapper = shallowMount(SupplierUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.supplier = supplierSample;
+        supplierServiceStub.update.resolves(supplierSample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(supplierServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(supplierServiceStub.update.calledWith(supplierSample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.supplier = entity;
         supplierServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(SupplierUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.supplier = entity;
 
         // WHEN
         comp.save();
@@ -82,25 +96,35 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundSupplier = { id: 123 };
-        supplierServiceStub.find.resolves(foundSupplier);
-        supplierServiceStub.retrieve.resolves([foundSupplier]);
+        supplierServiceStub.find.resolves(supplierSample);
+        supplierServiceStub.retrieve.resolves([supplierSample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { supplierId: 123 } }, null, cb => cb(comp));
+        route = {
+          params: {
+            supplierId: '' + supplierSample.id,
+          },
+        };
+        const wrapper = shallowMount(SupplierUpdate, { global: mountOptions });
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.supplier).toBe(foundSupplier);
+        expect(comp.supplier).toMatchObject(supplierSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        supplierServiceStub.find.resolves(supplierSample);
+        const wrapper = shallowMount(SupplierUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

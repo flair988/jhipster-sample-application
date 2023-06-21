@@ -1,105 +1,94 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import { IMondayUser, MondayUser } from '@/shared/model/monday-user.model';
 import MondayUserService from './monday-user.service';
 
-const validations: any = {
-  mondayUser: {
-    mondayId: {},
-    name: {},
-    email: {},
-    url: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'MondayUserUpdate',
+  setup() {
+    const mondayUserService = inject('mondayUserService', () => new MondayUserService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-})
-export default class MondayUserUpdate extends Vue {
-  @Inject('mondayUserService') private mondayUserService: () => MondayUserService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const mondayUser: Ref<IMondayUser> = ref(new MondayUser());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  public mondayUser: IMondayUser = new MondayUser();
-  public isSaving = false;
-  public currentLanguage = '';
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.mondayUserId) {
-        vm.retrieveMondayUser(to.params.mondayUserId);
+    const previousState = () => router.go(-1);
+
+    const retrieveMondayUser = async mondayUserId => {
+      try {
+        const res = await mondayUserService().find(mondayUserId);
+        mondayUser.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.mondayUser.id) {
-      this.mondayUserService()
-        .update(this.mondayUser)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.mondayUser.updated', { param: param.id });
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.mondayUserService()
-        .create(this.mondayUser)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.mondayUser.created', { param: param.id });
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.mondayUserId) {
+      retrieveMondayUser(route.params.mondayUserId);
     }
-  }
 
-  public retrieveMondayUser(mondayUserId): void {
-    this.mondayUserService()
-      .find(mondayUserId)
-      .then(res => {
-        this.mondayUser = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const { t: t$ } = useI18n();
+    const validations = useValidation();
+    const validationRules = {
+      mondayId: {},
+      name: {},
+      email: {},
+      url: {},
+    };
+    const v$ = useVuelidate(validationRules, mondayUser as any);
+    v$.value.$validate();
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {}
-}
+    return {
+      mondayUserService,
+      alertService,
+      mondayUser,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+      t$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.mondayUser.id) {
+        this.mondayUserService()
+          .update(this.mondayUser)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo(this.t$('jhipsterSampleApplicationApp.mondayUser.updated', { param: param.id }));
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.mondayUserService()
+          .create(this.mondayUser)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess(this.t$('jhipsterSampleApplicationApp.mondayUser.created', { param: param.id }).toString());
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

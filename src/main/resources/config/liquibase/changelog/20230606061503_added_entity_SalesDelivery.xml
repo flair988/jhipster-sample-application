@@ -17,12 +17,6 @@
             <column name="item_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="item_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="board_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="kingdee_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -30,12 +24,6 @@
                 <constraints nullable="true" />
             </column>
             <column name="order_date" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="total_actual_ship_qty" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="total_qty_delivery" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="loading_port" type="varchar(255)">
@@ -71,6 +59,12 @@
             <column name="kingdee_unique_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="doc_status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="cate_gory" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
     </changeSet>
@@ -93,13 +87,9 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="item_name" type="string"/>
-            <column name="item_id" type="string"/>
-            <column name="board_id" type="string"/>
             <column name="kingdee_id" type="string"/>
             <column name="customer" type="string"/>
             <column name="order_date" type="string"/>
-            <column name="total_actual_ship_qty" type="string"/>
-            <column name="total_qty_delivery" type="string"/>
             <column name="loading_port" type="string"/>
             <column name="discharge_port" type="string"/>
             <column name="transport_mode" type="string"/>
@@ -111,6 +101,8 @@
             <column name="container_size" type="string"/>
             <column name="remark" type="string"/>
             <column name="kingdee_unique_id" type="string"/>
+            <column name="doc_status" type="string"/>
+            <column name="cate_gory" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

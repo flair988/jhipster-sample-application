@@ -1,80 +1,78 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
+import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import { ISupplier } from '@/shared/model/supplier.model';
-
 import SupplierService from './supplier.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class Supplier extends Vue {
-  @Inject('supplierService') private supplierService: () => SupplierService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'Supplier',
+  setup() {
+    const { t: t$ } = useI18n();
+    const supplierService = inject('supplierService', () => new SupplierService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const suppliers: Ref<ISupplier[]> = ref([]);
 
-  public suppliers: ISupplier[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllSuppliers();
-  }
+    const retrieveSuppliers = async () => {
+      isFetching.value = true;
+      try {
+        const res = await supplierService().retrieve();
+        suppliers.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllSuppliers();
-  }
+    const handleSyncList = () => {
+      retrieveSuppliers();
+    };
 
-  public retrieveAllSuppliers(): void {
-    this.isFetching = true;
-    this.supplierService()
-      .retrieve()
-      .then(
-        res => {
-          this.suppliers = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveSuppliers();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: ISupplier) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeSupplier = async () => {
+      try {
+        await supplierService().delete(removeId.value);
+        const message = t$('jhipsterSampleApplicationApp.supplier.deleted', { param: removeId.value }).toString();
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveSuppliers();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: ISupplier): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeSupplier(): void {
-    this.supplierService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = this.$t('jhipsterSampleApplicationApp.supplier.deleted', { param: this.removeId });
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllSuppliers();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      suppliers,
+      handleSyncList,
+      isFetching,
+      retrieveSuppliers,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeSupplier,
+      t$,
+    };
+  },
+});

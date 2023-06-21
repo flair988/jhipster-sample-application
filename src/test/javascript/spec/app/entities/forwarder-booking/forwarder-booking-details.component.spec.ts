@@ -1,79 +1,89 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import ForwarderBookingDetailComponent from '@/entities/forwarder-booking/forwarder-booking-details.vue';
-import ForwarderBookingClass from '@/entities/forwarder-booking/forwarder-booking-details.component';
-import ForwarderBookingService from '@/entities/forwarder-booking/forwarder-booking.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+import ForwarderBookingDetails from '../../../../../../main/webapp/app/entities/forwarder-booking/forwarder-booking-details.vue';
+import ForwarderBookingService from '../../../../../../main/webapp/app/entities/forwarder-booking/forwarder-booking.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+type ForwarderBookingDetailsComponentType = InstanceType<typeof ForwarderBookingDetails>;
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const forwarderBookingSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('ForwarderBooking Management Detail Component', () => {
-    let wrapper: Wrapper<ForwarderBookingClass>;
-    let comp: ForwarderBookingClass;
     let forwarderBookingServiceStub: SinonStubbedInstance<ForwarderBookingService>;
+    let mountOptions: MountingOptions<ForwarderBookingDetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       forwarderBookingServiceStub = sinon.createStubInstance<ForwarderBookingService>(ForwarderBookingService);
 
-      wrapper = shallowMount<ForwarderBookingClass>(ForwarderBookingDetailComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: { forwarderBookingService: () => forwarderBookingServiceStub, alertService: () => new AlertService() },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          forwarderBookingService: () => forwarderBookingServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundForwarderBooking = { id: 123 };
-        forwarderBookingServiceStub.find.resolves(foundForwarderBooking);
-
+        forwarderBookingServiceStub.find.resolves(forwarderBookingSample);
+        route = {
+          params: {
+            forwarderBookingId: '' + 123,
+          },
+        };
+        const wrapper = shallowMount(ForwarderBookingDetails, { global: mountOptions });
+        const comp = wrapper.vm;
         // WHEN
-        comp.retrieveForwarderBooking(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.forwarderBooking).toBe(foundForwarderBooking);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const foundForwarderBooking = { id: 123 };
-        forwarderBookingServiceStub.find.resolves(foundForwarderBooking);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { forwarderBookingId: 123 } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.forwarderBooking).toBe(foundForwarderBooking);
+        expect(comp.forwarderBooking).toMatchObject(forwarderBookingSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        forwarderBookingServiceStub.find.resolves(forwarderBookingSample);
+        const wrapper = shallowMount(ForwarderBookingDetails, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

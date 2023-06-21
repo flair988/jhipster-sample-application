@@ -8,11 +8,11 @@
         "createOrEditLabel": "Create or edit a Operation Site",
         "notFound": "No Operation Sites found"
       },
-      "created": "A new Operation Site is created with identifier {{ param }}",
-      "updated": "A Operation Site is updated with identifier {{ param }}",
-      "deleted": "A Operation Site is deleted with identifier {{ param }}",
+      "created": "A new Operation Site is created with identifier { param }",
+      "updated": "A Operation Site is updated with identifier { param }",
+      "deleted": "A Operation Site is deleted with identifier { param }",
       "delete": {
-        "question": "Are you sure you want to delete Operation Site {{ id }}?"
+        "question": "Are you sure you want to delete Operation Site { id }?"
       },
       "detail": {
         "title": "Operation Site"
@@ -25,9 +25,7 @@
       "siteAddress": "Site Address",
       "cateGory": "Cate Gory",
       "country": "Country",
-      "boardId": "Board Id",
       "kingdeeId": "Kingdee Id",
-      "itemId": "Item Id",
       "businessLicense": "Business License",
       "sasDate": "Sas Date",
       "iso900ValidUtil": "Iso 900 Valid Util",

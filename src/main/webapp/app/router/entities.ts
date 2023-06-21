@@ -3,114 +3,78 @@ import { Authority } from '@/shared/security/authority';
 // prettier-ignore
 const Entities = () => import('@/entities/entities.vue');
 
-// prettier-ignore
 const Group = () => import('@/entities/group/group.vue');
-// prettier-ignore
 const GroupUpdate = () => import('@/entities/group/group-update.vue');
-// prettier-ignore
 const GroupDetails = () => import('@/entities/group/group-details.vue');
-// prettier-ignore
+
 const Item = () => import('@/entities/item/item.vue');
-// prettier-ignore
 const ItemUpdate = () => import('@/entities/item/item-update.vue');
-// prettier-ignore
 const ItemDetails = () => import('@/entities/item/item-details.vue');
-// prettier-ignore
+
 const MondayColumn = () => import('@/entities/monday-column/monday-column.vue');
-// prettier-ignore
 const MondayColumnUpdate = () => import('@/entities/monday-column/monday-column-update.vue');
-// prettier-ignore
 const MondayColumnDetails = () => import('@/entities/monday-column/monday-column-details.vue');
-// prettier-ignore
+
 const MondayUser = () => import('@/entities/monday-user/monday-user.vue');
-// prettier-ignore
 const MondayUserUpdate = () => import('@/entities/monday-user/monday-user-update.vue');
-// prettier-ignore
 const MondayUserDetails = () => import('@/entities/monday-user/monday-user-details.vue');
-// prettier-ignore
+
 const OperationSite = () => import('@/entities/operation-site/operation-site.vue');
-// prettier-ignore
 const OperationSiteUpdate = () => import('@/entities/operation-site/operation-site-update.vue');
-// prettier-ignore
 const OperationSiteDetails = () => import('@/entities/operation-site/operation-site-details.vue');
-// prettier-ignore
+
 const OrderFollowUp = () => import('@/entities/order-follow-up/order-follow-up.vue');
-// prettier-ignore
 const OrderFollowUpUpdate = () => import('@/entities/order-follow-up/order-follow-up-update.vue');
-// prettier-ignore
 const OrderFollowUpDetails = () => import('@/entities/order-follow-up/order-follow-up-details.vue');
-// prettier-ignore
+
 const PI = () => import('@/entities/pi/pi.vue');
-// prettier-ignore
 const PIUpdate = () => import('@/entities/pi/pi-update.vue');
-// prettier-ignore
 const PIDetails = () => import('@/entities/pi/pi-details.vue');
-// prettier-ignore
+
 const ProcessLog = () => import('@/entities/process-log/process-log.vue');
-// prettier-ignore
 const ProcessLogUpdate = () => import('@/entities/process-log/process-log-update.vue');
-// prettier-ignore
 const ProcessLogDetails = () => import('@/entities/process-log/process-log-details.vue');
-// prettier-ignore
+
 const ProductTaxmonomy = () => import('@/entities/product-taxmonomy/product-taxmonomy.vue');
-// prettier-ignore
 const ProductTaxmonomyUpdate = () => import('@/entities/product-taxmonomy/product-taxmonomy-update.vue');
-// prettier-ignore
 const ProductTaxmonomyDetails = () => import('@/entities/product-taxmonomy/product-taxmonomy-details.vue');
-// prettier-ignore
+
 const Supplier = () => import('@/entities/supplier/supplier.vue');
-// prettier-ignore
 const SupplierUpdate = () => import('@/entities/supplier/supplier-update.vue');
-// prettier-ignore
 const SupplierDetails = () => import('@/entities/supplier/supplier-details.vue');
-// prettier-ignore
+
 const Uom = () => import('@/entities/uom/uom.vue');
-// prettier-ignore
 const UomUpdate = () => import('@/entities/uom/uom-update.vue');
-// prettier-ignore
 const UomDetails = () => import('@/entities/uom/uom-details.vue');
-// prettier-ignore
+
 const Client = () => import('@/entities/client/client.vue');
-// prettier-ignore
 const ClientUpdate = () => import('@/entities/client/client-update.vue');
-// prettier-ignore
 const ClientDetails = () => import('@/entities/client/client-details.vue');
-// prettier-ignore
+
 const CommercialInvoice = () => import('@/entities/commercial-invoice/commercial-invoice.vue');
-// prettier-ignore
 const CommercialInvoiceUpdate = () => import('@/entities/commercial-invoice/commercial-invoice-update.vue');
-// prettier-ignore
 const CommercialInvoiceDetails = () => import('@/entities/commercial-invoice/commercial-invoice-details.vue');
-// prettier-ignore
+
 const Forwarder = () => import('@/entities/forwarder/forwarder.vue');
-// prettier-ignore
 const ForwarderUpdate = () => import('@/entities/forwarder/forwarder-update.vue');
-// prettier-ignore
 const ForwarderDetails = () => import('@/entities/forwarder/forwarder-details.vue');
-// prettier-ignore
+
 const ForwarderBooking = () => import('@/entities/forwarder-booking/forwarder-booking.vue');
-// prettier-ignore
 const ForwarderBookingUpdate = () => import('@/entities/forwarder-booking/forwarder-booking-update.vue');
-// prettier-ignore
 const ForwarderBookingDetails = () => import('@/entities/forwarder-booking/forwarder-booking-details.vue');
-// prettier-ignore
+
 const Inspection = () => import('@/entities/inspection/inspection.vue');
-// prettier-ignore
 const InspectionUpdate = () => import('@/entities/inspection/inspection-update.vue');
-// prettier-ignore
 const InspectionDetails = () => import('@/entities/inspection/inspection-details.vue');
-// prettier-ignore
+
 const ProductFinished = () => import('@/entities/product-finished/product-finished.vue');
-// prettier-ignore
 const ProductFinishedUpdate = () => import('@/entities/product-finished/product-finished-update.vue');
-// prettier-ignore
 const ProductFinishedDetails = () => import('@/entities/product-finished/product-finished-details.vue');
-// prettier-ignore
+
 const SalesDelivery = () => import('@/entities/sales-delivery/sales-delivery.vue');
-// prettier-ignore
 const SalesDeliveryUpdate = () => import('@/entities/sales-delivery/sales-delivery-update.vue');
-// prettier-ignore
 const SalesDeliveryDetails = () => import('@/entities/sales-delivery/sales-delivery-details.vue');
+
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default {

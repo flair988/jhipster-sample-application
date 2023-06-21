@@ -8,26 +8,26 @@
         "createOrEditLabel": "Create or edit a Product Finished",
         "notFound": "No Product Finisheds found"
       },
-      "created": "A new Product Finished is created with identifier {{ param }}",
-      "updated": "A Product Finished is updated with identifier {{ param }}",
-      "deleted": "A Product Finished is deleted with identifier {{ param }}",
+      "created": "A new Product Finished is created with identifier { param }",
+      "updated": "A Product Finished is updated with identifier { param }",
+      "deleted": "A Product Finished is deleted with identifier { param }",
       "delete": {
-        "question": "Are you sure you want to delete Product Finished {{ id }}?"
+        "question": "Are you sure you want to delete Product Finished { id }?"
       },
       "detail": {
         "title": "Product Finished"
       },
       "id": "Id",
       "itemName": "Item Name",
-      "itemId": "Item Id",
-      "boardId": "Board Id",
       "kingdeeId": "Kingdee Id",
       "supplier": "Supplier",
       "supplierEmail": "Supplier Email",
       "orderDate": "Order Date",
       "cateGory": "Cate Gory",
       "remark": "Remark",
-      "materialReceiptDate": "Material Receipt Date"
+      "materialReceiptDate": "Material Receipt Date",
+      "docStatus": "Doc Status",
+      "supplierName": "Supplier Name"
     }
   }
 }

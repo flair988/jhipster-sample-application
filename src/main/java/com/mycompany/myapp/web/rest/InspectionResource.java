@@ -126,12 +126,6 @@ public class InspectionResource {
                 if (inspection.getItemName() != null) {
                     existingInspection.setItemName(inspection.getItemName());
                 }
-                if (inspection.getItemId() != null) {
-                    existingInspection.setItemId(inspection.getItemId());
-                }
-                if (inspection.getBoardId() != null) {
-                    existingInspection.setBoardId(inspection.getBoardId());
-                }
                 if (inspection.getKingdeeId() != null) {
                     existingInspection.setKingdeeId(inspection.getKingdeeId());
                 }
@@ -144,14 +138,8 @@ public class InspectionResource {
                 if (inspection.getInspectionDate() != null) {
                     existingInspection.setInspectionDate(inspection.getInspectionDate());
                 }
-                if (inspection.getEndOfProductionDate() != null) {
-                    existingInspection.setEndOfProductionDate(inspection.getEndOfProductionDate());
-                }
                 if (inspection.getCateGory() != null) {
                     existingInspection.setCateGory(inspection.getCateGory());
-                }
-                if (inspection.getTechnicalFile() != null) {
-                    existingInspection.setTechnicalFile(inspection.getTechnicalFile());
                 }
                 if (inspection.getqCResult() != null) {
                     existingInspection.setqCResult(inspection.getqCResult());
@@ -159,14 +147,20 @@ public class InspectionResource {
                 if (inspection.getDocStatus() != null) {
                     existingInspection.setDocStatus(inspection.getDocStatus());
                 }
-                if (inspection.getGoodsReadyForPickUpDate() != null) {
-                    existingInspection.setGoodsReadyForPickUpDate(inspection.getGoodsReadyForPickUpDate());
-                }
                 if (inspection.getInspectionType() != null) {
                     existingInspection.setInspectionType(inspection.getInspectionType());
                 }
                 if (inspection.getInspectionBookingStatus() != null) {
                     existingInspection.setInspectionBookingStatus(inspection.getInspectionBookingStatus());
+                }
+                if (inspection.getInspectionEndDate() != null) {
+                    existingInspection.setInspectionEndDate(inspection.getInspectionEndDate());
+                }
+                if (inspection.getSupplierId() != null) {
+                    existingInspection.setSupplierId(inspection.getSupplierId());
+                }
+                if (inspection.getReportNumber() != null) {
+                    existingInspection.setReportNumber(inspection.getReportNumber());
                 }
 
                 return existingInspection;

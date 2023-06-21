@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IClient } from '@/shared/model/client.model';
 import ClientService from './client.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class ClientDetails extends Vue {
-  @Inject('clientService') private clientService: () => ClientService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ClientDetails',
+  setup() {
+    const clientService = inject('clientService', () => new ClientService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public client: IClient = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.clientId) {
-        vm.retrieveClient(to.params.clientId);
+    const previousState = () => router.go(-1);
+    const client: Ref<IClient> = ref({});
+
+    const retrieveClient = async clientId => {
+      try {
+        const res = await clientService().find(clientId);
+        client.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveClient(clientId) {
-    this.clientService()
-      .find(clientId)
-      .then(res => {
-        this.client = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.clientId) {
+      retrieveClient(route.params.clientId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      client,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

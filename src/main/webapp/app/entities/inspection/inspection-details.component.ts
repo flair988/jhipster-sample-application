@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IInspection } from '@/shared/model/inspection.model';
 import InspectionService from './inspection.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class InspectionDetails extends Vue {
-  @Inject('inspectionService') private inspectionService: () => InspectionService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'InspectionDetails',
+  setup() {
+    const inspectionService = inject('inspectionService', () => new InspectionService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public inspection: IInspection = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.inspectionId) {
-        vm.retrieveInspection(to.params.inspectionId);
+    const previousState = () => router.go(-1);
+    const inspection: Ref<IInspection> = ref({});
+
+    const retrieveInspection = async inspectionId => {
+      try {
+        const res = await inspectionService().find(inspectionId);
+        inspection.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveInspection(inspectionId) {
-    this.inspectionService()
-      .find(inspectionId)
-      .then(res => {
-        this.inspection = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.inspectionId) {
+      retrieveInspection(route.params.inspectionId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      inspection,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

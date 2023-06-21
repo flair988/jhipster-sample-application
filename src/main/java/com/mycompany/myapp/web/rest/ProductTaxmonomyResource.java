@@ -145,9 +145,6 @@ public class ProductTaxmonomyResource {
                 if (productTaxmonomy.getDescription() != null) {
                     existingProductTaxmonomy.setDescription(productTaxmonomy.getDescription());
                 }
-                if (productTaxmonomy.getBoardId() != null) {
-                    existingProductTaxmonomy.setBoardId(productTaxmonomy.getBoardId());
-                }
 
                 return existingProductTaxmonomy;
             })

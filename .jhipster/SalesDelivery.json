@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061503",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "sales_delivery",
   "fields": [
     {
@@ -11,14 +9,6 @@
     },
     {
       "fieldName": "itemName",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "itemId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "boardId",
       "fieldType": "String"
     },
     {
@@ -31,14 +21,6 @@
     },
     {
       "fieldName": "orderDate",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "totalActualShipQty",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "totalQtyDelivery",
       "fieldType": "String"
     },
     {
@@ -84,13 +66,17 @@
     {
       "fieldName": "kingdeeUniqueId",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "docStatus",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cateGory",
+      "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "SalesDelivery",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

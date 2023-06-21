@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Forwarder;
 import com.mycompany.myapp.repository.ForwarderRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -307,7 +307,7 @@ class ForwarderResourceIT {
         Forwarder partialUpdatedForwarder = new Forwarder();
         partialUpdatedForwarder.setId(forwarder.getId());
 
-        partialUpdatedForwarder.itemName(UPDATED_ITEM_NAME).contact(UPDATED_CONTACT).email(UPDATED_EMAIL).telephone(UPDATED_TELEPHONE);
+        partialUpdatedForwarder.itemName(UPDATED_ITEM_NAME).kingdeeId(UPDATED_KINGDEE_ID);
 
         restForwarderMockMvc
             .perform(
@@ -324,10 +324,10 @@ class ForwarderResourceIT {
         assertThat(testForwarder.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
         assertThat(testForwarder.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
         assertThat(testForwarder.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
-        assertThat(testForwarder.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
-        assertThat(testForwarder.getContact()).isEqualTo(UPDATED_CONTACT);
-        assertThat(testForwarder.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(testForwarder.getTelephone()).isEqualTo(UPDATED_TELEPHONE);
+        assertThat(testForwarder.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
+        assertThat(testForwarder.getContact()).isEqualTo(DEFAULT_CONTACT);
+        assertThat(testForwarder.getEmail()).isEqualTo(DEFAULT_EMAIL);
+        assertThat(testForwarder.getTelephone()).isEqualTo(DEFAULT_TELEPHONE);
     }
 
     @Test

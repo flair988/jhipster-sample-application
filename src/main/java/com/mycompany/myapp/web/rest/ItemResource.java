@@ -119,20 +119,11 @@ public class ItemResource {
         Optional<Item> result = itemRepository
             .findById(item.getId())
             .map(existingItem -> {
-                if (item.getPeople() != null) {
-                    existingItem.setPeople(item.getPeople());
-                }
                 if (item.getItemStatus() != null) {
                     existingItem.setItemStatus(item.getItemStatus());
                 }
                 if (item.getItemFranceName() != null) {
                     existingItem.setItemFranceName(item.getItemFranceName());
-                }
-                if (item.getItemId() != null) {
-                    existingItem.setItemId(item.getItemId());
-                }
-                if (item.getBoardId() != null) {
-                    existingItem.setBoardId(item.getBoardId());
                 }
                 if (item.getKingdeeId() != null) {
                     existingItem.setKingdeeId(item.getKingdeeId());
@@ -140,26 +131,8 @@ public class ItemResource {
                 if (item.getItemName() != null) {
                     existingItem.setItemName(item.getItemName());
                 }
-                if (item.getParentItem() != null) {
-                    existingItem.setParentItem(item.getParentItem());
-                }
-                if (item.getCodeP() != null) {
-                    existingItem.setCodeP(item.getCodeP());
-                }
                 if (item.getCodeag() != null) {
                     existingItem.setCodeag(item.getCodeag());
-                }
-                if (item.getMondayId() != null) {
-                    existingItem.setMondayId(item.getMondayId());
-                }
-                if (item.getDcsMerchandiser() != null) {
-                    existingItem.setDcsMerchandiser(item.getDcsMerchandiser());
-                }
-                if (item.getStockedInProdex() != null) {
-                    existingItem.setStockedInProdex(item.getStockedInProdex());
-                }
-                if (item.getSupplier() != null) {
-                    existingItem.setSupplier(item.getSupplier());
                 }
                 if (item.getTechnicalDocuments() != null) {
                     existingItem.setTechnicalDocuments(item.getTechnicalDocuments());
@@ -182,9 +155,6 @@ public class ItemResource {
                 if (item.getCartonHeightMilimeter() != null) {
                     existingItem.setCartonHeightMilimeter(item.getCartonHeightMilimeter());
                 }
-                if (item.getPortOfDeparture() != null) {
-                    existingItem.setPortOfDeparture(item.getPortOfDeparture());
-                }
                 if (item.getBarcode() != null) {
                     existingItem.setBarcode(item.getBarcode());
                 }
@@ -197,12 +167,6 @@ public class ItemResource {
                 if (item.getCartonWidthMilimeter() != null) {
                     existingItem.setCartonWidthMilimeter(item.getCartonWidthMilimeter());
                 }
-                if (item.getProductionLeadtimeCommitmentsFromSuppliers() != null) {
-                    existingItem.setProductionLeadtimeCommitmentsFromSuppliers(item.getProductionLeadtimeCommitmentsFromSuppliers());
-                }
-                if (item.getNegotiatedPrice() != null) {
-                    existingItem.setNegotiatedPrice(item.getNegotiatedPrice());
-                }
                 if (item.getProductDescriptionAndFonctionalities() != null) {
                     existingItem.setProductDescriptionAndFonctionalities(item.getProductDescriptionAndFonctionalities());
                 }
@@ -211,9 +175,6 @@ public class ItemResource {
                 }
                 if (item.getUserManual() != null) {
                     existingItem.setUserManual(item.getUserManual());
-                }
-                if (item.getSupplierMarketingService() != null) {
-                    existingItem.setSupplierMarketingService(item.getSupplierMarketingService());
                 }
                 if (item.getPalletSize() != null) {
                     existingItem.setPalletSize(item.getPalletSize());
@@ -224,65 +185,26 @@ public class ItemResource {
                 if (item.getProductPic() != null) {
                     existingItem.setProductPic(item.getProductPic());
                 }
-                if (item.getUpdateDate() != null) {
-                    existingItem.setUpdateDate(item.getUpdateDate());
-                }
-                if (item.getSubItems() != null) {
-                    existingItem.setSubItems(item.getSubItems());
-                }
-                if (item.getMirror() != null) {
-                    existingItem.setMirror(item.getMirror());
-                }
                 if (item.getLabel() != null) {
                     existingItem.setLabel(item.getLabel());
-                }
-                if (item.getMoqsPcsCommitment() != null) {
-                    existingItem.setMoqsPcsCommitment(item.getMoqsPcsCommitment());
-                }
-                if (item.getMoqCommitment() != null) {
-                    existingItem.setMoqCommitment(item.getMoqCommitment());
-                }
-                if (item.getUpdatedMoqAfterNegotiation() != null) {
-                    existingItem.setUpdatedMoqAfterNegotiation(item.getUpdatedMoqAfterNegotiation());
-                }
-                if (item.getUom() != null) {
-                    existingItem.setUom(item.getUom());
-                }
-                if (item.getBom() != null) {
-                    existingItem.setBom(item.getBom());
-                }
-                if (item.getPriceManagementStatus() != null) {
-                    existingItem.setPriceManagementStatus(item.getPriceManagementStatus());
                 }
                 if (item.getComment() != null) {
                     existingItem.setComment(item.getComment());
                 }
-                if (item.getJuneY() != null) {
-                    existingItem.setJuneY(item.getJuneY());
-                }
-                if (item.getCommentsJuneY() != null) {
-                    existingItem.setCommentsJuneY(item.getCommentsJuneY());
-                }
-                if (item.getDecemberY() != null) {
-                    existingItem.setDecemberY(item.getDecemberY());
-                }
-                if (item.getCommentsDecemberY() != null) {
-                    existingItem.setCommentsDecemberY(item.getCommentsDecemberY());
-                }
                 if (item.getProductTaxonomy() != null) {
                     existingItem.setProductTaxonomy(item.getProductTaxonomy());
                 }
-                if (item.getValidPeriod() != null) {
-                    existingItem.setValidPeriod(item.getValidPeriod());
+                if (item.getNetWeight() != null) {
+                    existingItem.setNetWeight(item.getNetWeight());
                 }
-                if (item.getWithTax() != null) {
-                    existingItem.setWithTax(item.getWithTax());
+                if (item.getGrossWeight() != null) {
+                    existingItem.setGrossWeight(item.getGrossWeight());
                 }
-                if (item.getUnitPrice() != null) {
-                    existingItem.setUnitPrice(item.getUnitPrice());
+                if (item.getUnitOfWeight() != null) {
+                    existingItem.setUnitOfWeight(item.getUnitOfWeight());
                 }
-                if (item.getCurrency() != null) {
-                    existingItem.setCurrency(item.getCurrency());
+                if (item.getCartonVolumeMilimeter() != null) {
+                    existingItem.setCartonVolumeMilimeter(item.getCartonVolumeMilimeter());
                 }
 
                 return existingItem;

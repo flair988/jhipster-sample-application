@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061452",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "pi",
   "fields": [
     {
@@ -14,15 +12,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "itemCode",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "poNumber",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "isNewItem",
       "fieldType": "String"
     },
     {
@@ -34,27 +24,11 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "supplier",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "supplierCode",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "orderDate",
       "fieldType": "String"
     },
     {
-      "fieldName": "port",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "requestedEndOfProdDate",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "itemQuantity",
       "fieldType": "String"
     },
     {
@@ -63,10 +37,6 @@
     },
     {
       "fieldName": "countryOfFinalDestination",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "productionLeadTimeCommitment",
       "fieldType": "String"
     },
     {
@@ -86,43 +56,11 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "itemUnit",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "rate",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "amount",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "totalAmount",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "discountRate",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "currency",
       "fieldType": "String"
     },
     {
-      "fieldName": "piStatus",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "remarks",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "itemId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "boardId",
       "fieldType": "String"
     },
     {
@@ -136,13 +74,13 @@
     {
       "fieldName": "portOfLoading",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "docStatus",
+      "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "PI",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061500",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "forwarder_booking",
   "fields": [
     {
@@ -11,14 +9,6 @@
     },
     {
       "fieldName": "itemName",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "itemId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "boardId",
       "fieldType": "String"
     },
     {
@@ -110,11 +100,7 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "ForwarderBooking",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

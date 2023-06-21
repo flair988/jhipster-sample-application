@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061453",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "process_log",
   "fields": [
     {
@@ -38,11 +36,7 @@
       "fieldType": "LocalDate"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "ProcessLog",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

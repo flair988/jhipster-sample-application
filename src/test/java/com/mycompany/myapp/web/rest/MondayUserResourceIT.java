@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.MondayUser;
 import com.mycompany.myapp.repository.MondayUserRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -265,7 +265,7 @@ class MondayUserResourceIT {
         MondayUser partialUpdatedMondayUser = new MondayUser();
         partialUpdatedMondayUser.setId(mondayUser.getId());
 
-        partialUpdatedMondayUser.name(UPDATED_NAME).url(UPDATED_URL);
+        partialUpdatedMondayUser.mondayId(UPDATED_MONDAY_ID).name(UPDATED_NAME);
 
         restMondayUserMockMvc
             .perform(
@@ -279,10 +279,10 @@ class MondayUserResourceIT {
         List<MondayUser> mondayUserList = mondayUserRepository.findAll();
         assertThat(mondayUserList).hasSize(databaseSizeBeforeUpdate);
         MondayUser testMondayUser = mondayUserList.get(mondayUserList.size() - 1);
-        assertThat(testMondayUser.getMondayId()).isEqualTo(DEFAULT_MONDAY_ID);
+        assertThat(testMondayUser.getMondayId()).isEqualTo(UPDATED_MONDAY_ID);
         assertThat(testMondayUser.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testMondayUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-        assertThat(testMondayUser.getUrl()).isEqualTo(UPDATED_URL);
+        assertThat(testMondayUser.getUrl()).isEqualTo(DEFAULT_URL);
     }
 
     @Test
