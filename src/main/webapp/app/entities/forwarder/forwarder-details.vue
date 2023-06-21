@@ -3,54 +3,54 @@
     <div class="col-8">
       <div v-if="forwarder">
         <h2 class="jh-entity-heading" data-cy="forwarderDetailsHeading">
-          <span v-text="$t('jhipsterSampleApplicationApp.forwarder.detail.title')">Forwarder</span> {{ forwarder.id }}
+          <span v-text="t$('jhipsterSampleApplicationApp.forwarder.detail.title')"></span> {{ forwarder.id }}
         </h2>
         <dl class="row jh-entity-details">
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.forwarder.itemName')">Item Name</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.forwarder.itemName')"></span>
           </dt>
           <dd>
             <span>{{ forwarder.itemName }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.forwarder.itemId')">Item Id</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.forwarder.itemId')"></span>
           </dt>
           <dd>
             <span>{{ forwarder.itemId }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.forwarder.boardId')">Board Id</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.forwarder.boardId')"></span>
           </dt>
           <dd>
             <span>{{ forwarder.boardId }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.forwarder.kingdeeId')">Kingdee Id</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.forwarder.kingdeeId')"></span>
           </dt>
           <dd>
             <span>{{ forwarder.kingdeeId }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.forwarder.contact')">Contact</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.forwarder.contact')"></span>
           </dt>
           <dd>
             <span>{{ forwarder.contact }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.forwarder.email')">Email</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.forwarder.email')"></span>
           </dt>
           <dd>
             <span>{{ forwarder.email }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.forwarder.telephone')">Telephone</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.forwarder.telephone')"></span>
           </dt>
           <dd>
             <span>{{ forwarder.telephone }}</span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.back')"></span>
         </button>
         <router-link
           v-if="forwarder.id"
@@ -59,7 +59,7 @@
           v-slot="{ navigate }"
         >
           <button @click="navigate" class="btn btn-primary">
-            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
+            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.edit')"></span>
           </button>
         </router-link>
       </div>

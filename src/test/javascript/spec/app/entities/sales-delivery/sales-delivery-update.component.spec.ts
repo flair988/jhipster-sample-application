@@ -1,73 +1,87 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import SalesDeliveryUpdateComponent from '@/entities/sales-delivery/sales-delivery-update.vue';
-import SalesDeliveryClass from '@/entities/sales-delivery/sales-delivery-update.component';
-import SalesDeliveryService from '@/entities/sales-delivery/sales-delivery.service';
+import SalesDeliveryUpdate from '../../../../../../main/webapp/app/entities/sales-delivery/sales-delivery-update.vue';
+import SalesDeliveryService from '../../../../../../main/webapp/app/entities/sales-delivery/sales-delivery.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-import AlertService from '@/shared/alert/alert.service';
+type SalesDeliveryUpdateComponentType = InstanceType<typeof SalesDeliveryUpdate>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const salesDeliverySample = { id: 123 };
 
 describe('Component Tests', () => {
+  let mountOptions: MountingOptions<SalesDeliveryUpdateComponentType>['global'];
+  let alertService: AlertService;
+
   describe('SalesDelivery Management Update Component', () => {
-    let wrapper: Wrapper<SalesDeliveryClass>;
-    let comp: SalesDeliveryClass;
+    let comp: SalesDeliveryUpdateComponentType;
     let salesDeliveryServiceStub: SinonStubbedInstance<SalesDeliveryService>;
 
     beforeEach(() => {
+      route = {};
       salesDeliveryServiceStub = sinon.createStubInstance<SalesDeliveryService>(SalesDeliveryService);
 
-      wrapper = shallowMount<SalesDeliveryClass>(SalesDeliveryUpdateComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: {
-          salesDeliveryService: () => salesDeliveryServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          salesDeliveryService: () => salesDeliveryServiceStub,
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 123 };
-        comp.salesDelivery = entity;
-        salesDeliveryServiceStub.update.resolves(entity);
+        const wrapper = shallowMount(SalesDeliveryUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.salesDelivery = salesDeliverySample;
+        salesDeliveryServiceStub.update.resolves(salesDeliverySample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(salesDeliveryServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(salesDeliveryServiceStub.update.calledWith(salesDeliverySample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.salesDelivery = entity;
         salesDeliveryServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(SalesDeliveryUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.salesDelivery = entity;
 
         // WHEN
         comp.save();
@@ -82,25 +96,35 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundSalesDelivery = { id: 123 };
-        salesDeliveryServiceStub.find.resolves(foundSalesDelivery);
-        salesDeliveryServiceStub.retrieve.resolves([foundSalesDelivery]);
+        salesDeliveryServiceStub.find.resolves(salesDeliverySample);
+        salesDeliveryServiceStub.retrieve.resolves([salesDeliverySample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { salesDeliveryId: 123 } }, null, cb => cb(comp));
+        route = {
+          params: {
+            salesDeliveryId: '' + salesDeliverySample.id,
+          },
+        };
+        const wrapper = shallowMount(SalesDeliveryUpdate, { global: mountOptions });
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.salesDelivery).toBe(foundSalesDelivery);
+        expect(comp.salesDelivery).toMatchObject(salesDeliverySample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        salesDeliveryServiceStub.find.resolves(salesDeliverySample);
+        const wrapper = shallowMount(SalesDeliveryUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

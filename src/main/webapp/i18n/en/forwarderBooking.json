@@ -8,19 +8,17 @@
         "createOrEditLabel": "Create or edit a Forwarder Booking",
         "notFound": "No Forwarder Bookings found"
       },
-      "created": "A new Forwarder Booking is created with identifier {{ param }}",
-      "updated": "A Forwarder Booking is updated with identifier {{ param }}",
-      "deleted": "A Forwarder Booking is deleted with identifier {{ param }}",
+      "created": "A new Forwarder Booking is created with identifier { param }",
+      "updated": "A Forwarder Booking is updated with identifier { param }",
+      "deleted": "A Forwarder Booking is deleted with identifier { param }",
       "delete": {
-        "question": "Are you sure you want to delete Forwarder Booking {{ id }}?"
+        "question": "Are you sure you want to delete Forwarder Booking { id }?"
       },
       "detail": {
         "title": "Forwarder Booking"
       },
       "id": "Id",
       "itemName": "Item Name",
-      "itemId": "Item Id",
-      "boardId": "Board Id",
       "kingdeeId": "Kingdee Id",
       "customer": "Customer",
       "orderDate": "Order Date",

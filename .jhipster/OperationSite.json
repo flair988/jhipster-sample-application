@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061450",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "operation_site",
   "fields": [
     {
@@ -38,15 +36,7 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "boardId",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "kingdeeId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "itemId",
       "fieldType": "String"
     },
     {
@@ -118,11 +108,7 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "OperationSite",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

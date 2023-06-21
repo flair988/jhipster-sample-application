@@ -1,79 +1,89 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import CommercialInvoiceDetailComponent from '@/entities/commercial-invoice/commercial-invoice-details.vue';
-import CommercialInvoiceClass from '@/entities/commercial-invoice/commercial-invoice-details.component';
-import CommercialInvoiceService from '@/entities/commercial-invoice/commercial-invoice.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+import CommercialInvoiceDetails from '../../../../../../main/webapp/app/entities/commercial-invoice/commercial-invoice-details.vue';
+import CommercialInvoiceService from '../../../../../../main/webapp/app/entities/commercial-invoice/commercial-invoice.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+type CommercialInvoiceDetailsComponentType = InstanceType<typeof CommercialInvoiceDetails>;
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const commercialInvoiceSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('CommercialInvoice Management Detail Component', () => {
-    let wrapper: Wrapper<CommercialInvoiceClass>;
-    let comp: CommercialInvoiceClass;
     let commercialInvoiceServiceStub: SinonStubbedInstance<CommercialInvoiceService>;
+    let mountOptions: MountingOptions<CommercialInvoiceDetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       commercialInvoiceServiceStub = sinon.createStubInstance<CommercialInvoiceService>(CommercialInvoiceService);
 
-      wrapper = shallowMount<CommercialInvoiceClass>(CommercialInvoiceDetailComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: { commercialInvoiceService: () => commercialInvoiceServiceStub, alertService: () => new AlertService() },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          commercialInvoiceService: () => commercialInvoiceServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundCommercialInvoice = { id: 123 };
-        commercialInvoiceServiceStub.find.resolves(foundCommercialInvoice);
-
+        commercialInvoiceServiceStub.find.resolves(commercialInvoiceSample);
+        route = {
+          params: {
+            commercialInvoiceId: '' + 123,
+          },
+        };
+        const wrapper = shallowMount(CommercialInvoiceDetails, { global: mountOptions });
+        const comp = wrapper.vm;
         // WHEN
-        comp.retrieveCommercialInvoice(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.commercialInvoice).toBe(foundCommercialInvoice);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const foundCommercialInvoice = { id: 123 };
-        commercialInvoiceServiceStub.find.resolves(foundCommercialInvoice);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { commercialInvoiceId: 123 } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.commercialInvoice).toBe(foundCommercialInvoice);
+        expect(comp.commercialInvoice).toMatchObject(commercialInvoiceSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        commercialInvoiceServiceStub.find.resolves(commercialInvoiceSample);
+        const wrapper = shallowMount(CommercialInvoiceDetails, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

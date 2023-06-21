@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061448",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "monday_column",
   "fields": [
     {
@@ -26,11 +24,7 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "MondayColumn",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

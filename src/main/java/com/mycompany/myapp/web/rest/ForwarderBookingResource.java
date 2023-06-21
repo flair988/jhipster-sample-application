@@ -127,12 +127,6 @@ public class ForwarderBookingResource {
                 if (forwarderBooking.getItemName() != null) {
                     existingForwarderBooking.setItemName(forwarderBooking.getItemName());
                 }
-                if (forwarderBooking.getItemId() != null) {
-                    existingForwarderBooking.setItemId(forwarderBooking.getItemId());
-                }
-                if (forwarderBooking.getBoardId() != null) {
-                    existingForwarderBooking.setBoardId(forwarderBooking.getBoardId());
-                }
                 if (forwarderBooking.getKingdeeId() != null) {
                     existingForwarderBooking.setKingdeeId(forwarderBooking.getKingdeeId());
                 }

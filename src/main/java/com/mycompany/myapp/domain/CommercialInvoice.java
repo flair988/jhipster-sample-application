@@ -1,7 +1,7 @@
 package com.mycompany.myapp.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -25,12 +25,6 @@ public class CommercialInvoice implements Serializable {
     @Column(name = "item_name")
     private String itemName;
 
-    @Column(name = "item_id")
-    private String itemId;
-
-    @Column(name = "board_id")
-    private String boardId;
-
     @Column(name = "kingdee_id")
     private String kingdeeId;
 
@@ -51,6 +45,12 @@ public class CommercialInvoice implements Serializable {
 
     @Column(name = "remarks")
     private String remarks;
+
+    @Column(name = "client_id")
+    private String clientId;
+
+    @Column(name = "doc_status")
+    private String docStatus;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -78,32 +78,6 @@ public class CommercialInvoice implements Serializable {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
-    }
-
-    public String getItemId() {
-        return this.itemId;
-    }
-
-    public CommercialInvoice itemId(String itemId) {
-        this.setItemId(itemId);
-        return this;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getBoardId() {
-        return this.boardId;
-    }
-
-    public CommercialInvoice boardId(String boardId) {
-        this.setBoardId(boardId);
-        return this;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
     }
 
     public String getKingdeeId() {
@@ -197,6 +171,32 @@ public class CommercialInvoice implements Serializable {
         this.remarks = remarks;
     }
 
+    public String getClientId() {
+        return this.clientId;
+    }
+
+    public CommercialInvoice clientId(String clientId) {
+        this.setClientId(clientId);
+        return this;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public String getDocStatus() {
+        return this.docStatus;
+    }
+
+    public CommercialInvoice docStatus(String docStatus) {
+        this.setDocStatus(docStatus);
+        return this;
+    }
+
+    public void setDocStatus(String docStatus) {
+        this.docStatus = docStatus;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -222,8 +222,6 @@ public class CommercialInvoice implements Serializable {
         return "CommercialInvoice{" +
             "id=" + getId() +
             ", itemName='" + getItemName() + "'" +
-            ", itemId='" + getItemId() + "'" +
-            ", boardId='" + getBoardId() + "'" +
             ", kingdeeId='" + getKingdeeId() + "'" +
             ", date='" + getDate() + "'" +
             ", client='" + getClient() + "'" +
@@ -231,6 +229,8 @@ public class CommercialInvoice implements Serializable {
             ", totalPrice='" + getTotalPrice() + "'" +
             ", currency='" + getCurrency() + "'" +
             ", remarks='" + getRemarks() + "'" +
+            ", clientId='" + getClientId() + "'" +
+            ", docStatus='" + getDocStatus() + "'" +
             "}";
     }
 }

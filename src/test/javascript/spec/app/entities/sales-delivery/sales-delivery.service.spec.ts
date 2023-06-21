@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import SalesDeliveryService from '@/entities/sales-delivery/sales-delivery.service';
-import { SalesDelivery } from '@/shared/model/sales-delivery.model';
+import SalesDeliveryService from '../../../../../../main/webapp/app/entities/sales-delivery/sales-delivery.service';
+import { SalesDelivery } from '../../../../../../main/webapp/app/shared/model/sales-delivery.model';
 
 const error = {
   response: {
@@ -31,8 +31,6 @@ describe('Service Tests', () => {
       service = new SalesDeliveryService();
       elemDefault = new SalesDelivery(
         123,
-        'AAAAAAA',
-        'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
@@ -103,13 +101,9 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             customer: 'BBBBBB',
             orderDate: 'BBBBBB',
-            totalActualShipQty: 'BBBBBB',
-            totalQtyDelivery: 'BBBBBB',
             loadingPort: 'BBBBBB',
             dischargePort: 'BBBBBB',
             transportMode: 'BBBBBB',
@@ -121,6 +115,8 @@ describe('Service Tests', () => {
             containerSize: 'BBBBBB',
             remark: 'BBBBBB',
             kingdeeUniqueId: 'BBBBBB',
+            docStatus: 'BBBBBB',
+            cateGory: 'BBBBBB',
           },
           elemDefault
         );
@@ -147,17 +143,12 @@ describe('Service Tests', () => {
       it('should partial update a SalesDelivery', async () => {
         const patchObject = Object.assign(
           {
-            itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
-            orderDate: 'BBBBBB',
-            dischargePort: 'BBBBBB',
-            incoterm: 'BBBBBB',
-            forwarder: 'BBBBBB',
+            transportMode: 'BBBBBB',
             eta: 'BBBBBB',
             etd: 'BBBBBB',
-            containerType: 'BBBBBB',
-            kingdeeUniqueId: 'BBBBBB',
+            remark: 'BBBBBB',
+            docStatus: 'BBBBBB',
           },
           new SalesDelivery()
         );
@@ -186,13 +177,9 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             customer: 'BBBBBB',
             orderDate: 'BBBBBB',
-            totalActualShipQty: 'BBBBBB',
-            totalQtyDelivery: 'BBBBBB',
             loadingPort: 'BBBBBB',
             dischargePort: 'BBBBBB',
             transportMode: 'BBBBBB',
@@ -204,6 +191,8 @@ describe('Service Tests', () => {
             containerSize: 'BBBBBB',
             remark: 'BBBBBB',
             kingdeeUniqueId: 'BBBBBB',
+            docStatus: 'BBBBBB',
+            cateGory: 'BBBBBB',
           },
           elemDefault
         );

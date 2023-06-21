@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IUom } from '@/shared/model/uom.model';
 import UomService from './uom.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class UomDetails extends Vue {
-  @Inject('uomService') private uomService: () => UomService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'UomDetails',
+  setup() {
+    const uomService = inject('uomService', () => new UomService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public uom: IUom = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.uomId) {
-        vm.retrieveUom(to.params.uomId);
+    const previousState = () => router.go(-1);
+    const uom: Ref<IUom> = ref({});
+
+    const retrieveUom = async uomId => {
+      try {
+        const res = await uomService().find(uomId);
+        uom.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveUom(uomId) {
-    this.uomService()
-      .find(uomId)
-      .then(res => {
-        this.uom = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.uomId) {
+      retrieveUom(route.params.uomId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      uom,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

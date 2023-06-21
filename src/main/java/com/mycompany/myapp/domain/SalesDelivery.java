@@ -1,7 +1,7 @@
 package com.mycompany.myapp.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -25,12 +25,6 @@ public class SalesDelivery implements Serializable {
     @Column(name = "item_name")
     private String itemName;
 
-    @Column(name = "item_id")
-    private String itemId;
-
-    @Column(name = "board_id")
-    private String boardId;
-
     @Column(name = "kingdee_id")
     private String kingdeeId;
 
@@ -39,12 +33,6 @@ public class SalesDelivery implements Serializable {
 
     @Column(name = "order_date")
     private String orderDate;
-
-    @Column(name = "total_actual_ship_qty")
-    private String totalActualShipQty;
-
-    @Column(name = "total_qty_delivery")
-    private String totalQtyDelivery;
 
     @Column(name = "loading_port")
     private String loadingPort;
@@ -79,6 +67,12 @@ public class SalesDelivery implements Serializable {
     @Column(name = "kingdee_unique_id")
     private String kingdeeUniqueId;
 
+    @Column(name = "doc_status")
+    private String docStatus;
+
+    @Column(name = "cate_gory")
+    private String cateGory;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -105,32 +99,6 @@ public class SalesDelivery implements Serializable {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
-    }
-
-    public String getItemId() {
-        return this.itemId;
-    }
-
-    public SalesDelivery itemId(String itemId) {
-        this.setItemId(itemId);
-        return this;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getBoardId() {
-        return this.boardId;
-    }
-
-    public SalesDelivery boardId(String boardId) {
-        this.setBoardId(boardId);
-        return this;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
     }
 
     public String getKingdeeId() {
@@ -170,32 +138,6 @@ public class SalesDelivery implements Serializable {
 
     public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
-    }
-
-    public String getTotalActualShipQty() {
-        return this.totalActualShipQty;
-    }
-
-    public SalesDelivery totalActualShipQty(String totalActualShipQty) {
-        this.setTotalActualShipQty(totalActualShipQty);
-        return this;
-    }
-
-    public void setTotalActualShipQty(String totalActualShipQty) {
-        this.totalActualShipQty = totalActualShipQty;
-    }
-
-    public String getTotalQtyDelivery() {
-        return this.totalQtyDelivery;
-    }
-
-    public SalesDelivery totalQtyDelivery(String totalQtyDelivery) {
-        this.setTotalQtyDelivery(totalQtyDelivery);
-        return this;
-    }
-
-    public void setTotalQtyDelivery(String totalQtyDelivery) {
-        this.totalQtyDelivery = totalQtyDelivery;
     }
 
     public String getLoadingPort() {
@@ -341,6 +283,32 @@ public class SalesDelivery implements Serializable {
         this.kingdeeUniqueId = kingdeeUniqueId;
     }
 
+    public String getDocStatus() {
+        return this.docStatus;
+    }
+
+    public SalesDelivery docStatus(String docStatus) {
+        this.setDocStatus(docStatus);
+        return this;
+    }
+
+    public void setDocStatus(String docStatus) {
+        this.docStatus = docStatus;
+    }
+
+    public String getCateGory() {
+        return this.cateGory;
+    }
+
+    public SalesDelivery cateGory(String cateGory) {
+        this.setCateGory(cateGory);
+        return this;
+    }
+
+    public void setCateGory(String cateGory) {
+        this.cateGory = cateGory;
+    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -366,13 +334,9 @@ public class SalesDelivery implements Serializable {
         return "SalesDelivery{" +
             "id=" + getId() +
             ", itemName='" + getItemName() + "'" +
-            ", itemId='" + getItemId() + "'" +
-            ", boardId='" + getBoardId() + "'" +
             ", kingdeeId='" + getKingdeeId() + "'" +
             ", customer='" + getCustomer() + "'" +
             ", orderDate='" + getOrderDate() + "'" +
-            ", totalActualShipQty='" + getTotalActualShipQty() + "'" +
-            ", totalQtyDelivery='" + getTotalQtyDelivery() + "'" +
             ", loadingPort='" + getLoadingPort() + "'" +
             ", dischargePort='" + getDischargePort() + "'" +
             ", transportMode='" + getTransportMode() + "'" +
@@ -384,6 +348,8 @@ public class SalesDelivery implements Serializable {
             ", containerSize='" + getContainerSize() + "'" +
             ", remark='" + getRemark() + "'" +
             ", kingdeeUniqueId='" + getKingdeeUniqueId() + "'" +
+            ", docStatus='" + getDocStatus() + "'" +
+            ", cateGory='" + getCateGory() + "'" +
             "}";
     }
 }

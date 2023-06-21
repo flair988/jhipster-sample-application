@@ -17,13 +17,7 @@
             <column name="item_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="item_code" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="po_number" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="is_new_item" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="category" type="varchar(255)">
@@ -32,31 +26,16 @@
             <column name="client" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="supplier" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="supplier_code" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="order_date" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="port" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="requested_end_of_prod_date" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="item_quantity" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="country_of_origin" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="country_of_final_destination" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="production_lead_time_commitment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="consignee" type="varchar(255)">
@@ -71,34 +50,10 @@
             <column name="terms_of_payment" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="item_unit" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="rate" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="amount" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="total_amount" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="discount_rate" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="currency" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="pi_status" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="remarks" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="item_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="board_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="kingdee_id" type="varchar(255)">
@@ -108,6 +63,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="port_of_loading" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="doc_status" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -132,37 +90,23 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="item_name" type="string"/>
-            <column name="item_code" type="string"/>
             <column name="po_number" type="string"/>
-            <column name="is_new_item" type="string"/>
             <column name="category" type="string"/>
             <column name="client" type="string"/>
-            <column name="supplier" type="string"/>
-            <column name="supplier_code" type="string"/>
             <column name="order_date" type="string"/>
-            <column name="port" type="string"/>
             <column name="requested_end_of_prod_date" type="string"/>
-            <column name="item_quantity" type="string"/>
             <column name="country_of_origin" type="string"/>
             <column name="country_of_final_destination" type="string"/>
-            <column name="production_lead_time_commitment" type="string"/>
             <column name="consignee" type="string"/>
             <column name="carriage_by" type="string"/>
             <column name="terms_of_delivery" type="string"/>
             <column name="terms_of_payment" type="string"/>
-            <column name="item_unit" type="string"/>
-            <column name="rate" type="string"/>
-            <column name="amount" type="string"/>
-            <column name="total_amount" type="string"/>
-            <column name="discount_rate" type="string"/>
             <column name="currency" type="string"/>
-            <column name="pi_status" type="string"/>
             <column name="remarks" type="string"/>
-            <column name="item_id" type="string"/>
-            <column name="board_id" type="string"/>
             <column name="kingdee_id" type="string"/>
             <column name="port_of_discharge" type="string"/>
             <column name="port_of_loading" type="string"/>
+            <column name="doc_status" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

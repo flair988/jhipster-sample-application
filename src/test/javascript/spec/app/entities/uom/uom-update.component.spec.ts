@@ -1,73 +1,87 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import UomUpdateComponent from '@/entities/uom/uom-update.vue';
-import UomClass from '@/entities/uom/uom-update.component';
-import UomService from '@/entities/uom/uom.service';
+import UomUpdate from '../../../../../../main/webapp/app/entities/uom/uom-update.vue';
+import UomService from '../../../../../../main/webapp/app/entities/uom/uom.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-import AlertService from '@/shared/alert/alert.service';
+type UomUpdateComponentType = InstanceType<typeof UomUpdate>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const uomSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let mountOptions: MountingOptions<UomUpdateComponentType>['global'];
+  let alertService: AlertService;
+
   describe('Uom Management Update Component', () => {
-    let wrapper: Wrapper<UomClass>;
-    let comp: UomClass;
+    let comp: UomUpdateComponentType;
     let uomServiceStub: SinonStubbedInstance<UomService>;
 
     beforeEach(() => {
+      route = {};
       uomServiceStub = sinon.createStubInstance<UomService>(UomService);
 
-      wrapper = shallowMount<UomClass>(UomUpdateComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: {
-          uomService: () => uomServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          uomService: () => uomServiceStub,
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 123 };
-        comp.uom = entity;
-        uomServiceStub.update.resolves(entity);
+        const wrapper = shallowMount(UomUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.uom = uomSample;
+        uomServiceStub.update.resolves(uomSample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(uomServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(uomServiceStub.update.calledWith(uomSample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.uom = entity;
         uomServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(UomUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.uom = entity;
 
         // WHEN
         comp.save();
@@ -82,25 +96,35 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundUom = { id: 123 };
-        uomServiceStub.find.resolves(foundUom);
-        uomServiceStub.retrieve.resolves([foundUom]);
+        uomServiceStub.find.resolves(uomSample);
+        uomServiceStub.retrieve.resolves([uomSample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { uomId: 123 } }, null, cb => cb(comp));
+        route = {
+          params: {
+            uomId: '' + uomSample.id,
+          },
+        };
+        const wrapper = shallowMount(UomUpdate, { global: mountOptions });
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.uom).toBe(foundUom);
+        expect(comp.uom).toMatchObject(uomSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        uomServiceStub.find.resolves(uomSample);
+        const wrapper = shallowMount(UomUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

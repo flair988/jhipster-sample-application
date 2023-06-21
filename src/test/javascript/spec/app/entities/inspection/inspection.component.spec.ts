@@ -1,25 +1,13 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 
-import * as config from '@/shared/config/config';
-import InspectionComponent from '@/entities/inspection/inspection.vue';
-import InspectionClass from '@/entities/inspection/inspection.component';
-import InspectionService from '@/entities/inspection/inspection.service';
-import AlertService from '@/shared/alert/alert.service';
+import Inspection from '../../../../../../main/webapp/app/entities/inspection/inspection.vue';
+import InspectionService from '../../../../../../main/webapp/app/entities/inspection/inspection.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(ToastPlugin);
-
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-badge', {});
-localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
+type InspectionComponentType = InstanceType<typeof Inspection>;
 
 const bModalStub = {
   render: () => {},
@@ -30,54 +18,84 @@ const bModalStub = {
 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
   describe('Inspection Management Component', () => {
-    let wrapper: Wrapper<InspectionClass>;
-    let comp: InspectionClass;
     let inspectionServiceStub: SinonStubbedInstance<InspectionService>;
+    let mountOptions: MountingOptions<InspectionComponentType>['global'];
 
     beforeEach(() => {
       inspectionServiceStub = sinon.createStubInstance<InspectionService>(InspectionService);
       inspectionServiceStub.retrieve.resolves({ headers: {} });
 
-      wrapper = shallowMount<InspectionClass>(InspectionComponent, {
-        store,
-        i18n,
-        localVue,
-        stubs: { bModal: bModalStub as any },
-        provide: {
-          inspectionService: () => inspectionServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          inspectionService: () => inspectionServiceStub,
+        },
+      };
     });
 
-    it('Should call load all on init', async () => {
-      // GIVEN
-      inspectionServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        inspectionServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
-      // WHEN
-      comp.retrieveAllInspections();
-      await comp.$nextTick();
+        // WHEN
+        const wrapper = shallowMount(Inspection, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
 
-      // THEN
-      expect(inspectionServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.inspections[0]).toEqual(expect.objectContaining({ id: 123 }));
+        // THEN
+        expect(inspectionServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.inspections[0]).toEqual(expect.objectContaining({ id: 123 }));
+      });
     });
-    it('Should call delete service on confirmDelete', async () => {
-      // GIVEN
-      inspectionServiceStub.delete.resolves({});
+    describe('Handles', () => {
+      let comp: InspectionComponentType;
 
-      // WHEN
-      comp.prepareRemove({ id: 123 });
-      expect(inspectionServiceStub.retrieve.callCount).toEqual(1);
+      beforeEach(async () => {
+        const wrapper = shallowMount(Inspection, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        inspectionServiceStub.retrieve.reset();
+        inspectionServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
 
-      comp.removeInspection();
-      await comp.$nextTick();
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        inspectionServiceStub.delete.resolves({});
 
-      // THEN
-      expect(inspectionServiceStub.delete.called).toBeTruthy();
-      expect(inspectionServiceStub.retrieve.callCount).toEqual(2);
+        // WHEN
+        comp.prepareRemove({ id: 123 });
+
+        comp.removeInspection();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(inspectionServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(inspectionServiceStub.retrieve.callCount).toEqual(1);
+      });
     });
   });
 });

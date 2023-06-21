@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import MondayUserService from '@/entities/monday-user/monday-user.service';
-import { MondayUser } from '@/shared/model/monday-user.model';
+import MondayUserService from '../../../../../../main/webapp/app/entities/monday-user/monday-user.service';
+import { MondayUser } from '../../../../../../main/webapp/app/shared/model/monday-user.model';
 
 const error = {
   response: {
@@ -111,7 +111,7 @@ describe('Service Tests', () => {
       it('should partial update a MondayUser', async () => {
         const patchObject = Object.assign(
           {
-            mondayId: 1,
+            name: 'BBBBBB',
             email: 'BBBBBB',
             url: 'BBBBBB',
           },

@@ -5,155 +5,146 @@
         <h2
           id="jhipsterSampleApplicationApp.client.home.createOrEditLabel"
           data-cy="ClientCreateUpdateHeading"
-          v-text="$t('jhipsterSampleApplicationApp.client.home.createOrEditLabel')"
-        >
-          Create or edit a Client
-        </h2>
+          v-text="t$('jhipsterSampleApplicationApp.client.home.createOrEditLabel')"
+        ></h2>
         <div>
           <div class="form-group" v-if="client.id">
-            <label for="id" v-text="$t('global.field.id')">ID</label>
+            <label for="id" v-text="t$('global.field.id')"></label>
             <input type="text" class="form-control" id="id" name="id" v-model="client.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.client.itemId')" for="client-itemId">Item Id</label>
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.client.itemId')" for="client-itemId"></label>
             <input
               type="text"
               class="form-control"
               name="itemId"
               id="client-itemId"
               data-cy="itemId"
-              :class="{ valid: !$v.client.itemId.$invalid, invalid: $v.client.itemId.$invalid }"
-              v-model="$v.client.itemId.$model"
+              :class="{ valid: !v$.itemId.$invalid, invalid: v$.itemId.$invalid }"
+              v-model="v$.itemId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.client.itemName')" for="client-itemName"
-              >Item Name</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.client.itemName')" for="client-itemName"></label>
             <input
               type="text"
               class="form-control"
               name="itemName"
               id="client-itemName"
               data-cy="itemName"
-              :class="{ valid: !$v.client.itemName.$invalid, invalid: $v.client.itemName.$invalid }"
-              v-model="$v.client.itemName.$model"
+              :class="{ valid: !v$.itemName.$invalid, invalid: v$.itemName.$invalid }"
+              v-model="v$.itemName.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.client.boardId')" for="client-boardId"
-              >Board Id</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.client.boardId')" for="client-boardId"></label>
             <input
               type="text"
               class="form-control"
               name="boardId"
               id="client-boardId"
               data-cy="boardId"
-              :class="{ valid: !$v.client.boardId.$invalid, invalid: $v.client.boardId.$invalid }"
-              v-model="$v.client.boardId.$model"
+              :class="{ valid: !v$.boardId.$invalid, invalid: v$.boardId.$invalid }"
+              v-model="v$.boardId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.client.subItems')" for="client-subItems"
-              >Sub Items</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.client.subItems')" for="client-subItems"></label>
             <input
               type="text"
               class="form-control"
               name="subItems"
               id="client-subItems"
               data-cy="subItems"
-              :class="{ valid: !$v.client.subItems.$invalid, invalid: $v.client.subItems.$invalid }"
-              v-model="$v.client.subItems.$model"
+              :class="{ valid: !v$.subItems.$invalid, invalid: v$.subItems.$invalid }"
+              v-model="v$.subItems.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.client.kingdeeId')" for="client-kingdeeId"
-              >Kingdee Id</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.client.kingdeeId')" for="client-kingdeeId"></label>
             <input
               type="text"
               class="form-control"
               name="kingdeeId"
               id="client-kingdeeId"
               data-cy="kingdeeId"
-              :class="{ valid: !$v.client.kingdeeId.$invalid, invalid: $v.client.kingdeeId.$invalid }"
-              v-model="$v.client.kingdeeId.$model"
+              :class="{ valid: !v$.kingdeeId.$invalid, invalid: v$.kingdeeId.$invalid }"
+              v-model="v$.kingdeeId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.client.customerName')" for="client-customerName"
-              >Customer Name</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.client.customerName')"
+              for="client-customerName"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="customerName"
               id="client-customerName"
               data-cy="customerName"
-              :class="{ valid: !$v.client.customerName.$invalid, invalid: $v.client.customerName.$invalid }"
-              v-model="$v.client.customerName.$model"
+              :class="{ valid: !v$.customerName.$invalid, invalid: v$.customerName.$invalid }"
+              v-model="v$.customerName.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.client.customerCode')" for="client-customerCode"
-              >Customer Code</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.client.customerCode')"
+              for="client-customerCode"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="customerCode"
               id="client-customerCode"
               data-cy="customerCode"
-              :class="{ valid: !$v.client.customerCode.$invalid, invalid: $v.client.customerCode.$invalid }"
-              v-model="$v.client.customerCode.$model"
+              :class="{ valid: !v$.customerCode.$invalid, invalid: v$.customerCode.$invalid }"
+              v-model="v$.customerCode.$model"
             />
           </div>
           <div class="form-group">
             <label
               class="form-control-label"
-              v-text="$t('jhipsterSampleApplicationApp.client.customerFrenceName')"
+              v-text="t$('jhipsterSampleApplicationApp.client.customerFrenceName')"
               for="client-customerFrenceName"
-              >Customer Frence Name</label
-            >
+            ></label>
             <input
               type="text"
               class="form-control"
               name="customerFrenceName"
               id="client-customerFrenceName"
               data-cy="customerFrenceName"
-              :class="{ valid: !$v.client.customerFrenceName.$invalid, invalid: $v.client.customerFrenceName.$invalid }"
-              v-model="$v.client.customerFrenceName.$model"
+              :class="{ valid: !v$.customerFrenceName.$invalid, invalid: v$.customerFrenceName.$invalid }"
+              v-model="v$.customerFrenceName.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.client.comment')" for="client-comment"
-              >Comment</label
-            >
+            <label class="form-control-label" v-text="t$('jhipsterSampleApplicationApp.client.comment')" for="client-comment"></label>
             <input
               type="text"
               class="form-control"
               name="comment"
               id="client-comment"
               data-cy="comment"
-              :class="{ valid: !$v.client.comment.$invalid, invalid: $v.client.comment.$invalid }"
-              v-model="$v.client.comment.$model"
+              :class="{ valid: !v$.comment.$invalid, invalid: v$.comment.$invalid }"
+              v-model="v$.comment.$model"
             />
           </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
-            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
+            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')"></span>
           </button>
           <button
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.client.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
-            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
+            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.save')"></span>
           </button>
         </div>
       </form>

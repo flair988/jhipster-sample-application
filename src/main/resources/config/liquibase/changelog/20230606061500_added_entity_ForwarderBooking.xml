@@ -17,12 +17,6 @@
             <column name="item_name" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="item_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="board_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="kingdee_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -111,8 +105,6 @@
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="item_name" type="string"/>
-            <column name="item_id" type="string"/>
-            <column name="board_id" type="string"/>
             <column name="kingdee_id" type="string"/>
             <column name="customer" type="string"/>
             <column name="order_date" type="string"/>

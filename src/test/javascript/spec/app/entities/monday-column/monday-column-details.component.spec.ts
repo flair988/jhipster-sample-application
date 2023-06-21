@@ -1,79 +1,89 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import MondayColumnDetailComponent from '@/entities/monday-column/monday-column-details.vue';
-import MondayColumnClass from '@/entities/monday-column/monday-column-details.component';
-import MondayColumnService from '@/entities/monday-column/monday-column.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+import MondayColumnDetails from '../../../../../../main/webapp/app/entities/monday-column/monday-column-details.vue';
+import MondayColumnService from '../../../../../../main/webapp/app/entities/monday-column/monday-column.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+type MondayColumnDetailsComponentType = InstanceType<typeof MondayColumnDetails>;
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const mondayColumnSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('MondayColumn Management Detail Component', () => {
-    let wrapper: Wrapper<MondayColumnClass>;
-    let comp: MondayColumnClass;
     let mondayColumnServiceStub: SinonStubbedInstance<MondayColumnService>;
+    let mountOptions: MountingOptions<MondayColumnDetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       mondayColumnServiceStub = sinon.createStubInstance<MondayColumnService>(MondayColumnService);
 
-      wrapper = shallowMount<MondayColumnClass>(MondayColumnDetailComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: { mondayColumnService: () => mondayColumnServiceStub, alertService: () => new AlertService() },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          mondayColumnService: () => mondayColumnServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundMondayColumn = { id: 123 };
-        mondayColumnServiceStub.find.resolves(foundMondayColumn);
-
+        mondayColumnServiceStub.find.resolves(mondayColumnSample);
+        route = {
+          params: {
+            mondayColumnId: '' + 123,
+          },
+        };
+        const wrapper = shallowMount(MondayColumnDetails, { global: mountOptions });
+        const comp = wrapper.vm;
         // WHEN
-        comp.retrieveMondayColumn(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.mondayColumn).toBe(foundMondayColumn);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const foundMondayColumn = { id: 123 };
-        mondayColumnServiceStub.find.resolves(foundMondayColumn);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { mondayColumnId: 123 } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.mondayColumn).toBe(foundMondayColumn);
+        expect(comp.mondayColumn).toMatchObject(mondayColumnSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        mondayColumnServiceStub.find.resolves(mondayColumnSample);
+        const wrapper = shallowMount(MondayColumnDetails, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

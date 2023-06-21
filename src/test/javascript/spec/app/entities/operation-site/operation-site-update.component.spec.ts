@@ -1,73 +1,87 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import OperationSiteUpdateComponent from '@/entities/operation-site/operation-site-update.vue';
-import OperationSiteClass from '@/entities/operation-site/operation-site-update.component';
-import OperationSiteService from '@/entities/operation-site/operation-site.service';
+import OperationSiteUpdate from '../../../../../../main/webapp/app/entities/operation-site/operation-site-update.vue';
+import OperationSiteService from '../../../../../../main/webapp/app/entities/operation-site/operation-site.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-import AlertService from '@/shared/alert/alert.service';
+type OperationSiteUpdateComponentType = InstanceType<typeof OperationSiteUpdate>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const operationSiteSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let mountOptions: MountingOptions<OperationSiteUpdateComponentType>['global'];
+  let alertService: AlertService;
+
   describe('OperationSite Management Update Component', () => {
-    let wrapper: Wrapper<OperationSiteClass>;
-    let comp: OperationSiteClass;
+    let comp: OperationSiteUpdateComponentType;
     let operationSiteServiceStub: SinonStubbedInstance<OperationSiteService>;
 
     beforeEach(() => {
+      route = {};
       operationSiteServiceStub = sinon.createStubInstance<OperationSiteService>(OperationSiteService);
 
-      wrapper = shallowMount<OperationSiteClass>(OperationSiteUpdateComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: {
-          operationSiteService: () => operationSiteServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          operationSiteService: () => operationSiteServiceStub,
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 123 };
-        comp.operationSite = entity;
-        operationSiteServiceStub.update.resolves(entity);
+        const wrapper = shallowMount(OperationSiteUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.operationSite = operationSiteSample;
+        operationSiteServiceStub.update.resolves(operationSiteSample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(operationSiteServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(operationSiteServiceStub.update.calledWith(operationSiteSample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.operationSite = entity;
         operationSiteServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(OperationSiteUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.operationSite = entity;
 
         // WHEN
         comp.save();
@@ -82,25 +96,35 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundOperationSite = { id: 123 };
-        operationSiteServiceStub.find.resolves(foundOperationSite);
-        operationSiteServiceStub.retrieve.resolves([foundOperationSite]);
+        operationSiteServiceStub.find.resolves(operationSiteSample);
+        operationSiteServiceStub.retrieve.resolves([operationSiteSample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { operationSiteId: 123 } }, null, cb => cb(comp));
+        route = {
+          params: {
+            operationSiteId: '' + operationSiteSample.id,
+          },
+        };
+        const wrapper = shallowMount(OperationSiteUpdate, { global: mountOptions });
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.operationSite).toBe(foundOperationSite);
+        expect(comp.operationSite).toMatchObject(operationSiteSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        operationSiteServiceStub.find.resolves(operationSiteSample);
+        const wrapper = shallowMount(OperationSiteUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

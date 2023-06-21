@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import ProductFinishedService from '@/entities/product-finished/product-finished.service';
-import { ProductFinished } from '@/shared/model/product-finished.model';
+import ProductFinishedService from '../../../../../../main/webapp/app/entities/product-finished/product-finished.service';
+import { ProductFinished } from '../../../../../../main/webapp/app/shared/model/product-finished.model';
 
 const error = {
   response: {
@@ -94,8 +94,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             supplier: 'BBBBBB',
             supplierEmail: 'BBBBBB',
@@ -103,6 +101,8 @@ describe('Service Tests', () => {
             cateGory: 'BBBBBB',
             remark: 'BBBBBB',
             materialReceiptDate: 'BBBBBB',
+            docStatus: 'BBBBBB',
+            supplierName: 'BBBBBB',
           },
           elemDefault
         );
@@ -130,8 +130,8 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
+            supplier: 'BBBBBB',
             cateGory: 'BBBBBB',
             remark: 'BBBBBB',
             materialReceiptDate: 'BBBBBB',
@@ -163,8 +163,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             supplier: 'BBBBBB',
             supplierEmail: 'BBBBBB',
@@ -172,6 +170,8 @@ describe('Service Tests', () => {
             cateGory: 'BBBBBB',
             remark: 'BBBBBB',
             materialReceiptDate: 'BBBBBB',
+            docStatus: 'BBBBBB',
+            supplierName: 'BBBBBB',
           },
           elemDefault
         );

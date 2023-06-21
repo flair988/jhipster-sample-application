@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IPI } from '@/shared/model/pi.model';
 import PIService from './pi.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class PIDetails extends Vue {
-  @Inject('pIService') private pIService: () => PIService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'PIDetails',
+  setup() {
+    const pIService = inject('pIService', () => new PIService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public pI: IPI = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.pIId) {
-        vm.retrievePI(to.params.pIId);
+    const previousState = () => router.go(-1);
+    const pI: Ref<IPI> = ref({});
+
+    const retrievePI = async pIId => {
+      try {
+        const res = await pIService().find(pIId);
+        pI.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrievePI(pIId) {
-    this.pIService()
-      .find(pIId)
-      .then(res => {
-        this.pI = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.pIId) {
+      retrievePI(route.params.pIId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      pI,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

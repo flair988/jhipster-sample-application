@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IProductTaxmonomy } from '@/shared/model/product-taxmonomy.model';
 import ProductTaxmonomyService from './product-taxmonomy.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class ProductTaxmonomyDetails extends Vue {
-  @Inject('productTaxmonomyService') private productTaxmonomyService: () => ProductTaxmonomyService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ProductTaxmonomyDetails',
+  setup() {
+    const productTaxmonomyService = inject('productTaxmonomyService', () => new ProductTaxmonomyService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public productTaxmonomy: IProductTaxmonomy = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.productTaxmonomyId) {
-        vm.retrieveProductTaxmonomy(to.params.productTaxmonomyId);
+    const previousState = () => router.go(-1);
+    const productTaxmonomy: Ref<IProductTaxmonomy> = ref({});
+
+    const retrieveProductTaxmonomy = async productTaxmonomyId => {
+      try {
+        const res = await productTaxmonomyService().find(productTaxmonomyId);
+        productTaxmonomy.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveProductTaxmonomy(productTaxmonomyId) {
-    this.productTaxmonomyService()
-      .find(productTaxmonomyId)
-      .then(res => {
-        this.productTaxmonomy = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.productTaxmonomyId) {
+      retrieveProductTaxmonomy(route.params.productTaxmonomyId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      productTaxmonomy,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

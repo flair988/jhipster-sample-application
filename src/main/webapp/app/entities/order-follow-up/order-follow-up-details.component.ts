@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IOrderFollowUp } from '@/shared/model/order-follow-up.model';
 import OrderFollowUpService from './order-follow-up.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class OrderFollowUpDetails extends Vue {
-  @Inject('orderFollowUpService') private orderFollowUpService: () => OrderFollowUpService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'OrderFollowUpDetails',
+  setup() {
+    const orderFollowUpService = inject('orderFollowUpService', () => new OrderFollowUpService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public orderFollowUp: IOrderFollowUp = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.orderFollowUpId) {
-        vm.retrieveOrderFollowUp(to.params.orderFollowUpId);
+    const previousState = () => router.go(-1);
+    const orderFollowUp: Ref<IOrderFollowUp> = ref({});
+
+    const retrieveOrderFollowUp = async orderFollowUpId => {
+      try {
+        const res = await orderFollowUpService().find(orderFollowUpId);
+        orderFollowUp.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveOrderFollowUp(orderFollowUpId) {
-    this.orderFollowUpService()
-      .find(orderFollowUpId)
-      .then(res => {
-        this.orderFollowUp = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.orderFollowUpId) {
+      retrieveOrderFollowUp(route.params.orderFollowUpId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      orderFollowUp,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

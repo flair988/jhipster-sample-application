@@ -1,7 +1,7 @@
 package com.mycompany.myapp.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -24,12 +24,6 @@ public class ForwarderBooking implements Serializable {
 
     @Column(name = "item_name")
     private String itemName;
-
-    @Column(name = "item_id")
-    private String itemId;
-
-    @Column(name = "board_id")
-    private String boardId;
 
     @Column(name = "kingdee_id")
     private String kingdeeId;
@@ -123,32 +117,6 @@ public class ForwarderBooking implements Serializable {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
-    }
-
-    public String getItemId() {
-        return this.itemId;
-    }
-
-    public ForwarderBooking itemId(String itemId) {
-        this.setItemId(itemId);
-        return this;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getBoardId() {
-        return this.boardId;
-    }
-
-    public ForwarderBooking boardId(String boardId) {
-        this.setBoardId(boardId);
-        return this;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
     }
 
     public String getKingdeeId() {
@@ -462,8 +430,6 @@ public class ForwarderBooking implements Serializable {
         return "ForwarderBooking{" +
             "id=" + getId() +
             ", itemName='" + getItemName() + "'" +
-            ", itemId='" + getItemId() + "'" +
-            ", boardId='" + getBoardId() + "'" +
             ", kingdeeId='" + getKingdeeId() + "'" +
             ", customer='" + getCustomer() + "'" +
             ", orderDate='" + getOrderDate() + "'" +

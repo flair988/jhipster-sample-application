@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061446",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "jhi_group",
   "fields": [
     {
@@ -30,11 +28,7 @@
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "Group",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

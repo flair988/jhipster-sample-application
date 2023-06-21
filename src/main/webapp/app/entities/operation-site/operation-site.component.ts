@@ -1,80 +1,78 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
+import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import { IOperationSite } from '@/shared/model/operation-site.model';
-
 import OperationSiteService from './operation-site.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component({
-  mixins: [Vue2Filters.mixin],
-})
-export default class OperationSite extends Vue {
-  @Inject('operationSiteService') private operationSiteService: () => OperationSiteService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'OperationSite',
+  setup() {
+    const { t: t$ } = useI18n();
+    const operationSiteService = inject('operationSiteService', () => new OperationSiteService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  private removeId: number = null;
+    const operationSites: Ref<IOperationSite[]> = ref([]);
 
-  public operationSites: IOperationSite[] = [];
+    const isFetching = ref(false);
 
-  public isFetching = false;
+    const clear = () => {};
 
-  public mounted(): void {
-    this.retrieveAllOperationSites();
-  }
+    const retrieveOperationSites = async () => {
+      isFetching.value = true;
+      try {
+        const res = await operationSiteService().retrieve();
+        operationSites.value = res.data;
+      } catch (err) {
+        alertService.showHttpError(err.response);
+      } finally {
+        isFetching.value = false;
+      }
+    };
 
-  public clear(): void {
-    this.retrieveAllOperationSites();
-  }
+    const handleSyncList = () => {
+      retrieveOperationSites();
+    };
 
-  public retrieveAllOperationSites(): void {
-    this.isFetching = true;
-    this.operationSiteService()
-      .retrieve()
-      .then(
-        res => {
-          this.operationSites = res.data;
-          this.isFetching = false;
-        },
-        err => {
-          this.isFetching = false;
-          this.alertService().showHttpError(this, err.response);
-        }
-      );
-  }
+    onMounted(async () => {
+      await retrieveOperationSites();
+    });
 
-  public handleSyncList(): void {
-    this.clear();
-  }
+    const removeId: Ref<number> = ref(null);
+    const removeEntity = ref<any>(null);
+    const prepareRemove = (instance: IOperationSite) => {
+      removeId.value = instance.id;
+      removeEntity.value.show();
+    };
+    const closeDialog = () => {
+      removeEntity.value.hide();
+    };
+    const removeOperationSite = async () => {
+      try {
+        await operationSiteService().delete(removeId.value);
+        const message = t$('jhipsterSampleApplicationApp.operationSite.deleted', { param: removeId.value }).toString();
+        alertService.showInfo(message, { variant: 'danger' });
+        removeId.value = null;
+        retrieveOperationSites();
+        closeDialog();
+      } catch (error) {
+        alertService.showHttpError(error.response);
+      }
+    };
 
-  public prepareRemove(instance: IOperationSite): void {
-    this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
-  }
-
-  public removeOperationSite(): void {
-    this.operationSiteService()
-      .delete(this.removeId)
-      .then(() => {
-        const message = this.$t('jhipsterSampleApplicationApp.operationSite.deleted', { param: this.removeId });
-        this.$bvToast.toast(message.toString(), {
-          toaster: 'b-toaster-top-center',
-          title: 'Info',
-          variant: 'danger',
-          solid: true,
-          autoHideDelay: 5000,
-        });
-        this.removeId = null;
-        this.retrieveAllOperationSites();
-        this.closeDialog();
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-  }
-}
+    return {
+      operationSites,
+      handleSyncList,
+      isFetching,
+      retrieveOperationSites,
+      clear,
+      removeId,
+      removeEntity,
+      prepareRemove,
+      closeDialog,
+      removeOperationSite,
+      t$,
+    };
+  },
+});

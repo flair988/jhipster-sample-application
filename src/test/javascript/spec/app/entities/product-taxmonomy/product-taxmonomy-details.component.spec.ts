@@ -1,79 +1,89 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import ProductTaxmonomyDetailComponent from '@/entities/product-taxmonomy/product-taxmonomy-details.vue';
-import ProductTaxmonomyClass from '@/entities/product-taxmonomy/product-taxmonomy-details.component';
-import ProductTaxmonomyService from '@/entities/product-taxmonomy/product-taxmonomy.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+import ProductTaxmonomyDetails from '../../../../../../main/webapp/app/entities/product-taxmonomy/product-taxmonomy-details.vue';
+import ProductTaxmonomyService from '../../../../../../main/webapp/app/entities/product-taxmonomy/product-taxmonomy.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+type ProductTaxmonomyDetailsComponentType = InstanceType<typeof ProductTaxmonomyDetails>;
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const productTaxmonomySample = { id: 123 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('ProductTaxmonomy Management Detail Component', () => {
-    let wrapper: Wrapper<ProductTaxmonomyClass>;
-    let comp: ProductTaxmonomyClass;
     let productTaxmonomyServiceStub: SinonStubbedInstance<ProductTaxmonomyService>;
+    let mountOptions: MountingOptions<ProductTaxmonomyDetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       productTaxmonomyServiceStub = sinon.createStubInstance<ProductTaxmonomyService>(ProductTaxmonomyService);
 
-      wrapper = shallowMount<ProductTaxmonomyClass>(ProductTaxmonomyDetailComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: { productTaxmonomyService: () => productTaxmonomyServiceStub, alertService: () => new AlertService() },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          productTaxmonomyService: () => productTaxmonomyServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundProductTaxmonomy = { id: 123 };
-        productTaxmonomyServiceStub.find.resolves(foundProductTaxmonomy);
-
+        productTaxmonomyServiceStub.find.resolves(productTaxmonomySample);
+        route = {
+          params: {
+            productTaxmonomyId: '' + 123,
+          },
+        };
+        const wrapper = shallowMount(ProductTaxmonomyDetails, { global: mountOptions });
+        const comp = wrapper.vm;
         // WHEN
-        comp.retrieveProductTaxmonomy(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.productTaxmonomy).toBe(foundProductTaxmonomy);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const foundProductTaxmonomy = { id: 123 };
-        productTaxmonomyServiceStub.find.resolves(foundProductTaxmonomy);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { productTaxmonomyId: 123 } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.productTaxmonomy).toBe(foundProductTaxmonomy);
+        expect(comp.productTaxmonomy).toMatchObject(productTaxmonomySample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        productTaxmonomyServiceStub.find.resolves(productTaxmonomySample);
+        const wrapper = shallowMount(ProductTaxmonomyDetails, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061458",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "commercial_invoice",
   "fields": [
     {
@@ -11,14 +9,6 @@
     },
     {
       "fieldName": "itemName",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "itemId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "boardId",
       "fieldType": "String"
     },
     {
@@ -48,13 +38,17 @@
     {
       "fieldName": "remarks",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "clientId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "docStatus",
+      "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "CommercialInvoice",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

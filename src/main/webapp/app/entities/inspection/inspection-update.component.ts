@@ -1,116 +1,103 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import { IInspection, Inspection } from '@/shared/model/inspection.model';
 import InspectionService from './inspection.service';
 
-const validations: any = {
-  inspection: {
-    itemName: {},
-    itemId: {},
-    boardId: {},
-    kingdeeId: {},
-    supplierName: {},
-    email: {},
-    inspectionDate: {},
-    endOfProductionDate: {},
-    cateGory: {},
-    technicalFile: {},
-    qCResult: {},
-    docStatus: {},
-    goodsReadyForPickUpDate: {},
-    inspectionType: {},
-    inspectionBookingStatus: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'InspectionUpdate',
+  setup() {
+    const inspectionService = inject('inspectionService', () => new InspectionService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-})
-export default class InspectionUpdate extends Vue {
-  @Inject('inspectionService') private inspectionService: () => InspectionService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const inspection: Ref<IInspection> = ref(new Inspection());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  public inspection: IInspection = new Inspection();
-  public isSaving = false;
-  public currentLanguage = '';
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.inspectionId) {
-        vm.retrieveInspection(to.params.inspectionId);
+    const previousState = () => router.go(-1);
+
+    const retrieveInspection = async inspectionId => {
+      try {
+        const res = await inspectionService().find(inspectionId);
+        inspection.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.inspection.id) {
-      this.inspectionService()
-        .update(this.inspection)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.inspection.updated', { param: param.id });
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.inspectionService()
-        .create(this.inspection)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.inspection.created', { param: param.id });
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.inspectionId) {
+      retrieveInspection(route.params.inspectionId);
     }
-  }
 
-  public retrieveInspection(inspectionId): void {
-    this.inspectionService()
-      .find(inspectionId)
-      .then(res => {
-        this.inspection = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const { t: t$ } = useI18n();
+    const validations = useValidation();
+    const validationRules = {
+      itemName: {},
+      kingdeeId: {},
+      supplierName: {},
+      email: {},
+      inspectionDate: {},
+      cateGory: {},
+      qCResult: {},
+      docStatus: {},
+      inspectionType: {},
+      inspectionBookingStatus: {},
+      inspectionEndDate: {},
+      supplierId: {},
+      reportNumber: {},
+    };
+    const v$ = useVuelidate(validationRules, inspection as any);
+    v$.value.$validate();
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {}
-}
+    return {
+      inspectionService,
+      alertService,
+      inspection,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+      t$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.inspection.id) {
+        this.inspectionService()
+          .update(this.inspection)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo(this.t$('jhipsterSampleApplicationApp.inspection.updated', { param: param.id }));
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.inspectionService()
+          .create(this.inspection)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess(this.t$('jhipsterSampleApplicationApp.inspection.created', { param: param.id }).toString());
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

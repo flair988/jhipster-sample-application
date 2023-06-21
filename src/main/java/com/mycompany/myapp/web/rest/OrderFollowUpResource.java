@@ -123,14 +123,8 @@ public class OrderFollowUpResource {
         Optional<OrderFollowUp> result = orderFollowUpRepository
             .findById(orderFollowUp.getId())
             .map(existingOrderFollowUp -> {
-                if (orderFollowUp.getItemId() != null) {
-                    existingOrderFollowUp.setItemId(orderFollowUp.getItemId());
-                }
                 if (orderFollowUp.getPoNumber() != null) {
                     existingOrderFollowUp.setPoNumber(orderFollowUp.getPoNumber());
-                }
-                if (orderFollowUp.getCustomer() != null) {
-                    existingOrderFollowUp.setCustomer(orderFollowUp.getCustomer());
                 }
                 if (orderFollowUp.getSupplier() != null) {
                     existingOrderFollowUp.setSupplier(orderFollowUp.getSupplier());
@@ -171,9 +165,6 @@ public class OrderFollowUpResource {
                 if (orderFollowUp.getUpdatedEta() != null) {
                     existingOrderFollowUp.setUpdatedEta(orderFollowUp.getUpdatedEta());
                 }
-                if (orderFollowUp.getForwarder() != null) {
-                    existingOrderFollowUp.setForwarder(orderFollowUp.getForwarder());
-                }
                 if (orderFollowUp.getDocumentStatus() != null) {
                     existingOrderFollowUp.setDocumentStatus(orderFollowUp.getDocumentStatus());
                 }
@@ -204,17 +195,11 @@ public class OrderFollowUpResource {
                 if (orderFollowUp.getItemName() != null) {
                     existingOrderFollowUp.setItemName(orderFollowUp.getItemName());
                 }
-                if (orderFollowUp.getBoardId() != null) {
-                    existingOrderFollowUp.setBoardId(orderFollowUp.getBoardId());
-                }
                 if (orderFollowUp.getKingdeeId() != null) {
                     existingOrderFollowUp.setKingdeeId(orderFollowUp.getKingdeeId());
                 }
                 if (orderFollowUp.getParentKingdeeId() != null) {
                     existingOrderFollowUp.setParentKingdeeId(orderFollowUp.getParentKingdeeId());
-                }
-                if (orderFollowUp.getParentMondayId() != null) {
-                    existingOrderFollowUp.setParentMondayId(orderFollowUp.getParentMondayId());
                 }
                 if (orderFollowUp.getQty() != null) {
                     existingOrderFollowUp.setQty(orderFollowUp.getQty());
@@ -222,17 +207,11 @@ public class OrderFollowUpResource {
                 if (orderFollowUp.getItemCode() != null) {
                     existingOrderFollowUp.setItemCode(orderFollowUp.getItemCode());
                 }
-                if (orderFollowUp.getAmount() != null) {
-                    existingOrderFollowUp.setAmount(orderFollowUp.getAmount());
-                }
-                if (orderFollowUp.getDiscount() != null) {
-                    existingOrderFollowUp.setDiscount(orderFollowUp.getDiscount());
-                }
-                if (orderFollowUp.getUnit() != null) {
-                    existingOrderFollowUp.setUnit(orderFollowUp.getUnit());
-                }
                 if (orderFollowUp.getContractEndOfProdDate() != null) {
                     existingOrderFollowUp.setContractEndOfProdDate(orderFollowUp.getContractEndOfProdDate());
+                }
+                if (orderFollowUp.getSupplierId() != null) {
+                    existingOrderFollowUp.setSupplierId(orderFollowUp.getSupplierId());
                 }
 
                 return existingOrderFollowUp;

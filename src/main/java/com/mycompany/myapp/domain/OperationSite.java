@@ -1,8 +1,8 @@
 package com.mycompany.myapp.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -44,14 +44,8 @@ public class OperationSite implements Serializable {
     @Column(name = "country")
     private String country;
 
-    @Column(name = "board_id")
-    private String boardId;
-
     @Column(name = "kingdee_id")
     private String kingdeeId;
-
-    @Column(name = "item_id")
-    private String itemId;
 
     @Column(name = "business_license")
     private String businessLicense;
@@ -210,19 +204,6 @@ public class OperationSite implements Serializable {
         this.country = country;
     }
 
-    public String getBoardId() {
-        return this.boardId;
-    }
-
-    public OperationSite boardId(String boardId) {
-        this.setBoardId(boardId);
-        return this;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
-    }
-
     public String getKingdeeId() {
         return this.kingdeeId;
     }
@@ -234,19 +215,6 @@ public class OperationSite implements Serializable {
 
     public void setKingdeeId(String kingdeeId) {
         this.kingdeeId = kingdeeId;
-    }
-
-    public String getItemId() {
-        return this.itemId;
-    }
-
-    public OperationSite itemId(String itemId) {
-        this.setItemId(itemId);
-        return this;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
     }
 
     public String getBusinessLicense() {
@@ -501,9 +469,7 @@ public class OperationSite implements Serializable {
             ", siteAddress='" + getSiteAddress() + "'" +
             ", cateGory='" + getCateGory() + "'" +
             ", country='" + getCountry() + "'" +
-            ", boardId='" + getBoardId() + "'" +
             ", kingdeeId='" + getKingdeeId() + "'" +
-            ", itemId='" + getItemId() + "'" +
             ", businessLicense='" + getBusinessLicense() + "'" +
             ", sasDate='" + getSasDate() + "'" +
             ", iso900ValidUtil='" + getIso900ValidUtil() + "'" +

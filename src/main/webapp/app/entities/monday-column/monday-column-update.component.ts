@@ -1,105 +1,94 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import { IMondayColumn, MondayColumn } from '@/shared/model/monday-column.model';
 import MondayColumnService from './monday-column.service';
 
-const validations: any = {
-  mondayColumn: {
-    boardId: {},
-    columnId: {},
-    title: {},
-    type: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'MondayColumnUpdate',
+  setup() {
+    const mondayColumnService = inject('mondayColumnService', () => new MondayColumnService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-})
-export default class MondayColumnUpdate extends Vue {
-  @Inject('mondayColumnService') private mondayColumnService: () => MondayColumnService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const mondayColumn: Ref<IMondayColumn> = ref(new MondayColumn());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  public mondayColumn: IMondayColumn = new MondayColumn();
-  public isSaving = false;
-  public currentLanguage = '';
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.mondayColumnId) {
-        vm.retrieveMondayColumn(to.params.mondayColumnId);
+    const previousState = () => router.go(-1);
+
+    const retrieveMondayColumn = async mondayColumnId => {
+      try {
+        const res = await mondayColumnService().find(mondayColumnId);
+        mondayColumn.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.mondayColumn.id) {
-      this.mondayColumnService()
-        .update(this.mondayColumn)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.mondayColumn.updated', { param: param.id });
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.mondayColumnService()
-        .create(this.mondayColumn)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.mondayColumn.created', { param: param.id });
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.mondayColumnId) {
+      retrieveMondayColumn(route.params.mondayColumnId);
     }
-  }
 
-  public retrieveMondayColumn(mondayColumnId): void {
-    this.mondayColumnService()
-      .find(mondayColumnId)
-      .then(res => {
-        this.mondayColumn = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const { t: t$ } = useI18n();
+    const validations = useValidation();
+    const validationRules = {
+      boardId: {},
+      columnId: {},
+      title: {},
+      type: {},
+    };
+    const v$ = useVuelidate(validationRules, mondayColumn as any);
+    v$.value.$validate();
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {}
-}
+    return {
+      mondayColumnService,
+      alertService,
+      mondayColumn,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+      t$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.mondayColumn.id) {
+        this.mondayColumnService()
+          .update(this.mondayColumn)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo(this.t$('jhipsterSampleApplicationApp.mondayColumn.updated', { param: param.id }));
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.mondayColumnService()
+          .create(this.mondayColumn)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess(this.t$('jhipsterSampleApplicationApp.mondayColumn.created', { param: param.id }).toString());
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

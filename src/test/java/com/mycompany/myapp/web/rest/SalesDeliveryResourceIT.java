@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.SalesDelivery;
 import com.mycompany.myapp.repository.SalesDeliveryRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +32,6 @@ class SalesDeliveryResourceIT {
     private static final String DEFAULT_ITEM_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ITEM_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ITEM_ID = "AAAAAAAAAA";
-    private static final String UPDATED_ITEM_ID = "BBBBBBBBBB";
-
-    private static final String DEFAULT_BOARD_ID = "AAAAAAAAAA";
-    private static final String UPDATED_BOARD_ID = "BBBBBBBBBB";
-
     private static final String DEFAULT_KINGDEE_ID = "AAAAAAAAAA";
     private static final String UPDATED_KINGDEE_ID = "BBBBBBBBBB";
 
@@ -46,12 +40,6 @@ class SalesDeliveryResourceIT {
 
     private static final String DEFAULT_ORDER_DATE = "AAAAAAAAAA";
     private static final String UPDATED_ORDER_DATE = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TOTAL_ACTUAL_SHIP_QTY = "AAAAAAAAAA";
-    private static final String UPDATED_TOTAL_ACTUAL_SHIP_QTY = "BBBBBBBBBB";
-
-    private static final String DEFAULT_TOTAL_QTY_DELIVERY = "AAAAAAAAAA";
-    private static final String UPDATED_TOTAL_QTY_DELIVERY = "BBBBBBBBBB";
 
     private static final String DEFAULT_LOADING_PORT = "AAAAAAAAAA";
     private static final String UPDATED_LOADING_PORT = "BBBBBBBBBB";
@@ -86,6 +74,12 @@ class SalesDeliveryResourceIT {
     private static final String DEFAULT_KINGDEE_UNIQUE_ID = "AAAAAAAAAA";
     private static final String UPDATED_KINGDEE_UNIQUE_ID = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DOC_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_DOC_STATUS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CATE_GORY = "AAAAAAAAAA";
+    private static final String UPDATED_CATE_GORY = "BBBBBBBBBB";
+
     private static final String ENTITY_API_URL = "/api/sales-deliveries";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -112,13 +106,9 @@ class SalesDeliveryResourceIT {
     public static SalesDelivery createEntity(EntityManager em) {
         SalesDelivery salesDelivery = new SalesDelivery()
             .itemName(DEFAULT_ITEM_NAME)
-            .itemId(DEFAULT_ITEM_ID)
-            .boardId(DEFAULT_BOARD_ID)
             .kingdeeId(DEFAULT_KINGDEE_ID)
             .customer(DEFAULT_CUSTOMER)
             .orderDate(DEFAULT_ORDER_DATE)
-            .totalActualShipQty(DEFAULT_TOTAL_ACTUAL_SHIP_QTY)
-            .totalQtyDelivery(DEFAULT_TOTAL_QTY_DELIVERY)
             .loadingPort(DEFAULT_LOADING_PORT)
             .dischargePort(DEFAULT_DISCHARGE_PORT)
             .transportMode(DEFAULT_TRANSPORT_MODE)
@@ -129,7 +119,9 @@ class SalesDeliveryResourceIT {
             .containerType(DEFAULT_CONTAINER_TYPE)
             .containerSize(DEFAULT_CONTAINER_SIZE)
             .remark(DEFAULT_REMARK)
-            .kingdeeUniqueId(DEFAULT_KINGDEE_UNIQUE_ID);
+            .kingdeeUniqueId(DEFAULT_KINGDEE_UNIQUE_ID)
+            .docStatus(DEFAULT_DOC_STATUS)
+            .cateGory(DEFAULT_CATE_GORY);
         return salesDelivery;
     }
 
@@ -142,13 +134,9 @@ class SalesDeliveryResourceIT {
     public static SalesDelivery createUpdatedEntity(EntityManager em) {
         SalesDelivery salesDelivery = new SalesDelivery()
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .customer(UPDATED_CUSTOMER)
             .orderDate(UPDATED_ORDER_DATE)
-            .totalActualShipQty(UPDATED_TOTAL_ACTUAL_SHIP_QTY)
-            .totalQtyDelivery(UPDATED_TOTAL_QTY_DELIVERY)
             .loadingPort(UPDATED_LOADING_PORT)
             .dischargePort(UPDATED_DISCHARGE_PORT)
             .transportMode(UPDATED_TRANSPORT_MODE)
@@ -159,7 +147,9 @@ class SalesDeliveryResourceIT {
             .containerType(UPDATED_CONTAINER_TYPE)
             .containerSize(UPDATED_CONTAINER_SIZE)
             .remark(UPDATED_REMARK)
-            .kingdeeUniqueId(UPDATED_KINGDEE_UNIQUE_ID);
+            .kingdeeUniqueId(UPDATED_KINGDEE_UNIQUE_ID)
+            .docStatus(UPDATED_DOC_STATUS)
+            .cateGory(UPDATED_CATE_GORY);
         return salesDelivery;
     }
 
@@ -182,13 +172,9 @@ class SalesDeliveryResourceIT {
         assertThat(salesDeliveryList).hasSize(databaseSizeBeforeCreate + 1);
         SalesDelivery testSalesDelivery = salesDeliveryList.get(salesDeliveryList.size() - 1);
         assertThat(testSalesDelivery.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
-        assertThat(testSalesDelivery.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
-        assertThat(testSalesDelivery.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
         assertThat(testSalesDelivery.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
         assertThat(testSalesDelivery.getCustomer()).isEqualTo(DEFAULT_CUSTOMER);
         assertThat(testSalesDelivery.getOrderDate()).isEqualTo(DEFAULT_ORDER_DATE);
-        assertThat(testSalesDelivery.getTotalActualShipQty()).isEqualTo(DEFAULT_TOTAL_ACTUAL_SHIP_QTY);
-        assertThat(testSalesDelivery.getTotalQtyDelivery()).isEqualTo(DEFAULT_TOTAL_QTY_DELIVERY);
         assertThat(testSalesDelivery.getLoadingPort()).isEqualTo(DEFAULT_LOADING_PORT);
         assertThat(testSalesDelivery.getDischargePort()).isEqualTo(DEFAULT_DISCHARGE_PORT);
         assertThat(testSalesDelivery.getTransportMode()).isEqualTo(DEFAULT_TRANSPORT_MODE);
@@ -200,6 +186,8 @@ class SalesDeliveryResourceIT {
         assertThat(testSalesDelivery.getContainerSize()).isEqualTo(DEFAULT_CONTAINER_SIZE);
         assertThat(testSalesDelivery.getRemark()).isEqualTo(DEFAULT_REMARK);
         assertThat(testSalesDelivery.getKingdeeUniqueId()).isEqualTo(DEFAULT_KINGDEE_UNIQUE_ID);
+        assertThat(testSalesDelivery.getDocStatus()).isEqualTo(DEFAULT_DOC_STATUS);
+        assertThat(testSalesDelivery.getCateGory()).isEqualTo(DEFAULT_CATE_GORY);
     }
 
     @Test
@@ -233,13 +221,9 @@ class SalesDeliveryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(salesDelivery.getId().intValue())))
             .andExpect(jsonPath("$.[*].itemName").value(hasItem(DEFAULT_ITEM_NAME)))
-            .andExpect(jsonPath("$.[*].itemId").value(hasItem(DEFAULT_ITEM_ID)))
-            .andExpect(jsonPath("$.[*].boardId").value(hasItem(DEFAULT_BOARD_ID)))
             .andExpect(jsonPath("$.[*].kingdeeId").value(hasItem(DEFAULT_KINGDEE_ID)))
             .andExpect(jsonPath("$.[*].customer").value(hasItem(DEFAULT_CUSTOMER)))
             .andExpect(jsonPath("$.[*].orderDate").value(hasItem(DEFAULT_ORDER_DATE)))
-            .andExpect(jsonPath("$.[*].totalActualShipQty").value(hasItem(DEFAULT_TOTAL_ACTUAL_SHIP_QTY)))
-            .andExpect(jsonPath("$.[*].totalQtyDelivery").value(hasItem(DEFAULT_TOTAL_QTY_DELIVERY)))
             .andExpect(jsonPath("$.[*].loadingPort").value(hasItem(DEFAULT_LOADING_PORT)))
             .andExpect(jsonPath("$.[*].dischargePort").value(hasItem(DEFAULT_DISCHARGE_PORT)))
             .andExpect(jsonPath("$.[*].transportMode").value(hasItem(DEFAULT_TRANSPORT_MODE)))
@@ -250,7 +234,9 @@ class SalesDeliveryResourceIT {
             .andExpect(jsonPath("$.[*].containerType").value(hasItem(DEFAULT_CONTAINER_TYPE)))
             .andExpect(jsonPath("$.[*].containerSize").value(hasItem(DEFAULT_CONTAINER_SIZE)))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)))
-            .andExpect(jsonPath("$.[*].kingdeeUniqueId").value(hasItem(DEFAULT_KINGDEE_UNIQUE_ID)));
+            .andExpect(jsonPath("$.[*].kingdeeUniqueId").value(hasItem(DEFAULT_KINGDEE_UNIQUE_ID)))
+            .andExpect(jsonPath("$.[*].docStatus").value(hasItem(DEFAULT_DOC_STATUS)))
+            .andExpect(jsonPath("$.[*].cateGory").value(hasItem(DEFAULT_CATE_GORY)));
     }
 
     @Test
@@ -266,13 +252,9 @@ class SalesDeliveryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(salesDelivery.getId().intValue()))
             .andExpect(jsonPath("$.itemName").value(DEFAULT_ITEM_NAME))
-            .andExpect(jsonPath("$.itemId").value(DEFAULT_ITEM_ID))
-            .andExpect(jsonPath("$.boardId").value(DEFAULT_BOARD_ID))
             .andExpect(jsonPath("$.kingdeeId").value(DEFAULT_KINGDEE_ID))
             .andExpect(jsonPath("$.customer").value(DEFAULT_CUSTOMER))
             .andExpect(jsonPath("$.orderDate").value(DEFAULT_ORDER_DATE))
-            .andExpect(jsonPath("$.totalActualShipQty").value(DEFAULT_TOTAL_ACTUAL_SHIP_QTY))
-            .andExpect(jsonPath("$.totalQtyDelivery").value(DEFAULT_TOTAL_QTY_DELIVERY))
             .andExpect(jsonPath("$.loadingPort").value(DEFAULT_LOADING_PORT))
             .andExpect(jsonPath("$.dischargePort").value(DEFAULT_DISCHARGE_PORT))
             .andExpect(jsonPath("$.transportMode").value(DEFAULT_TRANSPORT_MODE))
@@ -283,7 +265,9 @@ class SalesDeliveryResourceIT {
             .andExpect(jsonPath("$.containerType").value(DEFAULT_CONTAINER_TYPE))
             .andExpect(jsonPath("$.containerSize").value(DEFAULT_CONTAINER_SIZE))
             .andExpect(jsonPath("$.remark").value(DEFAULT_REMARK))
-            .andExpect(jsonPath("$.kingdeeUniqueId").value(DEFAULT_KINGDEE_UNIQUE_ID));
+            .andExpect(jsonPath("$.kingdeeUniqueId").value(DEFAULT_KINGDEE_UNIQUE_ID))
+            .andExpect(jsonPath("$.docStatus").value(DEFAULT_DOC_STATUS))
+            .andExpect(jsonPath("$.cateGory").value(DEFAULT_CATE_GORY));
     }
 
     @Test
@@ -307,13 +291,9 @@ class SalesDeliveryResourceIT {
         em.detach(updatedSalesDelivery);
         updatedSalesDelivery
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .customer(UPDATED_CUSTOMER)
             .orderDate(UPDATED_ORDER_DATE)
-            .totalActualShipQty(UPDATED_TOTAL_ACTUAL_SHIP_QTY)
-            .totalQtyDelivery(UPDATED_TOTAL_QTY_DELIVERY)
             .loadingPort(UPDATED_LOADING_PORT)
             .dischargePort(UPDATED_DISCHARGE_PORT)
             .transportMode(UPDATED_TRANSPORT_MODE)
@@ -324,7 +304,9 @@ class SalesDeliveryResourceIT {
             .containerType(UPDATED_CONTAINER_TYPE)
             .containerSize(UPDATED_CONTAINER_SIZE)
             .remark(UPDATED_REMARK)
-            .kingdeeUniqueId(UPDATED_KINGDEE_UNIQUE_ID);
+            .kingdeeUniqueId(UPDATED_KINGDEE_UNIQUE_ID)
+            .docStatus(UPDATED_DOC_STATUS)
+            .cateGory(UPDATED_CATE_GORY);
 
         restSalesDeliveryMockMvc
             .perform(
@@ -339,13 +321,9 @@ class SalesDeliveryResourceIT {
         assertThat(salesDeliveryList).hasSize(databaseSizeBeforeUpdate);
         SalesDelivery testSalesDelivery = salesDeliveryList.get(salesDeliveryList.size() - 1);
         assertThat(testSalesDelivery.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testSalesDelivery.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testSalesDelivery.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testSalesDelivery.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testSalesDelivery.getCustomer()).isEqualTo(UPDATED_CUSTOMER);
         assertThat(testSalesDelivery.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
-        assertThat(testSalesDelivery.getTotalActualShipQty()).isEqualTo(UPDATED_TOTAL_ACTUAL_SHIP_QTY);
-        assertThat(testSalesDelivery.getTotalQtyDelivery()).isEqualTo(UPDATED_TOTAL_QTY_DELIVERY);
         assertThat(testSalesDelivery.getLoadingPort()).isEqualTo(UPDATED_LOADING_PORT);
         assertThat(testSalesDelivery.getDischargePort()).isEqualTo(UPDATED_DISCHARGE_PORT);
         assertThat(testSalesDelivery.getTransportMode()).isEqualTo(UPDATED_TRANSPORT_MODE);
@@ -357,6 +335,8 @@ class SalesDeliveryResourceIT {
         assertThat(testSalesDelivery.getContainerSize()).isEqualTo(UPDATED_CONTAINER_SIZE);
         assertThat(testSalesDelivery.getRemark()).isEqualTo(UPDATED_REMARK);
         assertThat(testSalesDelivery.getKingdeeUniqueId()).isEqualTo(UPDATED_KINGDEE_UNIQUE_ID);
+        assertThat(testSalesDelivery.getDocStatus()).isEqualTo(UPDATED_DOC_STATUS);
+        assertThat(testSalesDelivery.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
     }
 
     @Test
@@ -428,16 +408,13 @@ class SalesDeliveryResourceIT {
         partialUpdatedSalesDelivery.setId(salesDelivery.getId());
 
         partialUpdatedSalesDelivery
-            .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
+            .customer(UPDATED_CUSTOMER)
             .orderDate(UPDATED_ORDER_DATE)
-            .totalActualShipQty(UPDATED_TOTAL_ACTUAL_SHIP_QTY)
-            .totalQtyDelivery(UPDATED_TOTAL_QTY_DELIVERY)
-            .transportMode(UPDATED_TRANSPORT_MODE)
+            .loadingPort(UPDATED_LOADING_PORT)
+            .dischargePort(UPDATED_DISCHARGE_PORT)
             .forwarder(UPDATED_FORWARDER)
-            .etd(UPDATED_ETD)
-            .containerType(UPDATED_CONTAINER_TYPE);
+            .remark(UPDATED_REMARK)
+            .cateGory(UPDATED_CATE_GORY);
 
         restSalesDeliveryMockMvc
             .perform(
@@ -451,25 +428,23 @@ class SalesDeliveryResourceIT {
         List<SalesDelivery> salesDeliveryList = salesDeliveryRepository.findAll();
         assertThat(salesDeliveryList).hasSize(databaseSizeBeforeUpdate);
         SalesDelivery testSalesDelivery = salesDeliveryList.get(salesDeliveryList.size() - 1);
-        assertThat(testSalesDelivery.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testSalesDelivery.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testSalesDelivery.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
+        assertThat(testSalesDelivery.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
         assertThat(testSalesDelivery.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
-        assertThat(testSalesDelivery.getCustomer()).isEqualTo(DEFAULT_CUSTOMER);
+        assertThat(testSalesDelivery.getCustomer()).isEqualTo(UPDATED_CUSTOMER);
         assertThat(testSalesDelivery.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
-        assertThat(testSalesDelivery.getTotalActualShipQty()).isEqualTo(UPDATED_TOTAL_ACTUAL_SHIP_QTY);
-        assertThat(testSalesDelivery.getTotalQtyDelivery()).isEqualTo(UPDATED_TOTAL_QTY_DELIVERY);
-        assertThat(testSalesDelivery.getLoadingPort()).isEqualTo(DEFAULT_LOADING_PORT);
-        assertThat(testSalesDelivery.getDischargePort()).isEqualTo(DEFAULT_DISCHARGE_PORT);
-        assertThat(testSalesDelivery.getTransportMode()).isEqualTo(UPDATED_TRANSPORT_MODE);
+        assertThat(testSalesDelivery.getLoadingPort()).isEqualTo(UPDATED_LOADING_PORT);
+        assertThat(testSalesDelivery.getDischargePort()).isEqualTo(UPDATED_DISCHARGE_PORT);
+        assertThat(testSalesDelivery.getTransportMode()).isEqualTo(DEFAULT_TRANSPORT_MODE);
         assertThat(testSalesDelivery.getIncoterm()).isEqualTo(DEFAULT_INCOTERM);
         assertThat(testSalesDelivery.getForwarder()).isEqualTo(UPDATED_FORWARDER);
         assertThat(testSalesDelivery.getEta()).isEqualTo(DEFAULT_ETA);
-        assertThat(testSalesDelivery.getEtd()).isEqualTo(UPDATED_ETD);
-        assertThat(testSalesDelivery.getContainerType()).isEqualTo(UPDATED_CONTAINER_TYPE);
+        assertThat(testSalesDelivery.getEtd()).isEqualTo(DEFAULT_ETD);
+        assertThat(testSalesDelivery.getContainerType()).isEqualTo(DEFAULT_CONTAINER_TYPE);
         assertThat(testSalesDelivery.getContainerSize()).isEqualTo(DEFAULT_CONTAINER_SIZE);
-        assertThat(testSalesDelivery.getRemark()).isEqualTo(DEFAULT_REMARK);
+        assertThat(testSalesDelivery.getRemark()).isEqualTo(UPDATED_REMARK);
         assertThat(testSalesDelivery.getKingdeeUniqueId()).isEqualTo(DEFAULT_KINGDEE_UNIQUE_ID);
+        assertThat(testSalesDelivery.getDocStatus()).isEqualTo(DEFAULT_DOC_STATUS);
+        assertThat(testSalesDelivery.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
     }
 
     @Test
@@ -486,13 +461,9 @@ class SalesDeliveryResourceIT {
 
         partialUpdatedSalesDelivery
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .customer(UPDATED_CUSTOMER)
             .orderDate(UPDATED_ORDER_DATE)
-            .totalActualShipQty(UPDATED_TOTAL_ACTUAL_SHIP_QTY)
-            .totalQtyDelivery(UPDATED_TOTAL_QTY_DELIVERY)
             .loadingPort(UPDATED_LOADING_PORT)
             .dischargePort(UPDATED_DISCHARGE_PORT)
             .transportMode(UPDATED_TRANSPORT_MODE)
@@ -503,7 +474,9 @@ class SalesDeliveryResourceIT {
             .containerType(UPDATED_CONTAINER_TYPE)
             .containerSize(UPDATED_CONTAINER_SIZE)
             .remark(UPDATED_REMARK)
-            .kingdeeUniqueId(UPDATED_KINGDEE_UNIQUE_ID);
+            .kingdeeUniqueId(UPDATED_KINGDEE_UNIQUE_ID)
+            .docStatus(UPDATED_DOC_STATUS)
+            .cateGory(UPDATED_CATE_GORY);
 
         restSalesDeliveryMockMvc
             .perform(
@@ -518,13 +491,9 @@ class SalesDeliveryResourceIT {
         assertThat(salesDeliveryList).hasSize(databaseSizeBeforeUpdate);
         SalesDelivery testSalesDelivery = salesDeliveryList.get(salesDeliveryList.size() - 1);
         assertThat(testSalesDelivery.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testSalesDelivery.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testSalesDelivery.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testSalesDelivery.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testSalesDelivery.getCustomer()).isEqualTo(UPDATED_CUSTOMER);
         assertThat(testSalesDelivery.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
-        assertThat(testSalesDelivery.getTotalActualShipQty()).isEqualTo(UPDATED_TOTAL_ACTUAL_SHIP_QTY);
-        assertThat(testSalesDelivery.getTotalQtyDelivery()).isEqualTo(UPDATED_TOTAL_QTY_DELIVERY);
         assertThat(testSalesDelivery.getLoadingPort()).isEqualTo(UPDATED_LOADING_PORT);
         assertThat(testSalesDelivery.getDischargePort()).isEqualTo(UPDATED_DISCHARGE_PORT);
         assertThat(testSalesDelivery.getTransportMode()).isEqualTo(UPDATED_TRANSPORT_MODE);
@@ -536,6 +505,8 @@ class SalesDeliveryResourceIT {
         assertThat(testSalesDelivery.getContainerSize()).isEqualTo(UPDATED_CONTAINER_SIZE);
         assertThat(testSalesDelivery.getRemark()).isEqualTo(UPDATED_REMARK);
         assertThat(testSalesDelivery.getKingdeeUniqueId()).isEqualTo(UPDATED_KINGDEE_UNIQUE_ID);
+        assertThat(testSalesDelivery.getDocStatus()).isEqualTo(UPDATED_DOC_STATUS);
+        assertThat(testSalesDelivery.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
     }
 
     @Test

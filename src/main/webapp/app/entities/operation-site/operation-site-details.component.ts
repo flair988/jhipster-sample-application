@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IOperationSite } from '@/shared/model/operation-site.model';
 import OperationSiteService from './operation-site.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class OperationSiteDetails extends Vue {
-  @Inject('operationSiteService') private operationSiteService: () => OperationSiteService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'OperationSiteDetails',
+  setup() {
+    const operationSiteService = inject('operationSiteService', () => new OperationSiteService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public operationSite: IOperationSite = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.operationSiteId) {
-        vm.retrieveOperationSite(to.params.operationSiteId);
+    const previousState = () => router.go(-1);
+    const operationSite: Ref<IOperationSite> = ref({});
+
+    const retrieveOperationSite = async operationSiteId => {
+      try {
+        const res = await operationSiteService().find(operationSiteId);
+        operationSite.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveOperationSite(operationSiteId) {
-    this.operationSiteService()
-      .find(operationSiteId)
-      .then(res => {
-        this.operationSite = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.operationSiteId) {
+      retrieveOperationSite(route.params.operationSiteId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      operationSite,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

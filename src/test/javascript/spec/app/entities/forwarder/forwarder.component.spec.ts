@@ -1,25 +1,13 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 
-import * as config from '@/shared/config/config';
-import ForwarderComponent from '@/entities/forwarder/forwarder.vue';
-import ForwarderClass from '@/entities/forwarder/forwarder.component';
-import ForwarderService from '@/entities/forwarder/forwarder.service';
-import AlertService from '@/shared/alert/alert.service';
+import Forwarder from '../../../../../../main/webapp/app/entities/forwarder/forwarder.vue';
+import ForwarderService from '../../../../../../main/webapp/app/entities/forwarder/forwarder.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(ToastPlugin);
-
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-badge', {});
-localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
+type ForwarderComponentType = InstanceType<typeof Forwarder>;
 
 const bModalStub = {
   render: () => {},
@@ -30,54 +18,84 @@ const bModalStub = {
 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
   describe('Forwarder Management Component', () => {
-    let wrapper: Wrapper<ForwarderClass>;
-    let comp: ForwarderClass;
     let forwarderServiceStub: SinonStubbedInstance<ForwarderService>;
+    let mountOptions: MountingOptions<ForwarderComponentType>['global'];
 
     beforeEach(() => {
       forwarderServiceStub = sinon.createStubInstance<ForwarderService>(ForwarderService);
       forwarderServiceStub.retrieve.resolves({ headers: {} });
 
-      wrapper = shallowMount<ForwarderClass>(ForwarderComponent, {
-        store,
-        i18n,
-        localVue,
-        stubs: { bModal: bModalStub as any },
-        provide: {
-          forwarderService: () => forwarderServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          forwarderService: () => forwarderServiceStub,
+        },
+      };
     });
 
-    it('Should call load all on init', async () => {
-      // GIVEN
-      forwarderServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        forwarderServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
-      // WHEN
-      comp.retrieveAllForwarders();
-      await comp.$nextTick();
+        // WHEN
+        const wrapper = shallowMount(Forwarder, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
 
-      // THEN
-      expect(forwarderServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.forwarders[0]).toEqual(expect.objectContaining({ id: 123 }));
+        // THEN
+        expect(forwarderServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.forwarders[0]).toEqual(expect.objectContaining({ id: 123 }));
+      });
     });
-    it('Should call delete service on confirmDelete', async () => {
-      // GIVEN
-      forwarderServiceStub.delete.resolves({});
+    describe('Handles', () => {
+      let comp: ForwarderComponentType;
 
-      // WHEN
-      comp.prepareRemove({ id: 123 });
-      expect(forwarderServiceStub.retrieve.callCount).toEqual(1);
+      beforeEach(async () => {
+        const wrapper = shallowMount(Forwarder, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        forwarderServiceStub.retrieve.reset();
+        forwarderServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
 
-      comp.removeForwarder();
-      await comp.$nextTick();
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        forwarderServiceStub.delete.resolves({});
 
-      // THEN
-      expect(forwarderServiceStub.delete.called).toBeTruthy();
-      expect(forwarderServiceStub.retrieve.callCount).toEqual(2);
+        // WHEN
+        comp.prepareRemove({ id: 123 });
+
+        comp.removeForwarder();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(forwarderServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(forwarderServiceStub.retrieve.callCount).toEqual(1);
+      });
     });
   });
 });

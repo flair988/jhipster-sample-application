@@ -1,128 +1,115 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core';
 
-import AlertService from '@/shared/alert/alert.service';
+import { useValidation } from '@/shared/composables';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 import { IOperationSite, OperationSite } from '@/shared/model/operation-site.model';
 import OperationSiteService from './operation-site.service';
 
-const validations: any = {
-  operationSite: {
-    itemName: {},
-    linkSupplierFactory: {},
-    typeOfSite: {},
-    contact: {},
-    siteAddress: {},
-    cateGory: {},
-    country: {},
-    boardId: {},
-    kingdeeId: {},
-    itemId: {},
-    businessLicense: {},
-    sasDate: {},
-    iso900ValidUtil: {},
-    iso14001ValidUtil: {},
-    attributeLor: {},
-    siteQualification: {},
-    qualificationScore: {},
-    pqvScore: {},
-    pqvDate: {},
-    pqvDecision: {},
-    technicalAuditDate: {},
-    technicalAuditScore: {},
-    thirdRdPartyDate: {},
-    thirdRdPartyScore: {},
-    bopeDate: {},
-    bopeScore: {},
-    capRequired: {},
-  },
-};
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'OperationSiteUpdate',
+  setup() {
+    const operationSiteService = inject('operationSiteService', () => new OperationSiteService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-@Component({
-  validations,
-})
-export default class OperationSiteUpdate extends Vue {
-  @Inject('operationSiteService') private operationSiteService: () => OperationSiteService;
-  @Inject('alertService') private alertService: () => AlertService;
+    const operationSite: Ref<IOperationSite> = ref(new OperationSite());
+    const isSaving = ref(false);
+    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
 
-  public operationSite: IOperationSite = new OperationSite();
-  public isSaving = false;
-  public currentLanguage = '';
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.operationSiteId) {
-        vm.retrieveOperationSite(to.params.operationSiteId);
+    const previousState = () => router.go(-1);
+
+    const retrieveOperationSite = async operationSiteId => {
+      try {
+        const res = await operationSiteService().find(operationSiteId);
+        operationSite.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  created(): void {
-    this.currentLanguage = this.$store.getters.currentLanguage;
-    this.$store.watch(
-      () => this.$store.getters.currentLanguage,
-      () => {
-        this.currentLanguage = this.$store.getters.currentLanguage;
-      }
-    );
-  }
-
-  public save(): void {
-    this.isSaving = true;
-    if (this.operationSite.id) {
-      this.operationSiteService()
-        .update(this.operationSite)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.operationSite.updated', { param: param.id });
-          return (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Info',
-            variant: 'info',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
-    } else {
-      this.operationSiteService()
-        .create(this.operationSite)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('jhipsterSampleApplicationApp.operationSite.created', { param: param.id });
-          (this.$root as any).$bvToast.toast(message.toString(), {
-            toaster: 'b-toaster-top-center',
-            title: 'Success',
-            variant: 'success',
-            solid: true,
-            autoHideDelay: 5000,
-          });
-        })
-        .catch(error => {
-          this.isSaving = false;
-          this.alertService().showHttpError(this, error.response);
-        });
+    if (route.params?.operationSiteId) {
+      retrieveOperationSite(route.params.operationSiteId);
     }
-  }
 
-  public retrieveOperationSite(operationSiteId): void {
-    this.operationSiteService()
-      .find(operationSiteId)
-      .then(res => {
-        this.operationSite = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    const { t: t$ } = useI18n();
+    const validations = useValidation();
+    const validationRules = {
+      itemName: {},
+      linkSupplierFactory: {},
+      typeOfSite: {},
+      contact: {},
+      siteAddress: {},
+      cateGory: {},
+      country: {},
+      kingdeeId: {},
+      businessLicense: {},
+      sasDate: {},
+      iso900ValidUtil: {},
+      iso14001ValidUtil: {},
+      attributeLor: {},
+      siteQualification: {},
+      qualificationScore: {},
+      pqvScore: {},
+      pqvDate: {},
+      pqvDecision: {},
+      technicalAuditDate: {},
+      technicalAuditScore: {},
+      thirdRdPartyDate: {},
+      thirdRdPartyScore: {},
+      bopeDate: {},
+      bopeScore: {},
+      capRequired: {},
+    };
+    const v$ = useVuelidate(validationRules, operationSite as any);
+    v$.value.$validate();
 
-  public previousState(): void {
-    this.$router.go(-1);
-  }
-
-  public initRelationships(): void {}
-}
+    return {
+      operationSiteService,
+      alertService,
+      operationSite,
+      previousState,
+      isSaving,
+      currentLanguage,
+      v$,
+      t$,
+    };
+  },
+  created(): void {},
+  methods: {
+    save(): void {
+      this.isSaving = true;
+      if (this.operationSite.id) {
+        this.operationSiteService()
+          .update(this.operationSite)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showInfo(this.t$('jhipsterSampleApplicationApp.operationSite.updated', { param: param.id }));
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      } else {
+        this.operationSiteService()
+          .create(this.operationSite)
+          .then(param => {
+            this.isSaving = false;
+            this.previousState();
+            this.alertService.showSuccess(this.t$('jhipsterSampleApplicationApp.operationSite.created', { param: param.id }).toString());
+          })
+          .catch(error => {
+            this.isSaving = false;
+            this.alertService.showHttpError(error.response);
+          });
+      }
+    },
+  },
+});

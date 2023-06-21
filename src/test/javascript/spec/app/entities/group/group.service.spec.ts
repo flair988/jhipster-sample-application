@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import GroupService from '@/entities/group/group.service';
-import { Group } from '@/shared/model/group.model';
+import GroupService from '../../../../../../main/webapp/app/entities/group/group.service';
+import { Group } from '../../../../../../main/webapp/app/shared/model/group.model';
 
 const error = {
   response: {

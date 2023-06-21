@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.ProductTaxmonomy;
 import com.mycompany.myapp.repository.ProductTaxmonomyRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,9 +50,6 @@ class ProductTaxmonomyResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_BOARD_ID = "AAAAAAAAAA";
-    private static final String UPDATED_BOARD_ID = "BBBBBBBBBB";
-
     private static final String ENTITY_API_URL = "/api/product-taxmonomies";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -84,8 +81,7 @@ class ProductTaxmonomyResourceIT {
             .groupName(DEFAULT_GROUP_NAME)
             .parentGroupName(DEFAULT_PARENT_GROUP_NAME)
             .subGroupName(DEFAULT_SUB_GROUP_NAME)
-            .description(DEFAULT_DESCRIPTION)
-            .boardId(DEFAULT_BOARD_ID);
+            .description(DEFAULT_DESCRIPTION);
         return productTaxmonomy;
     }
 
@@ -103,8 +99,7 @@ class ProductTaxmonomyResourceIT {
             .groupName(UPDATED_GROUP_NAME)
             .parentGroupName(UPDATED_PARENT_GROUP_NAME)
             .subGroupName(UPDATED_SUB_GROUP_NAME)
-            .description(UPDATED_DESCRIPTION)
-            .boardId(UPDATED_BOARD_ID);
+            .description(UPDATED_DESCRIPTION);
         return productTaxmonomy;
     }
 
@@ -135,7 +130,6 @@ class ProductTaxmonomyResourceIT {
         assertThat(testProductTaxmonomy.getParentGroupName()).isEqualTo(DEFAULT_PARENT_GROUP_NAME);
         assertThat(testProductTaxmonomy.getSubGroupName()).isEqualTo(DEFAULT_SUB_GROUP_NAME);
         assertThat(testProductTaxmonomy.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testProductTaxmonomy.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
     }
 
     @Test
@@ -176,8 +170,7 @@ class ProductTaxmonomyResourceIT {
             .andExpect(jsonPath("$.[*].groupName").value(hasItem(DEFAULT_GROUP_NAME)))
             .andExpect(jsonPath("$.[*].parentGroupName").value(hasItem(DEFAULT_PARENT_GROUP_NAME)))
             .andExpect(jsonPath("$.[*].subGroupName").value(hasItem(DEFAULT_SUB_GROUP_NAME)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].boardId").value(hasItem(DEFAULT_BOARD_ID)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 
     @Test
@@ -198,8 +191,7 @@ class ProductTaxmonomyResourceIT {
             .andExpect(jsonPath("$.groupName").value(DEFAULT_GROUP_NAME))
             .andExpect(jsonPath("$.parentGroupName").value(DEFAULT_PARENT_GROUP_NAME))
             .andExpect(jsonPath("$.subGroupName").value(DEFAULT_SUB_GROUP_NAME))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.boardId").value(DEFAULT_BOARD_ID));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
     }
 
     @Test
@@ -228,8 +220,7 @@ class ProductTaxmonomyResourceIT {
             .groupName(UPDATED_GROUP_NAME)
             .parentGroupName(UPDATED_PARENT_GROUP_NAME)
             .subGroupName(UPDATED_SUB_GROUP_NAME)
-            .description(UPDATED_DESCRIPTION)
-            .boardId(UPDATED_BOARD_ID);
+            .description(UPDATED_DESCRIPTION);
 
         restProductTaxmonomyMockMvc
             .perform(
@@ -250,7 +241,6 @@ class ProductTaxmonomyResourceIT {
         assertThat(testProductTaxmonomy.getParentGroupName()).isEqualTo(UPDATED_PARENT_GROUP_NAME);
         assertThat(testProductTaxmonomy.getSubGroupName()).isEqualTo(UPDATED_SUB_GROUP_NAME);
         assertThat(testProductTaxmonomy.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testProductTaxmonomy.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
     }
 
     @Test
@@ -323,13 +313,7 @@ class ProductTaxmonomyResourceIT {
         ProductTaxmonomy partialUpdatedProductTaxmonomy = new ProductTaxmonomy();
         partialUpdatedProductTaxmonomy.setId(productTaxmonomy.getId());
 
-        partialUpdatedProductTaxmonomy
-            .itemId(UPDATED_ITEM_ID)
-            .itemName(UPDATED_ITEM_NAME)
-            .groupName(UPDATED_GROUP_NAME)
-            .parentGroupName(UPDATED_PARENT_GROUP_NAME)
-            .subGroupName(UPDATED_SUB_GROUP_NAME)
-            .boardId(UPDATED_BOARD_ID);
+        partialUpdatedProductTaxmonomy.groupName(UPDATED_GROUP_NAME).parentGroupName(UPDATED_PARENT_GROUP_NAME);
 
         restProductTaxmonomyMockMvc
             .perform(
@@ -343,14 +327,13 @@ class ProductTaxmonomyResourceIT {
         List<ProductTaxmonomy> productTaxmonomyList = productTaxmonomyRepository.findAll();
         assertThat(productTaxmonomyList).hasSize(databaseSizeBeforeUpdate);
         ProductTaxmonomy testProductTaxmonomy = productTaxmonomyList.get(productTaxmonomyList.size() - 1);
-        assertThat(testProductTaxmonomy.getItemId()).isEqualTo(UPDATED_ITEM_ID);
+        assertThat(testProductTaxmonomy.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
         assertThat(testProductTaxmonomy.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
-        assertThat(testProductTaxmonomy.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
+        assertThat(testProductTaxmonomy.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
         assertThat(testProductTaxmonomy.getGroupName()).isEqualTo(UPDATED_GROUP_NAME);
         assertThat(testProductTaxmonomy.getParentGroupName()).isEqualTo(UPDATED_PARENT_GROUP_NAME);
-        assertThat(testProductTaxmonomy.getSubGroupName()).isEqualTo(UPDATED_SUB_GROUP_NAME);
+        assertThat(testProductTaxmonomy.getSubGroupName()).isEqualTo(DEFAULT_SUB_GROUP_NAME);
         assertThat(testProductTaxmonomy.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testProductTaxmonomy.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
     }
 
     @Test
@@ -372,8 +355,7 @@ class ProductTaxmonomyResourceIT {
             .groupName(UPDATED_GROUP_NAME)
             .parentGroupName(UPDATED_PARENT_GROUP_NAME)
             .subGroupName(UPDATED_SUB_GROUP_NAME)
-            .description(UPDATED_DESCRIPTION)
-            .boardId(UPDATED_BOARD_ID);
+            .description(UPDATED_DESCRIPTION);
 
         restProductTaxmonomyMockMvc
             .perform(
@@ -394,7 +376,6 @@ class ProductTaxmonomyResourceIT {
         assertThat(testProductTaxmonomy.getParentGroupName()).isEqualTo(UPDATED_PARENT_GROUP_NAME);
         assertThat(testProductTaxmonomy.getSubGroupName()).isEqualTo(UPDATED_SUB_GROUP_NAME);
         assertThat(testProductTaxmonomy.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testProductTaxmonomy.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
     }
 
     @Test

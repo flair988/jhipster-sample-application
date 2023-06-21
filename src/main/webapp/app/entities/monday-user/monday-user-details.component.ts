@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IMondayUser } from '@/shared/model/monday-user.model';
 import MondayUserService from './monday-user.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class MondayUserDetails extends Vue {
-  @Inject('mondayUserService') private mondayUserService: () => MondayUserService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'MondayUserDetails',
+  setup() {
+    const mondayUserService = inject('mondayUserService', () => new MondayUserService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public mondayUser: IMondayUser = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.mondayUserId) {
-        vm.retrieveMondayUser(to.params.mondayUserId);
+    const previousState = () => router.go(-1);
+    const mondayUser: Ref<IMondayUser> = ref({});
+
+    const retrieveMondayUser = async mondayUserId => {
+      try {
+        const res = await mondayUserService().find(mondayUserId);
+        mondayUser.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveMondayUser(mondayUserId) {
-    this.mondayUserService()
-      .find(mondayUserId)
-      .then(res => {
-        this.mondayUser = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.mondayUserId) {
+      retrieveMondayUser(route.params.mondayUserId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      mondayUser,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

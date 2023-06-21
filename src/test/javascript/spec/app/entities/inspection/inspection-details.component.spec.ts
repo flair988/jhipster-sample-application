@@ -1,79 +1,89 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import InspectionDetailComponent from '@/entities/inspection/inspection-details.vue';
-import InspectionClass from '@/entities/inspection/inspection-details.component';
-import InspectionService from '@/entities/inspection/inspection.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+import InspectionDetails from '../../../../../../main/webapp/app/entities/inspection/inspection-details.vue';
+import InspectionService from '../../../../../../main/webapp/app/entities/inspection/inspection.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+type InspectionDetailsComponentType = InstanceType<typeof InspectionDetails>;
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const inspectionSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('Inspection Management Detail Component', () => {
-    let wrapper: Wrapper<InspectionClass>;
-    let comp: InspectionClass;
     let inspectionServiceStub: SinonStubbedInstance<InspectionService>;
+    let mountOptions: MountingOptions<InspectionDetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       inspectionServiceStub = sinon.createStubInstance<InspectionService>(InspectionService);
 
-      wrapper = shallowMount<InspectionClass>(InspectionDetailComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: { inspectionService: () => inspectionServiceStub, alertService: () => new AlertService() },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          inspectionService: () => inspectionServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundInspection = { id: 123 };
-        inspectionServiceStub.find.resolves(foundInspection);
-
+        inspectionServiceStub.find.resolves(inspectionSample);
+        route = {
+          params: {
+            inspectionId: '' + 123,
+          },
+        };
+        const wrapper = shallowMount(InspectionDetails, { global: mountOptions });
+        const comp = wrapper.vm;
         // WHEN
-        comp.retrieveInspection(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.inspection).toBe(foundInspection);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const foundInspection = { id: 123 };
-        inspectionServiceStub.find.resolves(foundInspection);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { inspectionId: 123 } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.inspection).toBe(foundInspection);
+        expect(comp.inspection).toMatchObject(inspectionSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        inspectionServiceStub.find.resolves(inspectionSample);
+        const wrapper = shallowMount(InspectionDetails, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

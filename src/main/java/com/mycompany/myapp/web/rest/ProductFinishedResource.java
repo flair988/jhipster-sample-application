@@ -126,12 +126,6 @@ public class ProductFinishedResource {
                 if (productFinished.getItemName() != null) {
                     existingProductFinished.setItemName(productFinished.getItemName());
                 }
-                if (productFinished.getItemId() != null) {
-                    existingProductFinished.setItemId(productFinished.getItemId());
-                }
-                if (productFinished.getBoardId() != null) {
-                    existingProductFinished.setBoardId(productFinished.getBoardId());
-                }
                 if (productFinished.getKingdeeId() != null) {
                     existingProductFinished.setKingdeeId(productFinished.getKingdeeId());
                 }
@@ -152,6 +146,12 @@ public class ProductFinishedResource {
                 }
                 if (productFinished.getMaterialReceiptDate() != null) {
                     existingProductFinished.setMaterialReceiptDate(productFinished.getMaterialReceiptDate());
+                }
+                if (productFinished.getDocStatus() != null) {
+                    existingProductFinished.setDocStatus(productFinished.getDocStatus());
+                }
+                if (productFinished.getSupplierName() != null) {
+                    existingProductFinished.setSupplierName(productFinished.getSupplierName());
                 }
 
                 return existingProductFinished;

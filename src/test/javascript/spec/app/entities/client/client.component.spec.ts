@@ -1,25 +1,13 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 
-import * as config from '@/shared/config/config';
-import ClientComponent from '@/entities/client/client.vue';
-import ClientClass from '@/entities/client/client.component';
-import ClientService from '@/entities/client/client.service';
-import AlertService from '@/shared/alert/alert.service';
+import Client from '../../../../../../main/webapp/app/entities/client/client.vue';
+import ClientService from '../../../../../../main/webapp/app/entities/client/client.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(ToastPlugin);
-
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-badge', {});
-localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
+type ClientComponentType = InstanceType<typeof Client>;
 
 const bModalStub = {
   render: () => {},
@@ -30,54 +18,84 @@ const bModalStub = {
 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
   describe('Client Management Component', () => {
-    let wrapper: Wrapper<ClientClass>;
-    let comp: ClientClass;
     let clientServiceStub: SinonStubbedInstance<ClientService>;
+    let mountOptions: MountingOptions<ClientComponentType>['global'];
 
     beforeEach(() => {
       clientServiceStub = sinon.createStubInstance<ClientService>(ClientService);
       clientServiceStub.retrieve.resolves({ headers: {} });
 
-      wrapper = shallowMount<ClientClass>(ClientComponent, {
-        store,
-        i18n,
-        localVue,
-        stubs: { bModal: bModalStub as any },
-        provide: {
-          clientService: () => clientServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          clientService: () => clientServiceStub,
+        },
+      };
     });
 
-    it('Should call load all on init', async () => {
-      // GIVEN
-      clientServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        clientServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
-      // WHEN
-      comp.retrieveAllClients();
-      await comp.$nextTick();
+        // WHEN
+        const wrapper = shallowMount(Client, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
 
-      // THEN
-      expect(clientServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.clients[0]).toEqual(expect.objectContaining({ id: 123 }));
+        // THEN
+        expect(clientServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.clients[0]).toEqual(expect.objectContaining({ id: 123 }));
+      });
     });
-    it('Should call delete service on confirmDelete', async () => {
-      // GIVEN
-      clientServiceStub.delete.resolves({});
+    describe('Handles', () => {
+      let comp: ClientComponentType;
 
-      // WHEN
-      comp.prepareRemove({ id: 123 });
-      expect(clientServiceStub.retrieve.callCount).toEqual(1);
+      beforeEach(async () => {
+        const wrapper = shallowMount(Client, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        clientServiceStub.retrieve.reset();
+        clientServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
 
-      comp.removeClient();
-      await comp.$nextTick();
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        clientServiceStub.delete.resolves({});
 
-      // THEN
-      expect(clientServiceStub.delete.called).toBeTruthy();
-      expect(clientServiceStub.retrieve.callCount).toEqual(2);
+        // WHEN
+        comp.prepareRemove({ id: 123 });
+
+        comp.removeClient();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(clientServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(clientServiceStub.retrieve.callCount).toEqual(1);
+      });
     });
   });
 });

@@ -1,25 +1,13 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 
-import * as config from '@/shared/config/config';
-import MondayColumnComponent from '@/entities/monday-column/monday-column.vue';
-import MondayColumnClass from '@/entities/monday-column/monday-column.component';
-import MondayColumnService from '@/entities/monday-column/monday-column.service';
-import AlertService from '@/shared/alert/alert.service';
+import MondayColumn from '../../../../../../main/webapp/app/entities/monday-column/monday-column.vue';
+import MondayColumnService from '../../../../../../main/webapp/app/entities/monday-column/monday-column.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(ToastPlugin);
-
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-badge', {});
-localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
+type MondayColumnComponentType = InstanceType<typeof MondayColumn>;
 
 const bModalStub = {
   render: () => {},
@@ -30,54 +18,84 @@ const bModalStub = {
 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
   describe('MondayColumn Management Component', () => {
-    let wrapper: Wrapper<MondayColumnClass>;
-    let comp: MondayColumnClass;
     let mondayColumnServiceStub: SinonStubbedInstance<MondayColumnService>;
+    let mountOptions: MountingOptions<MondayColumnComponentType>['global'];
 
     beforeEach(() => {
       mondayColumnServiceStub = sinon.createStubInstance<MondayColumnService>(MondayColumnService);
       mondayColumnServiceStub.retrieve.resolves({ headers: {} });
 
-      wrapper = shallowMount<MondayColumnClass>(MondayColumnComponent, {
-        store,
-        i18n,
-        localVue,
-        stubs: { bModal: bModalStub as any },
-        provide: {
-          mondayColumnService: () => mondayColumnServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          mondayColumnService: () => mondayColumnServiceStub,
+        },
+      };
     });
 
-    it('Should call load all on init', async () => {
-      // GIVEN
-      mondayColumnServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        mondayColumnServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
-      // WHEN
-      comp.retrieveAllMondayColumns();
-      await comp.$nextTick();
+        // WHEN
+        const wrapper = shallowMount(MondayColumn, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
 
-      // THEN
-      expect(mondayColumnServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.mondayColumns[0]).toEqual(expect.objectContaining({ id: 123 }));
+        // THEN
+        expect(mondayColumnServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.mondayColumns[0]).toEqual(expect.objectContaining({ id: 123 }));
+      });
     });
-    it('Should call delete service on confirmDelete', async () => {
-      // GIVEN
-      mondayColumnServiceStub.delete.resolves({});
+    describe('Handles', () => {
+      let comp: MondayColumnComponentType;
 
-      // WHEN
-      comp.prepareRemove({ id: 123 });
-      expect(mondayColumnServiceStub.retrieve.callCount).toEqual(1);
+      beforeEach(async () => {
+        const wrapper = shallowMount(MondayColumn, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        mondayColumnServiceStub.retrieve.reset();
+        mondayColumnServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
 
-      comp.removeMondayColumn();
-      await comp.$nextTick();
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        mondayColumnServiceStub.delete.resolves({});
 
-      // THEN
-      expect(mondayColumnServiceStub.delete.called).toBeTruthy();
-      expect(mondayColumnServiceStub.retrieve.callCount).toEqual(2);
+        // WHEN
+        comp.prepareRemove({ id: 123 });
+
+        comp.removeMondayColumn();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(mondayColumnServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(mondayColumnServiceStub.retrieve.callCount).toEqual(1);
+      });
     });
   });
 });

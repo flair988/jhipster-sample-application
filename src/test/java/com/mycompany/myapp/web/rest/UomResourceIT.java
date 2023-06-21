@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Uom;
 import com.mycompany.myapp.repository.UomRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -315,7 +315,14 @@ class UomResourceIT {
         Uom partialUpdatedUom = new Uom();
         partialUpdatedUom.setId(uom.getId());
 
-        partialUpdatedUom.uom(UPDATED_UOM).kingdeeId(UPDATED_KINGDEE_ID);
+        partialUpdatedUom
+            .itemId(UPDATED_ITEM_ID)
+            .uom(UPDATED_UOM)
+            .uomGroup(UPDATED_UOM_GROUP)
+            .subItems(UPDATED_SUB_ITEMS)
+            .parentItem(UPDATED_PARENT_ITEM)
+            .boardId(UPDATED_BOARD_ID)
+            .kingdeeId(UPDATED_KINGDEE_ID);
 
         restUomMockMvc
             .perform(
@@ -329,13 +336,13 @@ class UomResourceIT {
         List<Uom> uomList = uomRepository.findAll();
         assertThat(uomList).hasSize(databaseSizeBeforeUpdate);
         Uom testUom = uomList.get(uomList.size() - 1);
-        assertThat(testUom.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
+        assertThat(testUom.getItemId()).isEqualTo(UPDATED_ITEM_ID);
         assertThat(testUom.getUom()).isEqualTo(UPDATED_UOM);
-        assertThat(testUom.getUomGroup()).isEqualTo(DEFAULT_UOM_GROUP);
+        assertThat(testUom.getUomGroup()).isEqualTo(UPDATED_UOM_GROUP);
         assertThat(testUom.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testUom.getSubItems()).isEqualTo(DEFAULT_SUB_ITEMS);
-        assertThat(testUom.getParentItem()).isEqualTo(DEFAULT_PARENT_ITEM);
-        assertThat(testUom.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
+        assertThat(testUom.getSubItems()).isEqualTo(UPDATED_SUB_ITEMS);
+        assertThat(testUom.getParentItem()).isEqualTo(UPDATED_PARENT_ITEM);
+        assertThat(testUom.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testUom.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
     }
 

@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IMondayColumn } from '@/shared/model/monday-column.model';
 import MondayColumnService from './monday-column.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class MondayColumnDetails extends Vue {
-  @Inject('mondayColumnService') private mondayColumnService: () => MondayColumnService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'MondayColumnDetails',
+  setup() {
+    const mondayColumnService = inject('mondayColumnService', () => new MondayColumnService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public mondayColumn: IMondayColumn = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.mondayColumnId) {
-        vm.retrieveMondayColumn(to.params.mondayColumnId);
+    const previousState = () => router.go(-1);
+    const mondayColumn: Ref<IMondayColumn> = ref({});
+
+    const retrieveMondayColumn = async mondayColumnId => {
+      try {
+        const res = await mondayColumnService().find(mondayColumnId);
+        mondayColumn.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveMondayColumn(mondayColumnId) {
-    this.mondayColumnService()
-      .find(mondayColumnId)
-      .then(res => {
-        this.mondayColumn = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.mondayColumnId) {
+      retrieveMondayColumn(route.params.mondayColumnId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      mondayColumn,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import ForwarderBookingService from '@/entities/forwarder-booking/forwarder-booking.service';
-import { ForwarderBooking } from '@/shared/model/forwarder-booking.model';
+import ForwarderBookingService from '../../../../../../main/webapp/app/entities/forwarder-booking/forwarder-booking.service';
+import { ForwarderBooking } from '../../../../../../main/webapp/app/shared/model/forwarder-booking.model';
 
 const error = {
   response: {
@@ -31,8 +31,6 @@ describe('Service Tests', () => {
       service = new ForwarderBookingService();
       elemDefault = new ForwarderBooking(
         123,
-        'AAAAAAA',
-        'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
         'AAAAAAA',
@@ -109,8 +107,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             customer: 'BBBBBB',
             orderDate: 'BBBBBB',
@@ -160,22 +156,16 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
-            kingdeeId: 'BBBBBB',
-            orderDate: 'BBBBBB',
             forwarder: 'BBBBBB',
-            totalQty: 'BBBBBB',
+            loadingPort: 'BBBBBB',
             containerType: 'BBBBBB',
             containerSize: 'BBBBBB',
             containerNumber: 'BBBBBB',
-            supplier: 'BBBBBB',
-            supplierEmail: 'BBBBBB',
             etd: 'BBBBBB',
             transportMode: 'BBBBBB',
-            numberOfCartons: 'BBBBBB',
-            totalVolume: 'BBBBBB',
             totalWeight: 'BBBBBB',
+            remark: 'BBBBBB',
+            client: 'BBBBBB',
           },
           new ForwarderBooking()
         );
@@ -204,8 +194,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             itemName: 'BBBBBB',
-            itemId: 'BBBBBB',
-            boardId: 'BBBBBB',
             kingdeeId: 'BBBBBB',
             customer: 'BBBBBB',
             orderDate: 'BBBBBB',

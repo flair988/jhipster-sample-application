@@ -3,36 +3,36 @@
     <div class="col-8">
       <div v-if="mondayColumn">
         <h2 class="jh-entity-heading" data-cy="mondayColumnDetailsHeading">
-          <span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.detail.title')">MondayColumn</span> {{ mondayColumn.id }}
+          <span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.detail.title')"></span> {{ mondayColumn.id }}
         </h2>
         <dl class="row jh-entity-details">
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.boardId')">Board Id</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.boardId')"></span>
           </dt>
           <dd>
             <span>{{ mondayColumn.boardId }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.columnId')">Column Id</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.columnId')"></span>
           </dt>
           <dd>
             <span>{{ mondayColumn.columnId }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.title')">Title</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.title')"></span>
           </dt>
           <dd>
             <span>{{ mondayColumn.title }}</span>
           </dd>
           <dt>
-            <span v-text="$t('jhipsterSampleApplicationApp.mondayColumn.type')">Type</span>
+            <span v-text="t$('jhipsterSampleApplicationApp.mondayColumn.type')"></span>
           </dt>
           <dd>
             <span>{{ mondayColumn.type }}</span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
+          <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.back')"></span>
         </button>
         <router-link
           v-if="mondayColumn.id"
@@ -41,7 +41,7 @@
           v-slot="{ navigate }"
         >
           <button @click="navigate" class="btn btn-primary">
-            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
+            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.edit')"></span>
           </button>
         </router-link>
       </div>

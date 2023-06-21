@@ -1,73 +1,87 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import MondayColumnUpdateComponent from '@/entities/monday-column/monday-column-update.vue';
-import MondayColumnClass from '@/entities/monday-column/monday-column-update.component';
-import MondayColumnService from '@/entities/monday-column/monday-column.service';
+import MondayColumnUpdate from '../../../../../../main/webapp/app/entities/monday-column/monday-column-update.vue';
+import MondayColumnService from '../../../../../../main/webapp/app/entities/monday-column/monday-column.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-import AlertService from '@/shared/alert/alert.service';
+type MondayColumnUpdateComponentType = InstanceType<typeof MondayColumnUpdate>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const mondayColumnSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let mountOptions: MountingOptions<MondayColumnUpdateComponentType>['global'];
+  let alertService: AlertService;
+
   describe('MondayColumn Management Update Component', () => {
-    let wrapper: Wrapper<MondayColumnClass>;
-    let comp: MondayColumnClass;
+    let comp: MondayColumnUpdateComponentType;
     let mondayColumnServiceStub: SinonStubbedInstance<MondayColumnService>;
 
     beforeEach(() => {
+      route = {};
       mondayColumnServiceStub = sinon.createStubInstance<MondayColumnService>(MondayColumnService);
 
-      wrapper = shallowMount<MondayColumnClass>(MondayColumnUpdateComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: {
-          mondayColumnService: () => mondayColumnServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          mondayColumnService: () => mondayColumnServiceStub,
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 123 };
-        comp.mondayColumn = entity;
-        mondayColumnServiceStub.update.resolves(entity);
+        const wrapper = shallowMount(MondayColumnUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.mondayColumn = mondayColumnSample;
+        mondayColumnServiceStub.update.resolves(mondayColumnSample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(mondayColumnServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(mondayColumnServiceStub.update.calledWith(mondayColumnSample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.mondayColumn = entity;
         mondayColumnServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(MondayColumnUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.mondayColumn = entity;
 
         // WHEN
         comp.save();
@@ -82,25 +96,35 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundMondayColumn = { id: 123 };
-        mondayColumnServiceStub.find.resolves(foundMondayColumn);
-        mondayColumnServiceStub.retrieve.resolves([foundMondayColumn]);
+        mondayColumnServiceStub.find.resolves(mondayColumnSample);
+        mondayColumnServiceStub.retrieve.resolves([mondayColumnSample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { mondayColumnId: 123 } }, null, cb => cb(comp));
+        route = {
+          params: {
+            mondayColumnId: '' + mondayColumnSample.id,
+          },
+        };
+        const wrapper = shallowMount(MondayColumnUpdate, { global: mountOptions });
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.mondayColumn).toBe(foundMondayColumn);
+        expect(comp.mondayColumn).toMatchObject(mondayColumnSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        mondayColumnServiceStub.find.resolves(mondayColumnSample);
+        const wrapper = shallowMount(MondayColumnUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

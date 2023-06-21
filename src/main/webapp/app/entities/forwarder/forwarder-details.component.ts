@@ -1,36 +1,43 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
 import { IForwarder } from '@/shared/model/forwarder.model';
 import ForwarderService from './forwarder.service';
-import AlertService from '@/shared/alert/alert.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
-@Component
-export default class ForwarderDetails extends Vue {
-  @Inject('forwarderService') private forwarderService: () => ForwarderService;
-  @Inject('alertService') private alertService: () => AlertService;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'ForwarderDetails',
+  setup() {
+    const forwarderService = inject('forwarderService', () => new ForwarderService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
-  public forwarder: IForwarder = {};
+    const route = useRoute();
+    const router = useRouter();
 
-  beforeRouteEnter(to, from, next) {
-    next(vm => {
-      if (to.params.forwarderId) {
-        vm.retrieveForwarder(to.params.forwarderId);
+    const previousState = () => router.go(-1);
+    const forwarder: Ref<IForwarder> = ref({});
+
+    const retrieveForwarder = async forwarderId => {
+      try {
+        const res = await forwarderService().find(forwarderId);
+        forwarder.value = res;
+      } catch (error) {
+        alertService.showHttpError(error.response);
       }
-    });
-  }
+    };
 
-  public retrieveForwarder(forwarderId) {
-    this.forwarderService()
-      .find(forwarderId)
-      .then(res => {
-        this.forwarder = res;
-      })
-      .catch(error => {
-        this.alertService().showHttpError(this, error.response);
-      });
-  }
+    if (route.params?.forwarderId) {
+      retrieveForwarder(route.params.forwarderId);
+    }
 
-  public previousState() {
-    this.$router.go(-1);
-  }
-}
+    return {
+      alertService,
+      forwarder,
+
+      previousState,
+      t$: useI18n().t,
+    };
+  },
+});

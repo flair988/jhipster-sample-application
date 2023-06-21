@@ -127,12 +127,6 @@ public class CommercialInvoiceResource {
                 if (commercialInvoice.getItemName() != null) {
                     existingCommercialInvoice.setItemName(commercialInvoice.getItemName());
                 }
-                if (commercialInvoice.getItemId() != null) {
-                    existingCommercialInvoice.setItemId(commercialInvoice.getItemId());
-                }
-                if (commercialInvoice.getBoardId() != null) {
-                    existingCommercialInvoice.setBoardId(commercialInvoice.getBoardId());
-                }
                 if (commercialInvoice.getKingdeeId() != null) {
                     existingCommercialInvoice.setKingdeeId(commercialInvoice.getKingdeeId());
                 }
@@ -153,6 +147,12 @@ public class CommercialInvoiceResource {
                 }
                 if (commercialInvoice.getRemarks() != null) {
                     existingCommercialInvoice.setRemarks(commercialInvoice.getRemarks());
+                }
+                if (commercialInvoice.getClientId() != null) {
+                    existingCommercialInvoice.setClientId(commercialInvoice.getClientId());
+                }
+                if (commercialInvoice.getDocStatus() != null) {
+                    existingCommercialInvoice.setDocStatus(commercialInvoice.getDocStatus());
                 }
 
                 return existingCommercialInvoice;

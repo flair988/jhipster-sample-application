@@ -8,12 +8,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.OperationSite;
 import com.mycompany.myapp.repository.OperationSiteRepository;
+import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,14 +52,8 @@ class OperationSiteResourceIT {
     private static final String DEFAULT_COUNTRY = "AAAAAAAAAA";
     private static final String UPDATED_COUNTRY = "BBBBBBBBBB";
 
-    private static final String DEFAULT_BOARD_ID = "AAAAAAAAAA";
-    private static final String UPDATED_BOARD_ID = "BBBBBBBBBB";
-
     private static final String DEFAULT_KINGDEE_ID = "AAAAAAAAAA";
     private static final String UPDATED_KINGDEE_ID = "BBBBBBBBBB";
-
-    private static final String DEFAULT_ITEM_ID = "AAAAAAAAAA";
-    private static final String UPDATED_ITEM_ID = "BBBBBBBBBB";
 
     private static final String DEFAULT_BUSINESS_LICENSE = "AAAAAAAAAA";
     private static final String UPDATED_BUSINESS_LICENSE = "BBBBBBBBBB";
@@ -144,9 +138,7 @@ class OperationSiteResourceIT {
             .siteAddress(DEFAULT_SITE_ADDRESS)
             .cateGory(DEFAULT_CATE_GORY)
             .country(DEFAULT_COUNTRY)
-            .boardId(DEFAULT_BOARD_ID)
             .kingdeeId(DEFAULT_KINGDEE_ID)
-            .itemId(DEFAULT_ITEM_ID)
             .businessLicense(DEFAULT_BUSINESS_LICENSE)
             .sasDate(DEFAULT_SAS_DATE)
             .iso900ValidUtil(DEFAULT_ISO_900_VALID_UTIL)
@@ -182,9 +174,7 @@ class OperationSiteResourceIT {
             .siteAddress(UPDATED_SITE_ADDRESS)
             .cateGory(UPDATED_CATE_GORY)
             .country(UPDATED_COUNTRY)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
-            .itemId(UPDATED_ITEM_ID)
             .businessLicense(UPDATED_BUSINESS_LICENSE)
             .sasDate(UPDATED_SAS_DATE)
             .iso900ValidUtil(UPDATED_ISO_900_VALID_UTIL)
@@ -230,9 +220,7 @@ class OperationSiteResourceIT {
         assertThat(testOperationSite.getSiteAddress()).isEqualTo(DEFAULT_SITE_ADDRESS);
         assertThat(testOperationSite.getCateGory()).isEqualTo(DEFAULT_CATE_GORY);
         assertThat(testOperationSite.getCountry()).isEqualTo(DEFAULT_COUNTRY);
-        assertThat(testOperationSite.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
         assertThat(testOperationSite.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
-        assertThat(testOperationSite.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
         assertThat(testOperationSite.getBusinessLicense()).isEqualTo(DEFAULT_BUSINESS_LICENSE);
         assertThat(testOperationSite.getSasDate()).isEqualTo(DEFAULT_SAS_DATE);
         assertThat(testOperationSite.getIso900ValidUtil()).isEqualTo(DEFAULT_ISO_900_VALID_UTIL);
@@ -289,9 +277,7 @@ class OperationSiteResourceIT {
             .andExpect(jsonPath("$.[*].siteAddress").value(hasItem(DEFAULT_SITE_ADDRESS)))
             .andExpect(jsonPath("$.[*].cateGory").value(hasItem(DEFAULT_CATE_GORY)))
             .andExpect(jsonPath("$.[*].country").value(hasItem(DEFAULT_COUNTRY)))
-            .andExpect(jsonPath("$.[*].boardId").value(hasItem(DEFAULT_BOARD_ID)))
             .andExpect(jsonPath("$.[*].kingdeeId").value(hasItem(DEFAULT_KINGDEE_ID)))
-            .andExpect(jsonPath("$.[*].itemId").value(hasItem(DEFAULT_ITEM_ID)))
             .andExpect(jsonPath("$.[*].businessLicense").value(hasItem(DEFAULT_BUSINESS_LICENSE)))
             .andExpect(jsonPath("$.[*].sasDate").value(hasItem(DEFAULT_SAS_DATE.toString())))
             .andExpect(jsonPath("$.[*].iso900ValidUtil").value(hasItem(DEFAULT_ISO_900_VALID_UTIL.toString())))
@@ -330,9 +316,7 @@ class OperationSiteResourceIT {
             .andExpect(jsonPath("$.siteAddress").value(DEFAULT_SITE_ADDRESS))
             .andExpect(jsonPath("$.cateGory").value(DEFAULT_CATE_GORY))
             .andExpect(jsonPath("$.country").value(DEFAULT_COUNTRY))
-            .andExpect(jsonPath("$.boardId").value(DEFAULT_BOARD_ID))
             .andExpect(jsonPath("$.kingdeeId").value(DEFAULT_KINGDEE_ID))
-            .andExpect(jsonPath("$.itemId").value(DEFAULT_ITEM_ID))
             .andExpect(jsonPath("$.businessLicense").value(DEFAULT_BUSINESS_LICENSE))
             .andExpect(jsonPath("$.sasDate").value(DEFAULT_SAS_DATE.toString()))
             .andExpect(jsonPath("$.iso900ValidUtil").value(DEFAULT_ISO_900_VALID_UTIL.toString()))
@@ -379,9 +363,7 @@ class OperationSiteResourceIT {
             .siteAddress(UPDATED_SITE_ADDRESS)
             .cateGory(UPDATED_CATE_GORY)
             .country(UPDATED_COUNTRY)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
-            .itemId(UPDATED_ITEM_ID)
             .businessLicense(UPDATED_BUSINESS_LICENSE)
             .sasDate(UPDATED_SAS_DATE)
             .iso900ValidUtil(UPDATED_ISO_900_VALID_UTIL)
@@ -419,9 +401,7 @@ class OperationSiteResourceIT {
         assertThat(testOperationSite.getSiteAddress()).isEqualTo(UPDATED_SITE_ADDRESS);
         assertThat(testOperationSite.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
         assertThat(testOperationSite.getCountry()).isEqualTo(UPDATED_COUNTRY);
-        assertThat(testOperationSite.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testOperationSite.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
-        assertThat(testOperationSite.getItemId()).isEqualTo(UPDATED_ITEM_ID);
         assertThat(testOperationSite.getBusinessLicense()).isEqualTo(UPDATED_BUSINESS_LICENSE);
         assertThat(testOperationSite.getSasDate()).isEqualTo(UPDATED_SAS_DATE);
         assertThat(testOperationSite.getIso900ValidUtil()).isEqualTo(UPDATED_ISO_900_VALID_UTIL);
@@ -511,17 +491,14 @@ class OperationSiteResourceIT {
 
         partialUpdatedOperationSite
             .linkSupplierFactory(UPDATED_LINK_SUPPLIER_FACTORY)
-            .contact(UPDATED_CONTACT)
-            .siteAddress(UPDATED_SITE_ADDRESS)
-            .cateGory(UPDATED_CATE_GORY)
-            .sasDate(UPDATED_SAS_DATE)
-            .attributeLor(UPDATED_ATTRIBUTE_LOR)
-            .siteQualification(UPDATED_SITE_QUALIFICATION)
+            .typeOfSite(UPDATED_TYPE_OF_SITE)
+            .country(UPDATED_COUNTRY)
+            .kingdeeId(UPDATED_KINGDEE_ID)
+            .iso900ValidUtil(UPDATED_ISO_900_VALID_UTIL)
+            .qualificationScore(UPDATED_QUALIFICATION_SCORE)
             .pqvScore(UPDATED_PQV_SCORE)
-            .pqvDecision(UPDATED_PQV_DECISION)
             .thirdRdPartyDate(UPDATED_THIRD_RD_PARTY_DATE)
-            .bopeDate(UPDATED_BOPE_DATE)
-            .capRequired(UPDATED_CAP_REQUIRED);
+            .thirdRdPartyScore(UPDATED_THIRD_RD_PARTY_SCORE);
 
         restOperationSiteMockMvc
             .perform(
@@ -537,31 +514,29 @@ class OperationSiteResourceIT {
         OperationSite testOperationSite = operationSiteList.get(operationSiteList.size() - 1);
         assertThat(testOperationSite.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
         assertThat(testOperationSite.getLinkSupplierFactory()).isEqualTo(UPDATED_LINK_SUPPLIER_FACTORY);
-        assertThat(testOperationSite.getTypeOfSite()).isEqualTo(DEFAULT_TYPE_OF_SITE);
-        assertThat(testOperationSite.getContact()).isEqualTo(UPDATED_CONTACT);
-        assertThat(testOperationSite.getSiteAddress()).isEqualTo(UPDATED_SITE_ADDRESS);
-        assertThat(testOperationSite.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
-        assertThat(testOperationSite.getCountry()).isEqualTo(DEFAULT_COUNTRY);
-        assertThat(testOperationSite.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
-        assertThat(testOperationSite.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
-        assertThat(testOperationSite.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
+        assertThat(testOperationSite.getTypeOfSite()).isEqualTo(UPDATED_TYPE_OF_SITE);
+        assertThat(testOperationSite.getContact()).isEqualTo(DEFAULT_CONTACT);
+        assertThat(testOperationSite.getSiteAddress()).isEqualTo(DEFAULT_SITE_ADDRESS);
+        assertThat(testOperationSite.getCateGory()).isEqualTo(DEFAULT_CATE_GORY);
+        assertThat(testOperationSite.getCountry()).isEqualTo(UPDATED_COUNTRY);
+        assertThat(testOperationSite.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testOperationSite.getBusinessLicense()).isEqualTo(DEFAULT_BUSINESS_LICENSE);
-        assertThat(testOperationSite.getSasDate()).isEqualTo(UPDATED_SAS_DATE);
-        assertThat(testOperationSite.getIso900ValidUtil()).isEqualTo(DEFAULT_ISO_900_VALID_UTIL);
+        assertThat(testOperationSite.getSasDate()).isEqualTo(DEFAULT_SAS_DATE);
+        assertThat(testOperationSite.getIso900ValidUtil()).isEqualTo(UPDATED_ISO_900_VALID_UTIL);
         assertThat(testOperationSite.getIso14001ValidUtil()).isEqualTo(DEFAULT_ISO_14001_VALID_UTIL);
-        assertThat(testOperationSite.getAttributeLor()).isEqualTo(UPDATED_ATTRIBUTE_LOR);
-        assertThat(testOperationSite.getSiteQualification()).isEqualTo(UPDATED_SITE_QUALIFICATION);
-        assertThat(testOperationSite.getQualificationScore()).isEqualTo(DEFAULT_QUALIFICATION_SCORE);
+        assertThat(testOperationSite.getAttributeLor()).isEqualTo(DEFAULT_ATTRIBUTE_LOR);
+        assertThat(testOperationSite.getSiteQualification()).isEqualTo(DEFAULT_SITE_QUALIFICATION);
+        assertThat(testOperationSite.getQualificationScore()).isEqualTo(UPDATED_QUALIFICATION_SCORE);
         assertThat(testOperationSite.getPqvScore()).isEqualTo(UPDATED_PQV_SCORE);
         assertThat(testOperationSite.getPqvDate()).isEqualTo(DEFAULT_PQV_DATE);
-        assertThat(testOperationSite.getPqvDecision()).isEqualTo(UPDATED_PQV_DECISION);
+        assertThat(testOperationSite.getPqvDecision()).isEqualTo(DEFAULT_PQV_DECISION);
         assertThat(testOperationSite.getTechnicalAuditDate()).isEqualTo(DEFAULT_TECHNICAL_AUDIT_DATE);
         assertThat(testOperationSite.getTechnicalAuditScore()).isEqualTo(DEFAULT_TECHNICAL_AUDIT_SCORE);
         assertThat(testOperationSite.getThirdRdPartyDate()).isEqualTo(UPDATED_THIRD_RD_PARTY_DATE);
-        assertThat(testOperationSite.getThirdRdPartyScore()).isEqualTo(DEFAULT_THIRD_RD_PARTY_SCORE);
-        assertThat(testOperationSite.getBopeDate()).isEqualTo(UPDATED_BOPE_DATE);
+        assertThat(testOperationSite.getThirdRdPartyScore()).isEqualTo(UPDATED_THIRD_RD_PARTY_SCORE);
+        assertThat(testOperationSite.getBopeDate()).isEqualTo(DEFAULT_BOPE_DATE);
         assertThat(testOperationSite.getBopeScore()).isEqualTo(DEFAULT_BOPE_SCORE);
-        assertThat(testOperationSite.getCapRequired()).isEqualTo(UPDATED_CAP_REQUIRED);
+        assertThat(testOperationSite.getCapRequired()).isEqualTo(DEFAULT_CAP_REQUIRED);
     }
 
     @Test
@@ -584,9 +559,7 @@ class OperationSiteResourceIT {
             .siteAddress(UPDATED_SITE_ADDRESS)
             .cateGory(UPDATED_CATE_GORY)
             .country(UPDATED_COUNTRY)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
-            .itemId(UPDATED_ITEM_ID)
             .businessLicense(UPDATED_BUSINESS_LICENSE)
             .sasDate(UPDATED_SAS_DATE)
             .iso900ValidUtil(UPDATED_ISO_900_VALID_UTIL)
@@ -624,9 +597,7 @@ class OperationSiteResourceIT {
         assertThat(testOperationSite.getSiteAddress()).isEqualTo(UPDATED_SITE_ADDRESS);
         assertThat(testOperationSite.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
         assertThat(testOperationSite.getCountry()).isEqualTo(UPDATED_COUNTRY);
-        assertThat(testOperationSite.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testOperationSite.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
-        assertThat(testOperationSite.getItemId()).isEqualTo(UPDATED_ITEM_ID);
         assertThat(testOperationSite.getBusinessLicense()).isEqualTo(UPDATED_BUSINESS_LICENSE);
         assertThat(testOperationSite.getSasDate()).isEqualTo(UPDATED_SAS_DATE);
         assertThat(testOperationSite.getIso900ValidUtil()).isEqualTo(UPDATED_ISO_900_VALID_UTIL);

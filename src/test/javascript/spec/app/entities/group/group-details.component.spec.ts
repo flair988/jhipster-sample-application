@@ -1,79 +1,89 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import VueRouter from 'vue-router';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import GroupDetailComponent from '@/entities/group/group-details.vue';
-import GroupClass from '@/entities/group/group-details.component';
-import GroupService from '@/entities/group/group.service';
-import router from '@/router';
-import AlertService from '@/shared/alert/alert.service';
+import GroupDetails from '../../../../../../main/webapp/app/entities/group/group-details.vue';
+import GroupService from '../../../../../../main/webapp/app/entities/group/group.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
+type GroupDetailsComponentType = InstanceType<typeof GroupDetails>;
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('router-link', {});
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
+
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const groupSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
+  afterEach(() => {
+    vitest.resetAllMocks();
+  });
+
   describe('Group Management Detail Component', () => {
-    let wrapper: Wrapper<GroupClass>;
-    let comp: GroupClass;
     let groupServiceStub: SinonStubbedInstance<GroupService>;
+    let mountOptions: MountingOptions<GroupDetailsComponentType>['global'];
 
     beforeEach(() => {
+      route = {};
       groupServiceStub = sinon.createStubInstance<GroupService>(GroupService);
 
-      wrapper = shallowMount<GroupClass>(GroupDetailComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: { groupService: () => groupServiceStub, alertService: () => new AlertService() },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'router-link': true,
+        },
+        provide: {
+          alertService,
+          groupService: () => groupServiceStub,
+        },
+      };
     });
 
-    describe('OnInit', () => {
+    describe('Navigate to details', () => {
       it('Should call load all on init', async () => {
         // GIVEN
-        const foundGroup = { id: 123 };
-        groupServiceStub.find.resolves(foundGroup);
-
+        groupServiceStub.find.resolves(groupSample);
+        route = {
+          params: {
+            groupId: '' + 123,
+          },
+        };
+        const wrapper = shallowMount(GroupDetails, { global: mountOptions });
+        const comp = wrapper.vm;
         // WHEN
-        comp.retrieveGroup(123);
         await comp.$nextTick();
 
         // THEN
-        expect(comp.group).toBe(foundGroup);
-      });
-    });
-
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
-        // GIVEN
-        const foundGroup = { id: 123 };
-        groupServiceStub.find.resolves(foundGroup);
-
-        // WHEN
-        comp.beforeRouteEnter({ params: { groupId: 123 } }, null, cb => cb(comp));
-        await comp.$nextTick();
-
-        // THEN
-        expect(comp.group).toBe(foundGroup);
+        expect(comp.group).toMatchObject(groupSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        groupServiceStub.find.resolves(groupSample);
+        const wrapper = shallowMount(GroupDetails, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

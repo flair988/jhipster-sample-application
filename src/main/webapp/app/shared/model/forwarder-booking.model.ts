@@ -1,8 +1,6 @@
 export interface IForwarderBooking {
   id?: number;
   itemName?: string | null;
-  itemId?: string | null;
-  boardId?: string | null;
   kingdeeId?: string | null;
   customer?: string | null;
   orderDate?: string | null;
@@ -31,8 +29,6 @@ export class ForwarderBooking implements IForwarderBooking {
   constructor(
     public id?: number,
     public itemName?: string | null,
-    public itemId?: string | null,
-    public boardId?: string | null,
     public kingdeeId?: string | null,
     public customer?: string | null,
     public orderDate?: string | null,

@@ -1,73 +1,87 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import ForwarderBookingUpdateComponent from '@/entities/forwarder-booking/forwarder-booking-update.vue';
-import ForwarderBookingClass from '@/entities/forwarder-booking/forwarder-booking-update.component';
-import ForwarderBookingService from '@/entities/forwarder-booking/forwarder-booking.service';
+import ForwarderBookingUpdate from '../../../../../../main/webapp/app/entities/forwarder-booking/forwarder-booking-update.vue';
+import ForwarderBookingService from '../../../../../../main/webapp/app/entities/forwarder-booking/forwarder-booking.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-import AlertService from '@/shared/alert/alert.service';
+type ForwarderBookingUpdateComponentType = InstanceType<typeof ForwarderBookingUpdate>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const forwarderBookingSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let mountOptions: MountingOptions<ForwarderBookingUpdateComponentType>['global'];
+  let alertService: AlertService;
+
   describe('ForwarderBooking Management Update Component', () => {
-    let wrapper: Wrapper<ForwarderBookingClass>;
-    let comp: ForwarderBookingClass;
+    let comp: ForwarderBookingUpdateComponentType;
     let forwarderBookingServiceStub: SinonStubbedInstance<ForwarderBookingService>;
 
     beforeEach(() => {
+      route = {};
       forwarderBookingServiceStub = sinon.createStubInstance<ForwarderBookingService>(ForwarderBookingService);
 
-      wrapper = shallowMount<ForwarderBookingClass>(ForwarderBookingUpdateComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: {
-          forwarderBookingService: () => forwarderBookingServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          forwarderBookingService: () => forwarderBookingServiceStub,
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 123 };
-        comp.forwarderBooking = entity;
-        forwarderBookingServiceStub.update.resolves(entity);
+        const wrapper = shallowMount(ForwarderBookingUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.forwarderBooking = forwarderBookingSample;
+        forwarderBookingServiceStub.update.resolves(forwarderBookingSample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(forwarderBookingServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(forwarderBookingServiceStub.update.calledWith(forwarderBookingSample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.forwarderBooking = entity;
         forwarderBookingServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(ForwarderBookingUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.forwarderBooking = entity;
 
         // WHEN
         comp.save();
@@ -82,25 +96,35 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundForwarderBooking = { id: 123 };
-        forwarderBookingServiceStub.find.resolves(foundForwarderBooking);
-        forwarderBookingServiceStub.retrieve.resolves([foundForwarderBooking]);
+        forwarderBookingServiceStub.find.resolves(forwarderBookingSample);
+        forwarderBookingServiceStub.retrieve.resolves([forwarderBookingSample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { forwarderBookingId: 123 } }, null, cb => cb(comp));
+        route = {
+          params: {
+            forwarderBookingId: '' + forwarderBookingSample.id,
+          },
+        };
+        const wrapper = shallowMount(ForwarderBookingUpdate, { global: mountOptions });
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.forwarderBooking).toBe(foundForwarderBooking);
+        expect(comp.forwarderBooking).toMatchObject(forwarderBookingSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        forwarderBookingServiceStub.find.resolves(forwarderBookingSample);
+        const wrapper = shallowMount(ForwarderBookingUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

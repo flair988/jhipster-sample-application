@@ -35,13 +35,7 @@
             <column name="country" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="board_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="kingdee_id" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="item_id" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="business_license" type="varchar(255)">
@@ -123,9 +117,7 @@
             <column name="site_address" type="string"/>
             <column name="cate_gory" type="string"/>
             <column name="country" type="string"/>
-            <column name="board_id" type="string"/>
             <column name="kingdee_id" type="string"/>
-            <column name="item_id" type="string"/>
             <column name="business_license" type="string"/>
             <column name="sas_date" type="date"/>
             <column name="iso_900_valid_util" type="date"/>

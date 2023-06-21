@@ -1,25 +1,13 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import { ToastPlugin } from 'bootstrap-vue';
 
-import * as config from '@/shared/config/config';
-import PIComponent from '@/entities/pi/pi.vue';
-import PIClass from '@/entities/pi/pi.component';
-import PIService from '@/entities/pi/pi.service';
-import AlertService from '@/shared/alert/alert.service';
+import PI from '../../../../../../main/webapp/app/entities/pi/pi.vue';
+import PIService from '../../../../../../main/webapp/app/entities/pi/pi.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-const localVue = createLocalVue();
-localVue.use(ToastPlugin);
-
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-badge', {});
-localVue.directive('b-modal', {});
-localVue.component('b-button', {});
-localVue.component('router-link', {});
+type PIComponentType = InstanceType<typeof PI>;
 
 const bModalStub = {
   render: () => {},
@@ -30,54 +18,84 @@ const bModalStub = {
 };
 
 describe('Component Tests', () => {
+  let alertService: AlertService;
+
   describe('PI Management Component', () => {
-    let wrapper: Wrapper<PIClass>;
-    let comp: PIClass;
     let pIServiceStub: SinonStubbedInstance<PIService>;
+    let mountOptions: MountingOptions<PIComponentType>['global'];
 
     beforeEach(() => {
       pIServiceStub = sinon.createStubInstance<PIService>(PIService);
       pIServiceStub.retrieve.resolves({ headers: {} });
 
-      wrapper = shallowMount<PIClass>(PIComponent, {
-        store,
-        i18n,
-        localVue,
-        stubs: { bModal: bModalStub as any },
-        provide: {
-          pIService: () => pIServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          bModal: bModalStub as any,
+          'font-awesome-icon': true,
+          'b-badge': true,
+          'b-button': true,
+          'router-link': true,
+        },
+        directives: {
+          'b-modal': {},
+        },
+        provide: {
+          alertService,
+          pIService: () => pIServiceStub,
+        },
+      };
     });
 
-    it('Should call load all on init', async () => {
-      // GIVEN
-      pIServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
+    describe('Mount', () => {
+      it('Should call load all on init', async () => {
+        // GIVEN
+        pIServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
-      // WHEN
-      comp.retrieveAllPIs();
-      await comp.$nextTick();
+        // WHEN
+        const wrapper = shallowMount(PI, { global: mountOptions });
+        const comp = wrapper.vm;
+        await comp.$nextTick();
 
-      // THEN
-      expect(pIServiceStub.retrieve.called).toBeTruthy();
-      expect(comp.pIS[0]).toEqual(expect.objectContaining({ id: 123 }));
+        // THEN
+        expect(pIServiceStub.retrieve.calledOnce).toBeTruthy();
+        expect(comp.pIS[0]).toEqual(expect.objectContaining({ id: 123 }));
+      });
     });
-    it('Should call delete service on confirmDelete', async () => {
-      // GIVEN
-      pIServiceStub.delete.resolves({});
+    describe('Handles', () => {
+      let comp: PIComponentType;
 
-      // WHEN
-      comp.prepareRemove({ id: 123 });
-      expect(pIServiceStub.retrieve.callCount).toEqual(1);
+      beforeEach(async () => {
+        const wrapper = shallowMount(PI, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+        pIServiceStub.retrieve.reset();
+        pIServiceStub.retrieve.resolves({ headers: {}, data: [] });
+      });
 
-      comp.removePI();
-      await comp.$nextTick();
+      it('Should call delete service on confirmDelete', async () => {
+        // GIVEN
+        pIServiceStub.delete.resolves({});
 
-      // THEN
-      expect(pIServiceStub.delete.called).toBeTruthy();
-      expect(pIServiceStub.retrieve.callCount).toEqual(2);
+        // WHEN
+        comp.prepareRemove({ id: 123 });
+
+        comp.removePI();
+        await comp.$nextTick(); // clear components
+
+        // THEN
+        expect(pIServiceStub.delete.called).toBeTruthy();
+
+        // THEN
+        await comp.$nextTick(); // handle component clear watch
+        expect(pIServiceStub.retrieve.callCount).toEqual(1);
+      });
     });
   });
 });

@@ -1,73 +1,87 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import MondayUserUpdateComponent from '@/entities/monday-user/monday-user-update.vue';
-import MondayUserClass from '@/entities/monday-user/monday-user-update.component';
-import MondayUserService from '@/entities/monday-user/monday-user.service';
+import MondayUserUpdate from '../../../../../../main/webapp/app/entities/monday-user/monday-user-update.vue';
+import MondayUserService from '../../../../../../main/webapp/app/entities/monday-user/monday-user.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-import AlertService from '@/shared/alert/alert.service';
+type MondayUserUpdateComponentType = InstanceType<typeof MondayUserUpdate>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const mondayUserSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let mountOptions: MountingOptions<MondayUserUpdateComponentType>['global'];
+  let alertService: AlertService;
+
   describe('MondayUser Management Update Component', () => {
-    let wrapper: Wrapper<MondayUserClass>;
-    let comp: MondayUserClass;
+    let comp: MondayUserUpdateComponentType;
     let mondayUserServiceStub: SinonStubbedInstance<MondayUserService>;
 
     beforeEach(() => {
+      route = {};
       mondayUserServiceStub = sinon.createStubInstance<MondayUserService>(MondayUserService);
 
-      wrapper = shallowMount<MondayUserClass>(MondayUserUpdateComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: {
-          mondayUserService: () => mondayUserServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          mondayUserService: () => mondayUserServiceStub,
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 123 };
-        comp.mondayUser = entity;
-        mondayUserServiceStub.update.resolves(entity);
+        const wrapper = shallowMount(MondayUserUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.mondayUser = mondayUserSample;
+        mondayUserServiceStub.update.resolves(mondayUserSample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(mondayUserServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(mondayUserServiceStub.update.calledWith(mondayUserSample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.mondayUser = entity;
         mondayUserServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(MondayUserUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.mondayUser = entity;
 
         // WHEN
         comp.save();
@@ -82,25 +96,35 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundMondayUser = { id: 123 };
-        mondayUserServiceStub.find.resolves(foundMondayUser);
-        mondayUserServiceStub.retrieve.resolves([foundMondayUser]);
+        mondayUserServiceStub.find.resolves(mondayUserSample);
+        mondayUserServiceStub.retrieve.resolves([mondayUserSample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { mondayUserId: 123 } }, null, cb => cb(comp));
+        route = {
+          params: {
+            mondayUserId: '' + mondayUserSample.id,
+          },
+        };
+        const wrapper = shallowMount(MondayUserUpdate, { global: mountOptions });
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.mondayUser).toBe(foundMondayUser);
+        expect(comp.mondayUser).toMatchObject(mondayUserSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        mondayUserServiceStub.find.resolves(mondayUserSample);
+        const wrapper = shallowMount(MondayUserUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

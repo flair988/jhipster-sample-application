@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.ProductFinished;
 import com.mycompany.myapp.repository.ProductFinishedRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +31,6 @@ class ProductFinishedResourceIT {
 
     private static final String DEFAULT_ITEM_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ITEM_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_ITEM_ID = "AAAAAAAAAA";
-    private static final String UPDATED_ITEM_ID = "BBBBBBBBBB";
-
-    private static final String DEFAULT_BOARD_ID = "AAAAAAAAAA";
-    private static final String UPDATED_BOARD_ID = "BBBBBBBBBB";
 
     private static final String DEFAULT_KINGDEE_ID = "AAAAAAAAAA";
     private static final String UPDATED_KINGDEE_ID = "BBBBBBBBBB";
@@ -58,6 +52,12 @@ class ProductFinishedResourceIT {
 
     private static final String DEFAULT_MATERIAL_RECEIPT_DATE = "AAAAAAAAAA";
     private static final String UPDATED_MATERIAL_RECEIPT_DATE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DOC_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_DOC_STATUS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SUPPLIER_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_SUPPLIER_NAME = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/product-finisheds";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -85,15 +85,15 @@ class ProductFinishedResourceIT {
     public static ProductFinished createEntity(EntityManager em) {
         ProductFinished productFinished = new ProductFinished()
             .itemName(DEFAULT_ITEM_NAME)
-            .itemId(DEFAULT_ITEM_ID)
-            .boardId(DEFAULT_BOARD_ID)
             .kingdeeId(DEFAULT_KINGDEE_ID)
             .supplier(DEFAULT_SUPPLIER)
             .supplierEmail(DEFAULT_SUPPLIER_EMAIL)
             .orderDate(DEFAULT_ORDER_DATE)
             .cateGory(DEFAULT_CATE_GORY)
             .remark(DEFAULT_REMARK)
-            .materialReceiptDate(DEFAULT_MATERIAL_RECEIPT_DATE);
+            .materialReceiptDate(DEFAULT_MATERIAL_RECEIPT_DATE)
+            .docStatus(DEFAULT_DOC_STATUS)
+            .supplierName(DEFAULT_SUPPLIER_NAME);
         return productFinished;
     }
 
@@ -106,15 +106,15 @@ class ProductFinishedResourceIT {
     public static ProductFinished createUpdatedEntity(EntityManager em) {
         ProductFinished productFinished = new ProductFinished()
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .supplier(UPDATED_SUPPLIER)
             .supplierEmail(UPDATED_SUPPLIER_EMAIL)
             .orderDate(UPDATED_ORDER_DATE)
             .cateGory(UPDATED_CATE_GORY)
             .remark(UPDATED_REMARK)
-            .materialReceiptDate(UPDATED_MATERIAL_RECEIPT_DATE);
+            .materialReceiptDate(UPDATED_MATERIAL_RECEIPT_DATE)
+            .docStatus(UPDATED_DOC_STATUS)
+            .supplierName(UPDATED_SUPPLIER_NAME);
         return productFinished;
     }
 
@@ -139,8 +139,6 @@ class ProductFinishedResourceIT {
         assertThat(productFinishedList).hasSize(databaseSizeBeforeCreate + 1);
         ProductFinished testProductFinished = productFinishedList.get(productFinishedList.size() - 1);
         assertThat(testProductFinished.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
-        assertThat(testProductFinished.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
-        assertThat(testProductFinished.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
         assertThat(testProductFinished.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
         assertThat(testProductFinished.getSupplier()).isEqualTo(DEFAULT_SUPPLIER);
         assertThat(testProductFinished.getSupplierEmail()).isEqualTo(DEFAULT_SUPPLIER_EMAIL);
@@ -148,6 +146,8 @@ class ProductFinishedResourceIT {
         assertThat(testProductFinished.getCateGory()).isEqualTo(DEFAULT_CATE_GORY);
         assertThat(testProductFinished.getRemark()).isEqualTo(DEFAULT_REMARK);
         assertThat(testProductFinished.getMaterialReceiptDate()).isEqualTo(DEFAULT_MATERIAL_RECEIPT_DATE);
+        assertThat(testProductFinished.getDocStatus()).isEqualTo(DEFAULT_DOC_STATUS);
+        assertThat(testProductFinished.getSupplierName()).isEqualTo(DEFAULT_SUPPLIER_NAME);
     }
 
     @Test
@@ -183,15 +183,15 @@ class ProductFinishedResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(productFinished.getId().intValue())))
             .andExpect(jsonPath("$.[*].itemName").value(hasItem(DEFAULT_ITEM_NAME)))
-            .andExpect(jsonPath("$.[*].itemId").value(hasItem(DEFAULT_ITEM_ID)))
-            .andExpect(jsonPath("$.[*].boardId").value(hasItem(DEFAULT_BOARD_ID)))
             .andExpect(jsonPath("$.[*].kingdeeId").value(hasItem(DEFAULT_KINGDEE_ID)))
             .andExpect(jsonPath("$.[*].supplier").value(hasItem(DEFAULT_SUPPLIER)))
             .andExpect(jsonPath("$.[*].supplierEmail").value(hasItem(DEFAULT_SUPPLIER_EMAIL)))
             .andExpect(jsonPath("$.[*].orderDate").value(hasItem(DEFAULT_ORDER_DATE)))
             .andExpect(jsonPath("$.[*].cateGory").value(hasItem(DEFAULT_CATE_GORY)))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)))
-            .andExpect(jsonPath("$.[*].materialReceiptDate").value(hasItem(DEFAULT_MATERIAL_RECEIPT_DATE)));
+            .andExpect(jsonPath("$.[*].materialReceiptDate").value(hasItem(DEFAULT_MATERIAL_RECEIPT_DATE)))
+            .andExpect(jsonPath("$.[*].docStatus").value(hasItem(DEFAULT_DOC_STATUS)))
+            .andExpect(jsonPath("$.[*].supplierName").value(hasItem(DEFAULT_SUPPLIER_NAME)));
     }
 
     @Test
@@ -207,15 +207,15 @@ class ProductFinishedResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(productFinished.getId().intValue()))
             .andExpect(jsonPath("$.itemName").value(DEFAULT_ITEM_NAME))
-            .andExpect(jsonPath("$.itemId").value(DEFAULT_ITEM_ID))
-            .andExpect(jsonPath("$.boardId").value(DEFAULT_BOARD_ID))
             .andExpect(jsonPath("$.kingdeeId").value(DEFAULT_KINGDEE_ID))
             .andExpect(jsonPath("$.supplier").value(DEFAULT_SUPPLIER))
             .andExpect(jsonPath("$.supplierEmail").value(DEFAULT_SUPPLIER_EMAIL))
             .andExpect(jsonPath("$.orderDate").value(DEFAULT_ORDER_DATE))
             .andExpect(jsonPath("$.cateGory").value(DEFAULT_CATE_GORY))
             .andExpect(jsonPath("$.remark").value(DEFAULT_REMARK))
-            .andExpect(jsonPath("$.materialReceiptDate").value(DEFAULT_MATERIAL_RECEIPT_DATE));
+            .andExpect(jsonPath("$.materialReceiptDate").value(DEFAULT_MATERIAL_RECEIPT_DATE))
+            .andExpect(jsonPath("$.docStatus").value(DEFAULT_DOC_STATUS))
+            .andExpect(jsonPath("$.supplierName").value(DEFAULT_SUPPLIER_NAME));
     }
 
     @Test
@@ -239,15 +239,15 @@ class ProductFinishedResourceIT {
         em.detach(updatedProductFinished);
         updatedProductFinished
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .supplier(UPDATED_SUPPLIER)
             .supplierEmail(UPDATED_SUPPLIER_EMAIL)
             .orderDate(UPDATED_ORDER_DATE)
             .cateGory(UPDATED_CATE_GORY)
             .remark(UPDATED_REMARK)
-            .materialReceiptDate(UPDATED_MATERIAL_RECEIPT_DATE);
+            .materialReceiptDate(UPDATED_MATERIAL_RECEIPT_DATE)
+            .docStatus(UPDATED_DOC_STATUS)
+            .supplierName(UPDATED_SUPPLIER_NAME);
 
         restProductFinishedMockMvc
             .perform(
@@ -262,8 +262,6 @@ class ProductFinishedResourceIT {
         assertThat(productFinishedList).hasSize(databaseSizeBeforeUpdate);
         ProductFinished testProductFinished = productFinishedList.get(productFinishedList.size() - 1);
         assertThat(testProductFinished.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testProductFinished.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testProductFinished.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testProductFinished.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testProductFinished.getSupplier()).isEqualTo(UPDATED_SUPPLIER);
         assertThat(testProductFinished.getSupplierEmail()).isEqualTo(UPDATED_SUPPLIER_EMAIL);
@@ -271,6 +269,8 @@ class ProductFinishedResourceIT {
         assertThat(testProductFinished.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
         assertThat(testProductFinished.getRemark()).isEqualTo(UPDATED_REMARK);
         assertThat(testProductFinished.getMaterialReceiptDate()).isEqualTo(UPDATED_MATERIAL_RECEIPT_DATE);
+        assertThat(testProductFinished.getDocStatus()).isEqualTo(UPDATED_DOC_STATUS);
+        assertThat(testProductFinished.getSupplierName()).isEqualTo(UPDATED_SUPPLIER_NAME);
     }
 
     @Test
@@ -343,15 +343,7 @@ class ProductFinishedResourceIT {
         ProductFinished partialUpdatedProductFinished = new ProductFinished();
         partialUpdatedProductFinished.setId(productFinished.getId());
 
-        partialUpdatedProductFinished
-            .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .supplier(UPDATED_SUPPLIER)
-            .supplierEmail(UPDATED_SUPPLIER_EMAIL)
-            .orderDate(UPDATED_ORDER_DATE)
-            .cateGory(UPDATED_CATE_GORY)
-            .remark(UPDATED_REMARK)
-            .materialReceiptDate(UPDATED_MATERIAL_RECEIPT_DATE);
+        partialUpdatedProductFinished.cateGory(UPDATED_CATE_GORY).docStatus(UPDATED_DOC_STATUS);
 
         restProductFinishedMockMvc
             .perform(
@@ -365,16 +357,16 @@ class ProductFinishedResourceIT {
         List<ProductFinished> productFinishedList = productFinishedRepository.findAll();
         assertThat(productFinishedList).hasSize(databaseSizeBeforeUpdate);
         ProductFinished testProductFinished = productFinishedList.get(productFinishedList.size() - 1);
-        assertThat(testProductFinished.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testProductFinished.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testProductFinished.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
+        assertThat(testProductFinished.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
         assertThat(testProductFinished.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
-        assertThat(testProductFinished.getSupplier()).isEqualTo(UPDATED_SUPPLIER);
-        assertThat(testProductFinished.getSupplierEmail()).isEqualTo(UPDATED_SUPPLIER_EMAIL);
-        assertThat(testProductFinished.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
+        assertThat(testProductFinished.getSupplier()).isEqualTo(DEFAULT_SUPPLIER);
+        assertThat(testProductFinished.getSupplierEmail()).isEqualTo(DEFAULT_SUPPLIER_EMAIL);
+        assertThat(testProductFinished.getOrderDate()).isEqualTo(DEFAULT_ORDER_DATE);
         assertThat(testProductFinished.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
-        assertThat(testProductFinished.getRemark()).isEqualTo(UPDATED_REMARK);
-        assertThat(testProductFinished.getMaterialReceiptDate()).isEqualTo(UPDATED_MATERIAL_RECEIPT_DATE);
+        assertThat(testProductFinished.getRemark()).isEqualTo(DEFAULT_REMARK);
+        assertThat(testProductFinished.getMaterialReceiptDate()).isEqualTo(DEFAULT_MATERIAL_RECEIPT_DATE);
+        assertThat(testProductFinished.getDocStatus()).isEqualTo(UPDATED_DOC_STATUS);
+        assertThat(testProductFinished.getSupplierName()).isEqualTo(DEFAULT_SUPPLIER_NAME);
     }
 
     @Test
@@ -391,15 +383,15 @@ class ProductFinishedResourceIT {
 
         partialUpdatedProductFinished
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .supplier(UPDATED_SUPPLIER)
             .supplierEmail(UPDATED_SUPPLIER_EMAIL)
             .orderDate(UPDATED_ORDER_DATE)
             .cateGory(UPDATED_CATE_GORY)
             .remark(UPDATED_REMARK)
-            .materialReceiptDate(UPDATED_MATERIAL_RECEIPT_DATE);
+            .materialReceiptDate(UPDATED_MATERIAL_RECEIPT_DATE)
+            .docStatus(UPDATED_DOC_STATUS)
+            .supplierName(UPDATED_SUPPLIER_NAME);
 
         restProductFinishedMockMvc
             .perform(
@@ -414,8 +406,6 @@ class ProductFinishedResourceIT {
         assertThat(productFinishedList).hasSize(databaseSizeBeforeUpdate);
         ProductFinished testProductFinished = productFinishedList.get(productFinishedList.size() - 1);
         assertThat(testProductFinished.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testProductFinished.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testProductFinished.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testProductFinished.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testProductFinished.getSupplier()).isEqualTo(UPDATED_SUPPLIER);
         assertThat(testProductFinished.getSupplierEmail()).isEqualTo(UPDATED_SUPPLIER_EMAIL);
@@ -423,6 +413,8 @@ class ProductFinishedResourceIT {
         assertThat(testProductFinished.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
         assertThat(testProductFinished.getRemark()).isEqualTo(UPDATED_REMARK);
         assertThat(testProductFinished.getMaterialReceiptDate()).isEqualTo(UPDATED_MATERIAL_RECEIPT_DATE);
+        assertThat(testProductFinished.getDocStatus()).isEqualTo(UPDATED_DOC_STATUS);
+        assertThat(testProductFinished.getSupplierName()).isEqualTo(UPDATED_SUPPLIER_NAME);
     }
 
     @Test

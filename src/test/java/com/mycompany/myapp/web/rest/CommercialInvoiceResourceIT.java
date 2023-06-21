@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.CommercialInvoice;
 import com.mycompany.myapp.repository.CommercialInvoiceRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +31,6 @@ class CommercialInvoiceResourceIT {
 
     private static final String DEFAULT_ITEM_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ITEM_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_ITEM_ID = "AAAAAAAAAA";
-    private static final String UPDATED_ITEM_ID = "BBBBBBBBBB";
-
-    private static final String DEFAULT_BOARD_ID = "AAAAAAAAAA";
-    private static final String UPDATED_BOARD_ID = "BBBBBBBBBB";
 
     private static final String DEFAULT_KINGDEE_ID = "AAAAAAAAAA";
     private static final String UPDATED_KINGDEE_ID = "BBBBBBBBBB";
@@ -58,6 +52,12 @@ class CommercialInvoiceResourceIT {
 
     private static final String DEFAULT_REMARKS = "AAAAAAAAAA";
     private static final String UPDATED_REMARKS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_CLIENT_ID = "AAAAAAAAAA";
+    private static final String UPDATED_CLIENT_ID = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DOC_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_DOC_STATUS = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/commercial-invoices";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -85,15 +85,15 @@ class CommercialInvoiceResourceIT {
     public static CommercialInvoice createEntity(EntityManager em) {
         CommercialInvoice commercialInvoice = new CommercialInvoice()
             .itemName(DEFAULT_ITEM_NAME)
-            .itemId(DEFAULT_ITEM_ID)
-            .boardId(DEFAULT_BOARD_ID)
             .kingdeeId(DEFAULT_KINGDEE_ID)
             .date(DEFAULT_DATE)
             .client(DEFAULT_CLIENT)
             .cateGory(DEFAULT_CATE_GORY)
             .totalPrice(DEFAULT_TOTAL_PRICE)
             .currency(DEFAULT_CURRENCY)
-            .remarks(DEFAULT_REMARKS);
+            .remarks(DEFAULT_REMARKS)
+            .clientId(DEFAULT_CLIENT_ID)
+            .docStatus(DEFAULT_DOC_STATUS);
         return commercialInvoice;
     }
 
@@ -106,15 +106,15 @@ class CommercialInvoiceResourceIT {
     public static CommercialInvoice createUpdatedEntity(EntityManager em) {
         CommercialInvoice commercialInvoice = new CommercialInvoice()
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .date(UPDATED_DATE)
             .client(UPDATED_CLIENT)
             .cateGory(UPDATED_CATE_GORY)
             .totalPrice(UPDATED_TOTAL_PRICE)
             .currency(UPDATED_CURRENCY)
-            .remarks(UPDATED_REMARKS);
+            .remarks(UPDATED_REMARKS)
+            .clientId(UPDATED_CLIENT_ID)
+            .docStatus(UPDATED_DOC_STATUS);
         return commercialInvoice;
     }
 
@@ -139,8 +139,6 @@ class CommercialInvoiceResourceIT {
         assertThat(commercialInvoiceList).hasSize(databaseSizeBeforeCreate + 1);
         CommercialInvoice testCommercialInvoice = commercialInvoiceList.get(commercialInvoiceList.size() - 1);
         assertThat(testCommercialInvoice.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
-        assertThat(testCommercialInvoice.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
-        assertThat(testCommercialInvoice.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
         assertThat(testCommercialInvoice.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
         assertThat(testCommercialInvoice.getDate()).isEqualTo(DEFAULT_DATE);
         assertThat(testCommercialInvoice.getClient()).isEqualTo(DEFAULT_CLIENT);
@@ -148,6 +146,8 @@ class CommercialInvoiceResourceIT {
         assertThat(testCommercialInvoice.getTotalPrice()).isEqualTo(DEFAULT_TOTAL_PRICE);
         assertThat(testCommercialInvoice.getCurrency()).isEqualTo(DEFAULT_CURRENCY);
         assertThat(testCommercialInvoice.getRemarks()).isEqualTo(DEFAULT_REMARKS);
+        assertThat(testCommercialInvoice.getClientId()).isEqualTo(DEFAULT_CLIENT_ID);
+        assertThat(testCommercialInvoice.getDocStatus()).isEqualTo(DEFAULT_DOC_STATUS);
     }
 
     @Test
@@ -183,15 +183,15 @@ class CommercialInvoiceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(commercialInvoice.getId().intValue())))
             .andExpect(jsonPath("$.[*].itemName").value(hasItem(DEFAULT_ITEM_NAME)))
-            .andExpect(jsonPath("$.[*].itemId").value(hasItem(DEFAULT_ITEM_ID)))
-            .andExpect(jsonPath("$.[*].boardId").value(hasItem(DEFAULT_BOARD_ID)))
             .andExpect(jsonPath("$.[*].kingdeeId").value(hasItem(DEFAULT_KINGDEE_ID)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE)))
             .andExpect(jsonPath("$.[*].client").value(hasItem(DEFAULT_CLIENT)))
             .andExpect(jsonPath("$.[*].cateGory").value(hasItem(DEFAULT_CATE_GORY)))
             .andExpect(jsonPath("$.[*].totalPrice").value(hasItem(DEFAULT_TOTAL_PRICE)))
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY)))
-            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS)));
+            .andExpect(jsonPath("$.[*].remarks").value(hasItem(DEFAULT_REMARKS)))
+            .andExpect(jsonPath("$.[*].clientId").value(hasItem(DEFAULT_CLIENT_ID)))
+            .andExpect(jsonPath("$.[*].docStatus").value(hasItem(DEFAULT_DOC_STATUS)));
     }
 
     @Test
@@ -207,15 +207,15 @@ class CommercialInvoiceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(commercialInvoice.getId().intValue()))
             .andExpect(jsonPath("$.itemName").value(DEFAULT_ITEM_NAME))
-            .andExpect(jsonPath("$.itemId").value(DEFAULT_ITEM_ID))
-            .andExpect(jsonPath("$.boardId").value(DEFAULT_BOARD_ID))
             .andExpect(jsonPath("$.kingdeeId").value(DEFAULT_KINGDEE_ID))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE))
             .andExpect(jsonPath("$.client").value(DEFAULT_CLIENT))
             .andExpect(jsonPath("$.cateGory").value(DEFAULT_CATE_GORY))
             .andExpect(jsonPath("$.totalPrice").value(DEFAULT_TOTAL_PRICE))
             .andExpect(jsonPath("$.currency").value(DEFAULT_CURRENCY))
-            .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS));
+            .andExpect(jsonPath("$.remarks").value(DEFAULT_REMARKS))
+            .andExpect(jsonPath("$.clientId").value(DEFAULT_CLIENT_ID))
+            .andExpect(jsonPath("$.docStatus").value(DEFAULT_DOC_STATUS));
     }
 
     @Test
@@ -239,15 +239,15 @@ class CommercialInvoiceResourceIT {
         em.detach(updatedCommercialInvoice);
         updatedCommercialInvoice
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .date(UPDATED_DATE)
             .client(UPDATED_CLIENT)
             .cateGory(UPDATED_CATE_GORY)
             .totalPrice(UPDATED_TOTAL_PRICE)
             .currency(UPDATED_CURRENCY)
-            .remarks(UPDATED_REMARKS);
+            .remarks(UPDATED_REMARKS)
+            .clientId(UPDATED_CLIENT_ID)
+            .docStatus(UPDATED_DOC_STATUS);
 
         restCommercialInvoiceMockMvc
             .perform(
@@ -262,8 +262,6 @@ class CommercialInvoiceResourceIT {
         assertThat(commercialInvoiceList).hasSize(databaseSizeBeforeUpdate);
         CommercialInvoice testCommercialInvoice = commercialInvoiceList.get(commercialInvoiceList.size() - 1);
         assertThat(testCommercialInvoice.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testCommercialInvoice.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testCommercialInvoice.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testCommercialInvoice.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testCommercialInvoice.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testCommercialInvoice.getClient()).isEqualTo(UPDATED_CLIENT);
@@ -271,6 +269,8 @@ class CommercialInvoiceResourceIT {
         assertThat(testCommercialInvoice.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testCommercialInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
         assertThat(testCommercialInvoice.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testCommercialInvoice.getClientId()).isEqualTo(UPDATED_CLIENT_ID);
+        assertThat(testCommercialInvoice.getDocStatus()).isEqualTo(UPDATED_DOC_STATUS);
     }
 
     @Test
@@ -345,9 +345,9 @@ class CommercialInvoiceResourceIT {
 
         partialUpdatedCommercialInvoice
             .itemName(UPDATED_ITEM_NAME)
-            .boardId(UPDATED_BOARD_ID)
+            .kingdeeId(UPDATED_KINGDEE_ID)
+            .date(UPDATED_DATE)
             .totalPrice(UPDATED_TOTAL_PRICE)
-            .currency(UPDATED_CURRENCY)
             .remarks(UPDATED_REMARKS);
 
         restCommercialInvoiceMockMvc
@@ -363,15 +363,15 @@ class CommercialInvoiceResourceIT {
         assertThat(commercialInvoiceList).hasSize(databaseSizeBeforeUpdate);
         CommercialInvoice testCommercialInvoice = commercialInvoiceList.get(commercialInvoiceList.size() - 1);
         assertThat(testCommercialInvoice.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testCommercialInvoice.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
-        assertThat(testCommercialInvoice.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
-        assertThat(testCommercialInvoice.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
-        assertThat(testCommercialInvoice.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testCommercialInvoice.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
+        assertThat(testCommercialInvoice.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testCommercialInvoice.getClient()).isEqualTo(DEFAULT_CLIENT);
         assertThat(testCommercialInvoice.getCateGory()).isEqualTo(DEFAULT_CATE_GORY);
         assertThat(testCommercialInvoice.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
-        assertThat(testCommercialInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
+        assertThat(testCommercialInvoice.getCurrency()).isEqualTo(DEFAULT_CURRENCY);
         assertThat(testCommercialInvoice.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testCommercialInvoice.getClientId()).isEqualTo(DEFAULT_CLIENT_ID);
+        assertThat(testCommercialInvoice.getDocStatus()).isEqualTo(DEFAULT_DOC_STATUS);
     }
 
     @Test
@@ -388,15 +388,15 @@ class CommercialInvoiceResourceIT {
 
         partialUpdatedCommercialInvoice
             .itemName(UPDATED_ITEM_NAME)
-            .itemId(UPDATED_ITEM_ID)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .date(UPDATED_DATE)
             .client(UPDATED_CLIENT)
             .cateGory(UPDATED_CATE_GORY)
             .totalPrice(UPDATED_TOTAL_PRICE)
             .currency(UPDATED_CURRENCY)
-            .remarks(UPDATED_REMARKS);
+            .remarks(UPDATED_REMARKS)
+            .clientId(UPDATED_CLIENT_ID)
+            .docStatus(UPDATED_DOC_STATUS);
 
         restCommercialInvoiceMockMvc
             .perform(
@@ -411,8 +411,6 @@ class CommercialInvoiceResourceIT {
         assertThat(commercialInvoiceList).hasSize(databaseSizeBeforeUpdate);
         CommercialInvoice testCommercialInvoice = commercialInvoiceList.get(commercialInvoiceList.size() - 1);
         assertThat(testCommercialInvoice.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testCommercialInvoice.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testCommercialInvoice.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testCommercialInvoice.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testCommercialInvoice.getDate()).isEqualTo(UPDATED_DATE);
         assertThat(testCommercialInvoice.getClient()).isEqualTo(UPDATED_CLIENT);
@@ -420,6 +418,8 @@ class CommercialInvoiceResourceIT {
         assertThat(testCommercialInvoice.getTotalPrice()).isEqualTo(UPDATED_TOTAL_PRICE);
         assertThat(testCommercialInvoice.getCurrency()).isEqualTo(UPDATED_CURRENCY);
         assertThat(testCommercialInvoice.getRemarks()).isEqualTo(UPDATED_REMARKS);
+        assertThat(testCommercialInvoice.getClientId()).isEqualTo(UPDATED_CLIENT_ID);
+        assertThat(testCommercialInvoice.getDocStatus()).isEqualTo(UPDATED_DOC_STATUS);
     }
 
     @Test

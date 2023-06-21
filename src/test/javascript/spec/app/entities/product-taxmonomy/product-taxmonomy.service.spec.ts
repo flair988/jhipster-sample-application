@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import ProductTaxmonomyService from '@/entities/product-taxmonomy/product-taxmonomy.service';
-import { ProductTaxmonomy } from '@/shared/model/product-taxmonomy.model';
+import ProductTaxmonomyService from '../../../../../../main/webapp/app/entities/product-taxmonomy/product-taxmonomy.service';
+import { ProductTaxmonomy } from '../../../../../../main/webapp/app/shared/model/product-taxmonomy.model';
 
 const error = {
   response: {
@@ -29,7 +29,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new ProductTaxmonomyService();
-      elemDefault = new ProductTaxmonomy(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new ProductTaxmonomy(123, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -88,7 +88,6 @@ describe('Service Tests', () => {
             parentGroupName: 'BBBBBB',
             subGroupName: 'BBBBBB',
             description: 'BBBBBB',
-            boardId: 'BBBBBB',
           },
           elemDefault
         );
@@ -116,11 +115,7 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             itemId: 'BBBBBB',
-            kingdeeId: 'BBBBBB',
-            itemName: 'BBBBBB',
-            groupName: 'BBBBBB',
-            parentGroupName: 'BBBBBB',
-            boardId: 'BBBBBB',
+            description: 'BBBBBB',
           },
           new ProductTaxmonomy()
         );
@@ -155,7 +150,6 @@ describe('Service Tests', () => {
             parentGroupName: 'BBBBBB',
             subGroupName: 'BBBBBB',
             description: 'BBBBBB',
-            boardId: 'BBBBBB',
           },
           elemDefault
         );

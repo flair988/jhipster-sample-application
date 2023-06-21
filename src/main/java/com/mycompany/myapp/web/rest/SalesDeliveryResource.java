@@ -126,12 +126,6 @@ public class SalesDeliveryResource {
                 if (salesDelivery.getItemName() != null) {
                     existingSalesDelivery.setItemName(salesDelivery.getItemName());
                 }
-                if (salesDelivery.getItemId() != null) {
-                    existingSalesDelivery.setItemId(salesDelivery.getItemId());
-                }
-                if (salesDelivery.getBoardId() != null) {
-                    existingSalesDelivery.setBoardId(salesDelivery.getBoardId());
-                }
                 if (salesDelivery.getKingdeeId() != null) {
                     existingSalesDelivery.setKingdeeId(salesDelivery.getKingdeeId());
                 }
@@ -140,12 +134,6 @@ public class SalesDeliveryResource {
                 }
                 if (salesDelivery.getOrderDate() != null) {
                     existingSalesDelivery.setOrderDate(salesDelivery.getOrderDate());
-                }
-                if (salesDelivery.getTotalActualShipQty() != null) {
-                    existingSalesDelivery.setTotalActualShipQty(salesDelivery.getTotalActualShipQty());
-                }
-                if (salesDelivery.getTotalQtyDelivery() != null) {
-                    existingSalesDelivery.setTotalQtyDelivery(salesDelivery.getTotalQtyDelivery());
                 }
                 if (salesDelivery.getLoadingPort() != null) {
                     existingSalesDelivery.setLoadingPort(salesDelivery.getLoadingPort());
@@ -179,6 +167,12 @@ public class SalesDeliveryResource {
                 }
                 if (salesDelivery.getKingdeeUniqueId() != null) {
                     existingSalesDelivery.setKingdeeUniqueId(salesDelivery.getKingdeeUniqueId());
+                }
+                if (salesDelivery.getDocStatus() != null) {
+                    existingSalesDelivery.setDocStatus(salesDelivery.getDocStatus());
+                }
+                if (salesDelivery.getCateGory() != null) {
+                    existingSalesDelivery.setCateGory(salesDelivery.getCateGory());
                 }
 
                 return existingSalesDelivery;

@@ -1,8 +1,6 @@
 {
   "applications": "*",
   "changelogDate": "20230606061451",
-  "dto": "no",
-  "embedded": false,
   "entityTableName": "order_follow_up",
   "fields": [
     {
@@ -10,15 +8,7 @@
       "fieldType": "Long"
     },
     {
-      "fieldName": "itemId",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "poNumber",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "customer",
       "fieldType": "String"
     },
     {
@@ -74,10 +64,6 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "forwarder",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "documentStatus",
       "fieldType": "String"
     },
@@ -118,19 +104,11 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "boardId",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "kingdeeId",
       "fieldType": "String"
     },
     {
       "fieldName": "parentKingdeeId",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "parentMondayId",
       "fieldType": "String"
     },
     {
@@ -142,27 +120,15 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "amount",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "discount",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "unit",
-      "fieldType": "String"
-    },
-    {
       "fieldName": "contractEndOfProdDate",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "supplierId",
       "fieldType": "String"
     }
   ],
-  "fluentMethods": true,
-  "jpaMetamodelFiltering": false,
   "name": "OrderFollowUp",
-  "pagination": "no",
-  "readOnly": false,
   "relationships": [],
-  "service": "no"
+  "searchEngine": "no"
 }

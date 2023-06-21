@@ -126,29 +126,17 @@ public class SupplierResource {
                 if (supplier.getClient() != null) {
                     existingSupplier.setClient(supplier.getClient());
                 }
-                if (supplier.getParentItem() != null) {
-                    existingSupplier.setParentItem(supplier.getParentItem());
-                }
-                if (supplier.getItemId() != null) {
-                    existingSupplier.setItemId(supplier.getItemId());
-                }
-                if (supplier.getBoardId() != null) {
-                    existingSupplier.setBoardId(supplier.getBoardId());
-                }
-                if (supplier.getPerson() != null) {
-                    existingSupplier.setPerson(supplier.getPerson());
-                }
                 if (supplier.getCategory() != null) {
                     existingSupplier.setCategory(supplier.getCategory());
                 }
                 if (supplier.getSubCategory() != null) {
                     existingSupplier.setSubCategory(supplier.getSubCategory());
                 }
-                if (supplier.getSupplierStatus() != null) {
-                    existingSupplier.setSupplierStatus(supplier.getSupplierStatus());
-                }
                 if (supplier.getCapStatus() != null) {
                     existingSupplier.setCapStatus(supplier.getCapStatus());
+                }
+                if (supplier.getSupplierStatus() != null) {
+                    existingSupplier.setSupplierStatus(supplier.getSupplierStatus());
                 }
                 if (supplier.getQualificationScore() != null) {
                     existingSupplier.setQualificationScore(supplier.getQualificationScore());
@@ -168,9 +156,6 @@ public class SupplierResource {
                 if (supplier.getContactEmailAddress() != null) {
                     existingSupplier.setContactEmailAddress(supplier.getContactEmailAddress());
                 }
-                if (supplier.getCountry() != null) {
-                    existingSupplier.setCountry(supplier.getCountry());
-                }
                 if (supplier.getOperationSite() != null) {
                     existingSupplier.setOperationSite(supplier.getOperationSite());
                 }
@@ -179,9 +164,6 @@ public class SupplierResource {
                 }
                 if (supplier.getWebsite() != null) {
                     existingSupplier.setWebsite(supplier.getWebsite());
-                }
-                if (supplier.getProductTaxonomy() != null) {
-                    existingSupplier.setProductTaxonomy(supplier.getProductTaxonomy());
                 }
                 if (supplier.getRelationStartingYear() != null) {
                     existingSupplier.setRelationStartingYear(supplier.getRelationStartingYear());
@@ -201,26 +183,26 @@ public class SupplierResource {
                 if (supplier.getItem() != null) {
                     existingSupplier.setItem(supplier.getItem());
                 }
-                if (supplier.getMirror() != null) {
-                    existingSupplier.setMirror(supplier.getMirror());
-                }
                 if (supplier.getSubItems() != null) {
                     existingSupplier.setSubItems(supplier.getSubItems());
-                }
-                if (supplier.getOwner() != null) {
-                    existingSupplier.setOwner(supplier.getOwner());
-                }
-                if (supplier.getStatus() != null) {
-                    existingSupplier.setStatus(supplier.getStatus());
                 }
                 if (supplier.getDate() != null) {
                     existingSupplier.setDate(supplier.getDate());
                 }
-                if (supplier.getFormula() != null) {
-                    existingSupplier.setFormula(supplier.getFormula());
-                }
                 if (supplier.getKingdeeId() != null) {
                     existingSupplier.setKingdeeId(supplier.getKingdeeId());
+                }
+                if (supplier.getRegion() != null) {
+                    existingSupplier.setRegion(supplier.getRegion());
+                }
+                if (supplier.getSupplierType() != null) {
+                    existingSupplier.setSupplierType(supplier.getSupplierType());
+                }
+                if (supplier.getRemark() != null) {
+                    existingSupplier.setRemark(supplier.getRemark());
+                }
+                if (supplier.getFrenchName() != null) {
+                    existingSupplier.setFrenchName(supplier.getFrenchName());
                 }
 
                 return existingSupplier;

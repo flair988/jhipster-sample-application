@@ -1,8 +1,8 @@
 package com.mycompany.myapp.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -26,29 +26,17 @@ public class Supplier implements Serializable {
     @Column(name = "client")
     private String client;
 
-    @Column(name = "parent_item")
-    private String parentItem;
-
-    @Column(name = "item_id")
-    private String itemId;
-
-    @Column(name = "board_id")
-    private String boardId;
-
-    @Column(name = "person")
-    private String person;
-
     @Column(name = "category")
     private String category;
 
     @Column(name = "sub_category")
     private String subCategory;
 
-    @Column(name = "supplier_status")
-    private String supplierStatus;
-
     @Column(name = "cap_status")
     private String capStatus;
+
+    @Column(name = "supplier_status")
+    private String supplierStatus;
 
     @Column(name = "qualification_score")
     private String qualificationScore;
@@ -68,9 +56,6 @@ public class Supplier implements Serializable {
     @Column(name = "contact_email_address")
     private String contactEmailAddress;
 
-    @Column(name = "country")
-    private String country;
-
     @Column(name = "operation_site")
     private String operationSite;
 
@@ -79,9 +64,6 @@ public class Supplier implements Serializable {
 
     @Column(name = "website")
     private String website;
-
-    @Column(name = "product_taxonomy")
-    private String productTaxonomy;
 
     @Column(name = "relation_starting_year")
     private String relationStartingYear;
@@ -101,26 +83,26 @@ public class Supplier implements Serializable {
     @Column(name = "item")
     private String item;
 
-    @Column(name = "mirror")
-    private String mirror;
-
     @Column(name = "sub_items")
     private String subItems;
-
-    @Column(name = "owner")
-    private String owner;
-
-    @Column(name = "status")
-    private String status;
 
     @Column(name = "date")
     private String date;
 
-    @Column(name = "formula")
-    private String formula;
-
     @Column(name = "kingdee_id")
     private String kingdeeId;
+
+    @Column(name = "region")
+    private String region;
+
+    @Column(name = "supplier_type")
+    private String supplierType;
+
+    @Column(name = "remark")
+    private String remark;
+
+    @Column(name = "french_name")
+    private String frenchName;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -150,58 +132,6 @@ public class Supplier implements Serializable {
         this.client = client;
     }
 
-    public String getParentItem() {
-        return this.parentItem;
-    }
-
-    public Supplier parentItem(String parentItem) {
-        this.setParentItem(parentItem);
-        return this;
-    }
-
-    public void setParentItem(String parentItem) {
-        this.parentItem = parentItem;
-    }
-
-    public String getItemId() {
-        return this.itemId;
-    }
-
-    public Supplier itemId(String itemId) {
-        this.setItemId(itemId);
-        return this;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getBoardId() {
-        return this.boardId;
-    }
-
-    public Supplier boardId(String boardId) {
-        this.setBoardId(boardId);
-        return this;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
-    }
-
-    public String getPerson() {
-        return this.person;
-    }
-
-    public Supplier person(String person) {
-        this.setPerson(person);
-        return this;
-    }
-
-    public void setPerson(String person) {
-        this.person = person;
-    }
-
     public String getCategory() {
         return this.category;
     }
@@ -228,19 +158,6 @@ public class Supplier implements Serializable {
         this.subCategory = subCategory;
     }
 
-    public String getSupplierStatus() {
-        return this.supplierStatus;
-    }
-
-    public Supplier supplierStatus(String supplierStatus) {
-        this.setSupplierStatus(supplierStatus);
-        return this;
-    }
-
-    public void setSupplierStatus(String supplierStatus) {
-        this.supplierStatus = supplierStatus;
-    }
-
     public String getCapStatus() {
         return this.capStatus;
     }
@@ -252,6 +169,19 @@ public class Supplier implements Serializable {
 
     public void setCapStatus(String capStatus) {
         this.capStatus = capStatus;
+    }
+
+    public String getSupplierStatus() {
+        return this.supplierStatus;
+    }
+
+    public Supplier supplierStatus(String supplierStatus) {
+        this.setSupplierStatus(supplierStatus);
+        return this;
+    }
+
+    public void setSupplierStatus(String supplierStatus) {
+        this.supplierStatus = supplierStatus;
     }
 
     public String getQualificationScore() {
@@ -332,19 +262,6 @@ public class Supplier implements Serializable {
         this.contactEmailAddress = contactEmailAddress;
     }
 
-    public String getCountry() {
-        return this.country;
-    }
-
-    public Supplier country(String country) {
-        this.setCountry(country);
-        return this;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
     public String getOperationSite() {
         return this.operationSite;
     }
@@ -382,19 +299,6 @@ public class Supplier implements Serializable {
 
     public void setWebsite(String website) {
         this.website = website;
-    }
-
-    public String getProductTaxonomy() {
-        return this.productTaxonomy;
-    }
-
-    public Supplier productTaxonomy(String productTaxonomy) {
-        this.setProductTaxonomy(productTaxonomy);
-        return this;
-    }
-
-    public void setProductTaxonomy(String productTaxonomy) {
-        this.productTaxonomy = productTaxonomy;
     }
 
     public String getRelationStartingYear() {
@@ -475,19 +379,6 @@ public class Supplier implements Serializable {
         this.item = item;
     }
 
-    public String getMirror() {
-        return this.mirror;
-    }
-
-    public Supplier mirror(String mirror) {
-        this.setMirror(mirror);
-        return this;
-    }
-
-    public void setMirror(String mirror) {
-        this.mirror = mirror;
-    }
-
     public String getSubItems() {
         return this.subItems;
     }
@@ -499,32 +390,6 @@ public class Supplier implements Serializable {
 
     public void setSubItems(String subItems) {
         this.subItems = subItems;
-    }
-
-    public String getOwner() {
-        return this.owner;
-    }
-
-    public Supplier owner(String owner) {
-        this.setOwner(owner);
-        return this;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getStatus() {
-        return this.status;
-    }
-
-    public Supplier status(String status) {
-        this.setStatus(status);
-        return this;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getDate() {
@@ -540,19 +405,6 @@ public class Supplier implements Serializable {
         this.date = date;
     }
 
-    public String getFormula() {
-        return this.formula;
-    }
-
-    public Supplier formula(String formula) {
-        this.setFormula(formula);
-        return this;
-    }
-
-    public void setFormula(String formula) {
-        this.formula = formula;
-    }
-
     public String getKingdeeId() {
         return this.kingdeeId;
     }
@@ -564,6 +416,58 @@ public class Supplier implements Serializable {
 
     public void setKingdeeId(String kingdeeId) {
         this.kingdeeId = kingdeeId;
+    }
+
+    public String getRegion() {
+        return this.region;
+    }
+
+    public Supplier region(String region) {
+        this.setRegion(region);
+        return this;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
+    public String getSupplierType() {
+        return this.supplierType;
+    }
+
+    public Supplier supplierType(String supplierType) {
+        this.setSupplierType(supplierType);
+        return this;
+    }
+
+    public void setSupplierType(String supplierType) {
+        this.supplierType = supplierType;
+    }
+
+    public String getRemark() {
+        return this.remark;
+    }
+
+    public Supplier remark(String remark) {
+        this.setRemark(remark);
+        return this;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getFrenchName() {
+        return this.frenchName;
+    }
+
+    public Supplier frenchName(String frenchName) {
+        this.setFrenchName(frenchName);
+        return this;
+    }
+
+    public void setFrenchName(String frenchName) {
+        this.frenchName = frenchName;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -591,38 +495,32 @@ public class Supplier implements Serializable {
         return "Supplier{" +
             "id=" + getId() +
             ", client='" + getClient() + "'" +
-            ", parentItem='" + getParentItem() + "'" +
-            ", itemId='" + getItemId() + "'" +
-            ", boardId='" + getBoardId() + "'" +
-            ", person='" + getPerson() + "'" +
             ", category='" + getCategory() + "'" +
             ", subCategory='" + getSubCategory() + "'" +
-            ", supplierStatus='" + getSupplierStatus() + "'" +
             ", capStatus='" + getCapStatus() + "'" +
+            ", supplierStatus='" + getSupplierStatus() + "'" +
             ", qualificationScore='" + getQualificationScore() + "'" +
             ", bopeScore='" + getBopeScore() + "'" +
             ", internalSupplierId='" + getInternalSupplierId() + "'" +
             ", contact='" + getContact() + "'" +
             ", contactPhoneNumber='" + getContactPhoneNumber() + "'" +
             ", contactEmailAddress='" + getContactEmailAddress() + "'" +
-            ", country='" + getCountry() + "'" +
             ", operationSite='" + getOperationSite() + "'" +
             ", address='" + getAddress() + "'" +
             ", website='" + getWebsite() + "'" +
-            ", productTaxonomy='" + getProductTaxonomy() + "'" +
             ", relationStartingYear='" + getRelationStartingYear() + "'" +
             ", businessLicense='" + getBusinessLicense() + "'" +
             ", rexOriginStatus='" + getRexOriginStatus() + "'" +
             ", createDate='" + getCreateDate() + "'" +
             ", updateDate='" + getUpdateDate() + "'" +
             ", item='" + getItem() + "'" +
-            ", mirror='" + getMirror() + "'" +
             ", subItems='" + getSubItems() + "'" +
-            ", owner='" + getOwner() + "'" +
-            ", status='" + getStatus() + "'" +
             ", date='" + getDate() + "'" +
-            ", formula='" + getFormula() + "'" +
             ", kingdeeId='" + getKingdeeId() + "'" +
+            ", region='" + getRegion() + "'" +
+            ", supplierType='" + getSupplierType() + "'" +
+            ", remark='" + getRemark() + "'" +
+            ", frenchName='" + getFrenchName() + "'" +
             "}";
     }
 }

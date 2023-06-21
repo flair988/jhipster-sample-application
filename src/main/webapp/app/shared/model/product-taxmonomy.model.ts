@@ -7,7 +7,6 @@ export interface IProductTaxmonomy {
   parentGroupName?: string | null;
   subGroupName?: string | null;
   description?: string | null;
-  boardId?: string | null;
 }
 
 export class ProductTaxmonomy implements IProductTaxmonomy {
@@ -19,7 +18,6 @@ export class ProductTaxmonomy implements IProductTaxmonomy {
     public groupName?: string | null,
     public parentGroupName?: string | null,
     public subGroupName?: string | null,
-    public description?: string | null,
-    public boardId?: string | null
+    public description?: string | null
   ) {}
 }

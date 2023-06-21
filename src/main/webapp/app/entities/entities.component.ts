@@ -1,4 +1,4 @@
-import { Component, Provide, Vue } from 'vue-property-decorator';
+import { defineComponent, provide } from 'vue';
 
 import UserService from '@/entities/user/user.service';
 import GroupService from './group/group.service';
@@ -21,26 +21,29 @@ import ProductFinishedService from './product-finished/product-finished.service'
 import SalesDeliveryService from './sales-delivery/sales-delivery.service';
 // jhipster-needle-add-entity-service-to-entities-component-import - JHipster will import entities services here
 
-@Component
-export default class Entities extends Vue {
-  @Provide('userService') private userService = () => new UserService();
-  @Provide('groupService') private groupService = () => new GroupService();
-  @Provide('itemService') private itemService = () => new ItemService();
-  @Provide('mondayColumnService') private mondayColumnService = () => new MondayColumnService();
-  @Provide('mondayUserService') private mondayUserService = () => new MondayUserService();
-  @Provide('operationSiteService') private operationSiteService = () => new OperationSiteService();
-  @Provide('orderFollowUpService') private orderFollowUpService = () => new OrderFollowUpService();
-  @Provide('pIService') private pIService = () => new PIService();
-  @Provide('processLogService') private processLogService = () => new ProcessLogService();
-  @Provide('productTaxmonomyService') private productTaxmonomyService = () => new ProductTaxmonomyService();
-  @Provide('supplierService') private supplierService = () => new SupplierService();
-  @Provide('uomService') private uomService = () => new UomService();
-  @Provide('clientService') private clientService = () => new ClientService();
-  @Provide('commercialInvoiceService') private commercialInvoiceService = () => new CommercialInvoiceService();
-  @Provide('forwarderService') private forwarderService = () => new ForwarderService();
-  @Provide('forwarderBookingService') private forwarderBookingService = () => new ForwarderBookingService();
-  @Provide('inspectionService') private inspectionService = () => new InspectionService();
-  @Provide('productFinishedService') private productFinishedService = () => new ProductFinishedService();
-  @Provide('salesDeliveryService') private salesDeliveryService = () => new SalesDeliveryService();
-  // jhipster-needle-add-entity-service-to-entities-component - JHipster will import entities services here
-}
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'Entities',
+  setup() {
+    provide('userService', () => new UserService());
+    provide('groupService', () => new GroupService());
+    provide('itemService', () => new ItemService());
+    provide('mondayColumnService', () => new MondayColumnService());
+    provide('mondayUserService', () => new MondayUserService());
+    provide('operationSiteService', () => new OperationSiteService());
+    provide('orderFollowUpService', () => new OrderFollowUpService());
+    provide('pIService', () => new PIService());
+    provide('processLogService', () => new ProcessLogService());
+    provide('productTaxmonomyService', () => new ProductTaxmonomyService());
+    provide('supplierService', () => new SupplierService());
+    provide('uomService', () => new UomService());
+    provide('clientService', () => new ClientService());
+    provide('commercialInvoiceService', () => new CommercialInvoiceService());
+    provide('forwarderService', () => new ForwarderService());
+    provide('forwarderBookingService', () => new ForwarderBookingService());
+    provide('inspectionService', () => new InspectionService());
+    provide('productFinishedService', () => new ProductFinishedService());
+    provide('salesDeliveryService', () => new SalesDeliveryService());
+    // jhipster-needle-add-entity-service-to-entities-component - JHipster will import entities services here
+  },
+});

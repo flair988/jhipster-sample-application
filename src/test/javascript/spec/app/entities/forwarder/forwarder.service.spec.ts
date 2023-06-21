@@ -2,8 +2,8 @@
 import axios from 'axios';
 import sinon from 'sinon';
 
-import ForwarderService from '@/entities/forwarder/forwarder.service';
-import { Forwarder } from '@/shared/model/forwarder.model';
+import ForwarderService from '../../../../../../main/webapp/app/entities/forwarder/forwarder.service';
+import { Forwarder } from '../../../../../../main/webapp/app/shared/model/forwarder.model';
 
 const error = {
   response: {
@@ -114,9 +114,7 @@ describe('Service Tests', () => {
       it('should partial update a Forwarder', async () => {
         const patchObject = Object.assign(
           {
-            itemName: 'BBBBBB',
-            kingdeeId: 'BBBBBB',
-            contact: 'BBBBBB',
+            telephone: 'BBBBBB',
           },
           new Forwarder()
         );

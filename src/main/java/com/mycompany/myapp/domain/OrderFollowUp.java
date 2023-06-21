@@ -1,7 +1,7 @@
 package com.mycompany.myapp.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -22,14 +22,8 @@ public class OrderFollowUp implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "item_id")
-    private String itemId;
-
     @Column(name = "po_number")
     private String poNumber;
-
-    @Column(name = "customer")
-    private String customer;
 
     @Column(name = "supplier")
     private String supplier;
@@ -70,9 +64,6 @@ public class OrderFollowUp implements Serializable {
     @Column(name = "updated_eta")
     private String updatedEta;
 
-    @Column(name = "forwarder")
-    private String forwarder;
-
     @Column(name = "document_status")
     private String documentStatus;
 
@@ -103,17 +94,11 @@ public class OrderFollowUp implements Serializable {
     @Column(name = "item_name")
     private String itemName;
 
-    @Column(name = "board_id")
-    private String boardId;
-
     @Column(name = "kingdee_id")
     private String kingdeeId;
 
     @Column(name = "parent_kingdee_id")
     private String parentKingdeeId;
-
-    @Column(name = "parent_monday_id")
-    private String parentMondayId;
 
     @Column(name = "qty")
     private String qty;
@@ -121,17 +106,11 @@ public class OrderFollowUp implements Serializable {
     @Column(name = "item_code")
     private String itemCode;
 
-    @Column(name = "amount")
-    private String amount;
-
-    @Column(name = "discount")
-    private String discount;
-
-    @Column(name = "unit")
-    private String unit;
-
     @Column(name = "contract_end_of_prod_date")
     private String contractEndOfProdDate;
+
+    @Column(name = "supplier_id")
+    private String supplierId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -148,19 +127,6 @@ public class OrderFollowUp implements Serializable {
         this.id = id;
     }
 
-    public String getItemId() {
-        return this.itemId;
-    }
-
-    public OrderFollowUp itemId(String itemId) {
-        this.setItemId(itemId);
-        return this;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
     public String getPoNumber() {
         return this.poNumber;
     }
@@ -172,19 +138,6 @@ public class OrderFollowUp implements Serializable {
 
     public void setPoNumber(String poNumber) {
         this.poNumber = poNumber;
-    }
-
-    public String getCustomer() {
-        return this.customer;
-    }
-
-    public OrderFollowUp customer(String customer) {
-        this.setCustomer(customer);
-        return this;
-    }
-
-    public void setCustomer(String customer) {
-        this.customer = customer;
     }
 
     public String getSupplier() {
@@ -356,19 +309,6 @@ public class OrderFollowUp implements Serializable {
         this.updatedEta = updatedEta;
     }
 
-    public String getForwarder() {
-        return this.forwarder;
-    }
-
-    public OrderFollowUp forwarder(String forwarder) {
-        this.setForwarder(forwarder);
-        return this;
-    }
-
-    public void setForwarder(String forwarder) {
-        this.forwarder = forwarder;
-    }
-
     public String getDocumentStatus() {
         return this.documentStatus;
     }
@@ -499,19 +439,6 @@ public class OrderFollowUp implements Serializable {
         this.itemName = itemName;
     }
 
-    public String getBoardId() {
-        return this.boardId;
-    }
-
-    public OrderFollowUp boardId(String boardId) {
-        this.setBoardId(boardId);
-        return this;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
-    }
-
     public String getKingdeeId() {
         return this.kingdeeId;
     }
@@ -536,19 +463,6 @@ public class OrderFollowUp implements Serializable {
 
     public void setParentKingdeeId(String parentKingdeeId) {
         this.parentKingdeeId = parentKingdeeId;
-    }
-
-    public String getParentMondayId() {
-        return this.parentMondayId;
-    }
-
-    public OrderFollowUp parentMondayId(String parentMondayId) {
-        this.setParentMondayId(parentMondayId);
-        return this;
-    }
-
-    public void setParentMondayId(String parentMondayId) {
-        this.parentMondayId = parentMondayId;
     }
 
     public String getQty() {
@@ -577,45 +491,6 @@ public class OrderFollowUp implements Serializable {
         this.itemCode = itemCode;
     }
 
-    public String getAmount() {
-        return this.amount;
-    }
-
-    public OrderFollowUp amount(String amount) {
-        this.setAmount(amount);
-        return this;
-    }
-
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
-    public String getDiscount() {
-        return this.discount;
-    }
-
-    public OrderFollowUp discount(String discount) {
-        this.setDiscount(discount);
-        return this;
-    }
-
-    public void setDiscount(String discount) {
-        this.discount = discount;
-    }
-
-    public String getUnit() {
-        return this.unit;
-    }
-
-    public OrderFollowUp unit(String unit) {
-        this.setUnit(unit);
-        return this;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
     public String getContractEndOfProdDate() {
         return this.contractEndOfProdDate;
     }
@@ -627,6 +502,19 @@ public class OrderFollowUp implements Serializable {
 
     public void setContractEndOfProdDate(String contractEndOfProdDate) {
         this.contractEndOfProdDate = contractEndOfProdDate;
+    }
+
+    public String getSupplierId() {
+        return this.supplierId;
+    }
+
+    public OrderFollowUp supplierId(String supplierId) {
+        this.setSupplierId(supplierId);
+        return this;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -653,9 +541,7 @@ public class OrderFollowUp implements Serializable {
     public String toString() {
         return "OrderFollowUp{" +
             "id=" + getId() +
-            ", itemId='" + getItemId() + "'" +
             ", poNumber='" + getPoNumber() + "'" +
-            ", customer='" + getCustomer() + "'" +
             ", supplier='" + getSupplier() + "'" +
             ", orderDate='" + getOrderDate() + "'" +
             ", cateGory='" + getCateGory() + "'" +
@@ -669,7 +555,6 @@ public class OrderFollowUp implements Serializable {
             ", atd='" + getAtd() + "'" +
             ", eta='" + getEta() + "'" +
             ", updatedEta='" + getUpdatedEta() + "'" +
-            ", forwarder='" + getForwarder() + "'" +
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", customInstruction='" + getCustomInstruction() + "'" +
             ", customInspection='" + getCustomInspection() + "'" +
@@ -680,16 +565,12 @@ public class OrderFollowUp implements Serializable {
             ", dcMember='" + getDcMember() + "'" +
             ", comment='" + getComment() + "'" +
             ", itemName='" + getItemName() + "'" +
-            ", boardId='" + getBoardId() + "'" +
             ", kingdeeId='" + getKingdeeId() + "'" +
             ", parentKingdeeId='" + getParentKingdeeId() + "'" +
-            ", parentMondayId='" + getParentMondayId() + "'" +
             ", qty='" + getQty() + "'" +
             ", itemCode='" + getItemCode() + "'" +
-            ", amount='" + getAmount() + "'" +
-            ", discount='" + getDiscount() + "'" +
-            ", unit='" + getUnit() + "'" +
             ", contractEndOfProdDate='" + getContractEndOfProdDate() + "'" +
+            ", supplierId='" + getSupplierId() + "'" +
             "}";
     }
 }

@@ -122,14 +122,8 @@ public class PIResource {
                 if (pI.getItemName() != null) {
                     existingPI.setItemName(pI.getItemName());
                 }
-                if (pI.getItemCode() != null) {
-                    existingPI.setItemCode(pI.getItemCode());
-                }
                 if (pI.getPoNumber() != null) {
                     existingPI.setPoNumber(pI.getPoNumber());
-                }
-                if (pI.getIsNewItem() != null) {
-                    existingPI.setIsNewItem(pI.getIsNewItem());
                 }
                 if (pI.getCategory() != null) {
                     existingPI.setCategory(pI.getCategory());
@@ -137,32 +131,17 @@ public class PIResource {
                 if (pI.getClient() != null) {
                     existingPI.setClient(pI.getClient());
                 }
-                if (pI.getSupplier() != null) {
-                    existingPI.setSupplier(pI.getSupplier());
-                }
-                if (pI.getSupplierCode() != null) {
-                    existingPI.setSupplierCode(pI.getSupplierCode());
-                }
                 if (pI.getOrderDate() != null) {
                     existingPI.setOrderDate(pI.getOrderDate());
                 }
-                if (pI.getPort() != null) {
-                    existingPI.setPort(pI.getPort());
-                }
                 if (pI.getRequestedEndOfProdDate() != null) {
                     existingPI.setRequestedEndOfProdDate(pI.getRequestedEndOfProdDate());
-                }
-                if (pI.getItemQuantity() != null) {
-                    existingPI.setItemQuantity(pI.getItemQuantity());
                 }
                 if (pI.getCountryOfOrigin() != null) {
                     existingPI.setCountryOfOrigin(pI.getCountryOfOrigin());
                 }
                 if (pI.getCountryOfFinalDestination() != null) {
                     existingPI.setCountryOfFinalDestination(pI.getCountryOfFinalDestination());
-                }
-                if (pI.getProductionLeadTimeCommitment() != null) {
-                    existingPI.setProductionLeadTimeCommitment(pI.getProductionLeadTimeCommitment());
                 }
                 if (pI.getConsignee() != null) {
                     existingPI.setConsignee(pI.getConsignee());
@@ -176,35 +155,11 @@ public class PIResource {
                 if (pI.getTermsOfPayment() != null) {
                     existingPI.setTermsOfPayment(pI.getTermsOfPayment());
                 }
-                if (pI.getItemUnit() != null) {
-                    existingPI.setItemUnit(pI.getItemUnit());
-                }
-                if (pI.getRate() != null) {
-                    existingPI.setRate(pI.getRate());
-                }
-                if (pI.getAmount() != null) {
-                    existingPI.setAmount(pI.getAmount());
-                }
-                if (pI.getTotalAmount() != null) {
-                    existingPI.setTotalAmount(pI.getTotalAmount());
-                }
-                if (pI.getDiscountRate() != null) {
-                    existingPI.setDiscountRate(pI.getDiscountRate());
-                }
                 if (pI.getCurrency() != null) {
                     existingPI.setCurrency(pI.getCurrency());
                 }
-                if (pI.getPiStatus() != null) {
-                    existingPI.setPiStatus(pI.getPiStatus());
-                }
                 if (pI.getRemarks() != null) {
                     existingPI.setRemarks(pI.getRemarks());
-                }
-                if (pI.getItemId() != null) {
-                    existingPI.setItemId(pI.getItemId());
-                }
-                if (pI.getBoardId() != null) {
-                    existingPI.setBoardId(pI.getBoardId());
                 }
                 if (pI.getKingdeeId() != null) {
                     existingPI.setKingdeeId(pI.getKingdeeId());
@@ -214,6 +169,9 @@ public class PIResource {
                 }
                 if (pI.getPortOfLoading() != null) {
                     existingPI.setPortOfLoading(pI.getPortOfLoading());
+                }
+                if (pI.getDocStatus() != null) {
+                    existingPI.setDocStatus(pI.getDocStatus());
                 }
 
                 return existingPI;

@@ -1,73 +1,87 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
+import { vitest } from 'vitest';
+import { shallowMount, MountingOptions } from '@vue/test-utils';
 import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { RouteLocation } from 'vue-router';
 
-import * as config from '@/shared/config/config';
-import ProcessLogUpdateComponent from '@/entities/process-log/process-log-update.vue';
-import ProcessLogClass from '@/entities/process-log/process-log-update.component';
-import ProcessLogService from '@/entities/process-log/process-log.service';
+import ProcessLogUpdate from '../../../../../../main/webapp/app/entities/process-log/process-log-update.vue';
+import ProcessLogService from '../../../../../../main/webapp/app/entities/process-log/process-log.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
-import AlertService from '@/shared/alert/alert.service';
+type ProcessLogUpdateComponentType = InstanceType<typeof ProcessLogUpdate>;
 
-const localVue = createLocalVue();
+let route: Partial<RouteLocation>;
+const routerGoMock = vitest.fn();
 
-config.initVueApp(localVue);
-const i18n = config.initI18N(localVue);
-const store = config.initVueXStore(localVue);
-const router = new Router();
-localVue.use(Router);
-localVue.use(ToastPlugin);
-localVue.component('font-awesome-icon', {});
-localVue.component('b-input-group', {});
-localVue.component('b-input-group-prepend', {});
-localVue.component('b-form-datepicker', {});
-localVue.component('b-form-input', {});
+vitest.mock('vue-router', () => ({
+  useRoute: () => route,
+  useRouter: () => ({ go: routerGoMock }),
+}));
+
+const processLogSample = { id: 123 };
 
 describe('Component Tests', () => {
+  let mountOptions: MountingOptions<ProcessLogUpdateComponentType>['global'];
+  let alertService: AlertService;
+
   describe('ProcessLog Management Update Component', () => {
-    let wrapper: Wrapper<ProcessLogClass>;
-    let comp: ProcessLogClass;
+    let comp: ProcessLogUpdateComponentType;
     let processLogServiceStub: SinonStubbedInstance<ProcessLogService>;
 
     beforeEach(() => {
+      route = {};
       processLogServiceStub = sinon.createStubInstance<ProcessLogService>(ProcessLogService);
 
-      wrapper = shallowMount<ProcessLogClass>(ProcessLogUpdateComponent, {
-        store,
-        i18n,
-        localVue,
-        router,
-        provide: {
-          processLogService: () => processLogServiceStub,
-          alertService: () => new AlertService(),
-        },
+      alertService = new AlertService({
+        i18n: { t: vitest.fn() } as any,
+        bvToast: {
+          toast: vitest.fn(),
+        } as any,
       });
-      comp = wrapper.vm;
+
+      mountOptions = {
+        stubs: {
+          'font-awesome-icon': true,
+          'b-input-group': true,
+          'b-input-group-prepend': true,
+          'b-form-datepicker': true,
+          'b-form-input': true,
+        },
+        provide: {
+          alertService,
+          processLogService: () => processLogServiceStub,
+        },
+      };
+    });
+
+    afterEach(() => {
+      vitest.resetAllMocks();
     });
 
     describe('save', () => {
       it('Should call update service on save for existing entity', async () => {
         // GIVEN
-        const entity = { id: 123 };
-        comp.processLog = entity;
-        processLogServiceStub.update.resolves(entity);
+        const wrapper = shallowMount(ProcessLogUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.processLog = processLogSample;
+        processLogServiceStub.update.resolves(processLogSample);
 
         // WHEN
         comp.save();
         await comp.$nextTick();
 
         // THEN
-        expect(processLogServiceStub.update.calledWith(entity)).toBeTruthy();
+        expect(processLogServiceStub.update.calledWith(processLogSample)).toBeTruthy();
         expect(comp.isSaving).toEqual(false);
       });
 
       it('Should call create service on save for new entity', async () => {
         // GIVEN
         const entity = {};
-        comp.processLog = entity;
         processLogServiceStub.create.resolves(entity);
+        const wrapper = shallowMount(ProcessLogUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        comp.processLog = entity;
 
         // WHEN
         comp.save();
@@ -82,25 +96,35 @@ describe('Component Tests', () => {
     describe('Before route enter', () => {
       it('Should retrieve data', async () => {
         // GIVEN
-        const foundProcessLog = { id: 123 };
-        processLogServiceStub.find.resolves(foundProcessLog);
-        processLogServiceStub.retrieve.resolves([foundProcessLog]);
+        processLogServiceStub.find.resolves(processLogSample);
+        processLogServiceStub.retrieve.resolves([processLogSample]);
 
         // WHEN
-        comp.beforeRouteEnter({ params: { processLogId: 123 } }, null, cb => cb(comp));
+        route = {
+          params: {
+            processLogId: '' + processLogSample.id,
+          },
+        };
+        const wrapper = shallowMount(ProcessLogUpdate, { global: mountOptions });
+        comp = wrapper.vm;
         await comp.$nextTick();
 
         // THEN
-        expect(comp.processLog).toBe(foundProcessLog);
+        expect(comp.processLog).toMatchObject(processLogSample);
       });
     });
 
     describe('Previous state', () => {
       it('Should go previous state', async () => {
+        processLogServiceStub.find.resolves(processLogSample);
+        const wrapper = shallowMount(ProcessLogUpdate, { global: mountOptions });
+        comp = wrapper.vm;
+        await comp.$nextTick();
+
         comp.previousState();
         await comp.$nextTick();
 
-        expect(comp.$router.currentRoute.fullPath).toContain('/');
+        expect(routerGoMock).toHaveBeenCalledWith(-1);
       });
     });
   });

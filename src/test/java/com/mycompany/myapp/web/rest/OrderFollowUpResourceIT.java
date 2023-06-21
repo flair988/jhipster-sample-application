@@ -8,10 +8,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.OrderFollowUp;
 import com.mycompany.myapp.repository.OrderFollowUpRepository;
+import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
-import javax.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class OrderFollowUpResourceIT {
 
-    private static final String DEFAULT_ITEM_ID = "AAAAAAAAAA";
-    private static final String UPDATED_ITEM_ID = "BBBBBBBBBB";
-
     private static final String DEFAULT_PO_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_PO_NUMBER = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CUSTOMER = "AAAAAAAAAA";
-    private static final String UPDATED_CUSTOMER = "BBBBBBBBBB";
 
     private static final String DEFAULT_SUPPLIER = "AAAAAAAAAA";
     private static final String UPDATED_SUPPLIER = "BBBBBBBBBB";
@@ -77,9 +71,6 @@ class OrderFollowUpResourceIT {
     private static final String DEFAULT_UPDATED_ETA = "AAAAAAAAAA";
     private static final String UPDATED_UPDATED_ETA = "BBBBBBBBBB";
 
-    private static final String DEFAULT_FORWARDER = "AAAAAAAAAA";
-    private static final String UPDATED_FORWARDER = "BBBBBBBBBB";
-
     private static final String DEFAULT_DOCUMENT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENT_STATUS = "BBBBBBBBBB";
 
@@ -110,17 +101,11 @@ class OrderFollowUpResourceIT {
     private static final String DEFAULT_ITEM_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ITEM_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_BOARD_ID = "AAAAAAAAAA";
-    private static final String UPDATED_BOARD_ID = "BBBBBBBBBB";
-
     private static final String DEFAULT_KINGDEE_ID = "AAAAAAAAAA";
     private static final String UPDATED_KINGDEE_ID = "BBBBBBBBBB";
 
     private static final String DEFAULT_PARENT_KINGDEE_ID = "AAAAAAAAAA";
     private static final String UPDATED_PARENT_KINGDEE_ID = "BBBBBBBBBB";
-
-    private static final String DEFAULT_PARENT_MONDAY_ID = "AAAAAAAAAA";
-    private static final String UPDATED_PARENT_MONDAY_ID = "BBBBBBBBBB";
 
     private static final String DEFAULT_QTY = "AAAAAAAAAA";
     private static final String UPDATED_QTY = "BBBBBBBBBB";
@@ -128,17 +113,11 @@ class OrderFollowUpResourceIT {
     private static final String DEFAULT_ITEM_CODE = "AAAAAAAAAA";
     private static final String UPDATED_ITEM_CODE = "BBBBBBBBBB";
 
-    private static final String DEFAULT_AMOUNT = "AAAAAAAAAA";
-    private static final String UPDATED_AMOUNT = "BBBBBBBBBB";
-
-    private static final String DEFAULT_DISCOUNT = "AAAAAAAAAA";
-    private static final String UPDATED_DISCOUNT = "BBBBBBBBBB";
-
-    private static final String DEFAULT_UNIT = "AAAAAAAAAA";
-    private static final String UPDATED_UNIT = "BBBBBBBBBB";
-
     private static final String DEFAULT_CONTRACT_END_OF_PROD_DATE = "AAAAAAAAAA";
     private static final String UPDATED_CONTRACT_END_OF_PROD_DATE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_SUPPLIER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_SUPPLIER_ID = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/order-follow-ups";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -165,9 +144,7 @@ class OrderFollowUpResourceIT {
      */
     public static OrderFollowUp createEntity(EntityManager em) {
         OrderFollowUp orderFollowUp = new OrderFollowUp()
-            .itemId(DEFAULT_ITEM_ID)
             .poNumber(DEFAULT_PO_NUMBER)
-            .customer(DEFAULT_CUSTOMER)
             .supplier(DEFAULT_SUPPLIER)
             .orderDate(DEFAULT_ORDER_DATE)
             .cateGory(DEFAULT_CATE_GORY)
@@ -181,7 +158,6 @@ class OrderFollowUpResourceIT {
             .atd(DEFAULT_ATD)
             .eta(DEFAULT_ETA)
             .updatedEta(DEFAULT_UPDATED_ETA)
-            .forwarder(DEFAULT_FORWARDER)
             .documentStatus(DEFAULT_DOCUMENT_STATUS)
             .customInstruction(DEFAULT_CUSTOM_INSTRUCTION)
             .customInspection(DEFAULT_CUSTOM_INSPECTION)
@@ -192,16 +168,12 @@ class OrderFollowUpResourceIT {
             .dcMember(DEFAULT_DC_MEMBER)
             .comment(DEFAULT_COMMENT)
             .itemName(DEFAULT_ITEM_NAME)
-            .boardId(DEFAULT_BOARD_ID)
             .kingdeeId(DEFAULT_KINGDEE_ID)
             .parentKingdeeId(DEFAULT_PARENT_KINGDEE_ID)
-            .parentMondayId(DEFAULT_PARENT_MONDAY_ID)
             .qty(DEFAULT_QTY)
             .itemCode(DEFAULT_ITEM_CODE)
-            .amount(DEFAULT_AMOUNT)
-            .discount(DEFAULT_DISCOUNT)
-            .unit(DEFAULT_UNIT)
-            .contractEndOfProdDate(DEFAULT_CONTRACT_END_OF_PROD_DATE);
+            .contractEndOfProdDate(DEFAULT_CONTRACT_END_OF_PROD_DATE)
+            .supplierId(DEFAULT_SUPPLIER_ID);
         return orderFollowUp;
     }
 
@@ -213,9 +185,7 @@ class OrderFollowUpResourceIT {
      */
     public static OrderFollowUp createUpdatedEntity(EntityManager em) {
         OrderFollowUp orderFollowUp = new OrderFollowUp()
-            .itemId(UPDATED_ITEM_ID)
             .poNumber(UPDATED_PO_NUMBER)
-            .customer(UPDATED_CUSTOMER)
             .supplier(UPDATED_SUPPLIER)
             .orderDate(UPDATED_ORDER_DATE)
             .cateGory(UPDATED_CATE_GORY)
@@ -229,7 +199,6 @@ class OrderFollowUpResourceIT {
             .atd(UPDATED_ATD)
             .eta(UPDATED_ETA)
             .updatedEta(UPDATED_UPDATED_ETA)
-            .forwarder(UPDATED_FORWARDER)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .customInstruction(UPDATED_CUSTOM_INSTRUCTION)
             .customInspection(UPDATED_CUSTOM_INSPECTION)
@@ -240,16 +209,12 @@ class OrderFollowUpResourceIT {
             .dcMember(UPDATED_DC_MEMBER)
             .comment(UPDATED_COMMENT)
             .itemName(UPDATED_ITEM_NAME)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .parentKingdeeId(UPDATED_PARENT_KINGDEE_ID)
-            .parentMondayId(UPDATED_PARENT_MONDAY_ID)
             .qty(UPDATED_QTY)
             .itemCode(UPDATED_ITEM_CODE)
-            .amount(UPDATED_AMOUNT)
-            .discount(UPDATED_DISCOUNT)
-            .unit(UPDATED_UNIT)
-            .contractEndOfProdDate(UPDATED_CONTRACT_END_OF_PROD_DATE);
+            .contractEndOfProdDate(UPDATED_CONTRACT_END_OF_PROD_DATE)
+            .supplierId(UPDATED_SUPPLIER_ID);
         return orderFollowUp;
     }
 
@@ -271,9 +236,7 @@ class OrderFollowUpResourceIT {
         List<OrderFollowUp> orderFollowUpList = orderFollowUpRepository.findAll();
         assertThat(orderFollowUpList).hasSize(databaseSizeBeforeCreate + 1);
         OrderFollowUp testOrderFollowUp = orderFollowUpList.get(orderFollowUpList.size() - 1);
-        assertThat(testOrderFollowUp.getItemId()).isEqualTo(DEFAULT_ITEM_ID);
         assertThat(testOrderFollowUp.getPoNumber()).isEqualTo(DEFAULT_PO_NUMBER);
-        assertThat(testOrderFollowUp.getCustomer()).isEqualTo(DEFAULT_CUSTOMER);
         assertThat(testOrderFollowUp.getSupplier()).isEqualTo(DEFAULT_SUPPLIER);
         assertThat(testOrderFollowUp.getOrderDate()).isEqualTo(DEFAULT_ORDER_DATE);
         assertThat(testOrderFollowUp.getCateGory()).isEqualTo(DEFAULT_CATE_GORY);
@@ -287,7 +250,6 @@ class OrderFollowUpResourceIT {
         assertThat(testOrderFollowUp.getAtd()).isEqualTo(DEFAULT_ATD);
         assertThat(testOrderFollowUp.getEta()).isEqualTo(DEFAULT_ETA);
         assertThat(testOrderFollowUp.getUpdatedEta()).isEqualTo(DEFAULT_UPDATED_ETA);
-        assertThat(testOrderFollowUp.getForwarder()).isEqualTo(DEFAULT_FORWARDER);
         assertThat(testOrderFollowUp.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
         assertThat(testOrderFollowUp.getCustomInstruction()).isEqualTo(DEFAULT_CUSTOM_INSTRUCTION);
         assertThat(testOrderFollowUp.getCustomInspection()).isEqualTo(DEFAULT_CUSTOM_INSPECTION);
@@ -298,16 +260,12 @@ class OrderFollowUpResourceIT {
         assertThat(testOrderFollowUp.getDcMember()).isEqualTo(DEFAULT_DC_MEMBER);
         assertThat(testOrderFollowUp.getComment()).isEqualTo(DEFAULT_COMMENT);
         assertThat(testOrderFollowUp.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
-        assertThat(testOrderFollowUp.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
         assertThat(testOrderFollowUp.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
         assertThat(testOrderFollowUp.getParentKingdeeId()).isEqualTo(DEFAULT_PARENT_KINGDEE_ID);
-        assertThat(testOrderFollowUp.getParentMondayId()).isEqualTo(DEFAULT_PARENT_MONDAY_ID);
         assertThat(testOrderFollowUp.getQty()).isEqualTo(DEFAULT_QTY);
         assertThat(testOrderFollowUp.getItemCode()).isEqualTo(DEFAULT_ITEM_CODE);
-        assertThat(testOrderFollowUp.getAmount()).isEqualTo(DEFAULT_AMOUNT);
-        assertThat(testOrderFollowUp.getDiscount()).isEqualTo(DEFAULT_DISCOUNT);
-        assertThat(testOrderFollowUp.getUnit()).isEqualTo(DEFAULT_UNIT);
         assertThat(testOrderFollowUp.getContractEndOfProdDate()).isEqualTo(DEFAULT_CONTRACT_END_OF_PROD_DATE);
+        assertThat(testOrderFollowUp.getSupplierId()).isEqualTo(DEFAULT_SUPPLIER_ID);
     }
 
     @Test
@@ -340,9 +298,7 @@ class OrderFollowUpResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(orderFollowUp.getId().intValue())))
-            .andExpect(jsonPath("$.[*].itemId").value(hasItem(DEFAULT_ITEM_ID)))
             .andExpect(jsonPath("$.[*].poNumber").value(hasItem(DEFAULT_PO_NUMBER)))
-            .andExpect(jsonPath("$.[*].customer").value(hasItem(DEFAULT_CUSTOMER)))
             .andExpect(jsonPath("$.[*].supplier").value(hasItem(DEFAULT_SUPPLIER)))
             .andExpect(jsonPath("$.[*].orderDate").value(hasItem(DEFAULT_ORDER_DATE)))
             .andExpect(jsonPath("$.[*].cateGory").value(hasItem(DEFAULT_CATE_GORY)))
@@ -356,7 +312,6 @@ class OrderFollowUpResourceIT {
             .andExpect(jsonPath("$.[*].atd").value(hasItem(DEFAULT_ATD)))
             .andExpect(jsonPath("$.[*].eta").value(hasItem(DEFAULT_ETA)))
             .andExpect(jsonPath("$.[*].updatedEta").value(hasItem(DEFAULT_UPDATED_ETA)))
-            .andExpect(jsonPath("$.[*].forwarder").value(hasItem(DEFAULT_FORWARDER)))
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].customInstruction").value(hasItem(DEFAULT_CUSTOM_INSTRUCTION)))
             .andExpect(jsonPath("$.[*].customInspection").value(hasItem(DEFAULT_CUSTOM_INSPECTION)))
@@ -367,16 +322,12 @@ class OrderFollowUpResourceIT {
             .andExpect(jsonPath("$.[*].dcMember").value(hasItem(DEFAULT_DC_MEMBER)))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT)))
             .andExpect(jsonPath("$.[*].itemName").value(hasItem(DEFAULT_ITEM_NAME)))
-            .andExpect(jsonPath("$.[*].boardId").value(hasItem(DEFAULT_BOARD_ID)))
             .andExpect(jsonPath("$.[*].kingdeeId").value(hasItem(DEFAULT_KINGDEE_ID)))
             .andExpect(jsonPath("$.[*].parentKingdeeId").value(hasItem(DEFAULT_PARENT_KINGDEE_ID)))
-            .andExpect(jsonPath("$.[*].parentMondayId").value(hasItem(DEFAULT_PARENT_MONDAY_ID)))
             .andExpect(jsonPath("$.[*].qty").value(hasItem(DEFAULT_QTY)))
             .andExpect(jsonPath("$.[*].itemCode").value(hasItem(DEFAULT_ITEM_CODE)))
-            .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT)))
-            .andExpect(jsonPath("$.[*].discount").value(hasItem(DEFAULT_DISCOUNT)))
-            .andExpect(jsonPath("$.[*].unit").value(hasItem(DEFAULT_UNIT)))
-            .andExpect(jsonPath("$.[*].contractEndOfProdDate").value(hasItem(DEFAULT_CONTRACT_END_OF_PROD_DATE)));
+            .andExpect(jsonPath("$.[*].contractEndOfProdDate").value(hasItem(DEFAULT_CONTRACT_END_OF_PROD_DATE)))
+            .andExpect(jsonPath("$.[*].supplierId").value(hasItem(DEFAULT_SUPPLIER_ID)));
     }
 
     @Test
@@ -391,9 +342,7 @@ class OrderFollowUpResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(orderFollowUp.getId().intValue()))
-            .andExpect(jsonPath("$.itemId").value(DEFAULT_ITEM_ID))
             .andExpect(jsonPath("$.poNumber").value(DEFAULT_PO_NUMBER))
-            .andExpect(jsonPath("$.customer").value(DEFAULT_CUSTOMER))
             .andExpect(jsonPath("$.supplier").value(DEFAULT_SUPPLIER))
             .andExpect(jsonPath("$.orderDate").value(DEFAULT_ORDER_DATE))
             .andExpect(jsonPath("$.cateGory").value(DEFAULT_CATE_GORY))
@@ -407,7 +356,6 @@ class OrderFollowUpResourceIT {
             .andExpect(jsonPath("$.atd").value(DEFAULT_ATD))
             .andExpect(jsonPath("$.eta").value(DEFAULT_ETA))
             .andExpect(jsonPath("$.updatedEta").value(DEFAULT_UPDATED_ETA))
-            .andExpect(jsonPath("$.forwarder").value(DEFAULT_FORWARDER))
             .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
             .andExpect(jsonPath("$.customInstruction").value(DEFAULT_CUSTOM_INSTRUCTION))
             .andExpect(jsonPath("$.customInspection").value(DEFAULT_CUSTOM_INSPECTION))
@@ -418,16 +366,12 @@ class OrderFollowUpResourceIT {
             .andExpect(jsonPath("$.dcMember").value(DEFAULT_DC_MEMBER))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT))
             .andExpect(jsonPath("$.itemName").value(DEFAULT_ITEM_NAME))
-            .andExpect(jsonPath("$.boardId").value(DEFAULT_BOARD_ID))
             .andExpect(jsonPath("$.kingdeeId").value(DEFAULT_KINGDEE_ID))
             .andExpect(jsonPath("$.parentKingdeeId").value(DEFAULT_PARENT_KINGDEE_ID))
-            .andExpect(jsonPath("$.parentMondayId").value(DEFAULT_PARENT_MONDAY_ID))
             .andExpect(jsonPath("$.qty").value(DEFAULT_QTY))
             .andExpect(jsonPath("$.itemCode").value(DEFAULT_ITEM_CODE))
-            .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT))
-            .andExpect(jsonPath("$.discount").value(DEFAULT_DISCOUNT))
-            .andExpect(jsonPath("$.unit").value(DEFAULT_UNIT))
-            .andExpect(jsonPath("$.contractEndOfProdDate").value(DEFAULT_CONTRACT_END_OF_PROD_DATE));
+            .andExpect(jsonPath("$.contractEndOfProdDate").value(DEFAULT_CONTRACT_END_OF_PROD_DATE))
+            .andExpect(jsonPath("$.supplierId").value(DEFAULT_SUPPLIER_ID));
     }
 
     @Test
@@ -450,9 +394,7 @@ class OrderFollowUpResourceIT {
         // Disconnect from session so that the updates on updatedOrderFollowUp are not directly saved in db
         em.detach(updatedOrderFollowUp);
         updatedOrderFollowUp
-            .itemId(UPDATED_ITEM_ID)
             .poNumber(UPDATED_PO_NUMBER)
-            .customer(UPDATED_CUSTOMER)
             .supplier(UPDATED_SUPPLIER)
             .orderDate(UPDATED_ORDER_DATE)
             .cateGory(UPDATED_CATE_GORY)
@@ -466,7 +408,6 @@ class OrderFollowUpResourceIT {
             .atd(UPDATED_ATD)
             .eta(UPDATED_ETA)
             .updatedEta(UPDATED_UPDATED_ETA)
-            .forwarder(UPDATED_FORWARDER)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .customInstruction(UPDATED_CUSTOM_INSTRUCTION)
             .customInspection(UPDATED_CUSTOM_INSPECTION)
@@ -477,16 +418,12 @@ class OrderFollowUpResourceIT {
             .dcMember(UPDATED_DC_MEMBER)
             .comment(UPDATED_COMMENT)
             .itemName(UPDATED_ITEM_NAME)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .parentKingdeeId(UPDATED_PARENT_KINGDEE_ID)
-            .parentMondayId(UPDATED_PARENT_MONDAY_ID)
             .qty(UPDATED_QTY)
             .itemCode(UPDATED_ITEM_CODE)
-            .amount(UPDATED_AMOUNT)
-            .discount(UPDATED_DISCOUNT)
-            .unit(UPDATED_UNIT)
-            .contractEndOfProdDate(UPDATED_CONTRACT_END_OF_PROD_DATE);
+            .contractEndOfProdDate(UPDATED_CONTRACT_END_OF_PROD_DATE)
+            .supplierId(UPDATED_SUPPLIER_ID);
 
         restOrderFollowUpMockMvc
             .perform(
@@ -500,9 +437,7 @@ class OrderFollowUpResourceIT {
         List<OrderFollowUp> orderFollowUpList = orderFollowUpRepository.findAll();
         assertThat(orderFollowUpList).hasSize(databaseSizeBeforeUpdate);
         OrderFollowUp testOrderFollowUp = orderFollowUpList.get(orderFollowUpList.size() - 1);
-        assertThat(testOrderFollowUp.getItemId()).isEqualTo(UPDATED_ITEM_ID);
         assertThat(testOrderFollowUp.getPoNumber()).isEqualTo(UPDATED_PO_NUMBER);
-        assertThat(testOrderFollowUp.getCustomer()).isEqualTo(UPDATED_CUSTOMER);
         assertThat(testOrderFollowUp.getSupplier()).isEqualTo(UPDATED_SUPPLIER);
         assertThat(testOrderFollowUp.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
         assertThat(testOrderFollowUp.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
@@ -516,7 +451,6 @@ class OrderFollowUpResourceIT {
         assertThat(testOrderFollowUp.getAtd()).isEqualTo(UPDATED_ATD);
         assertThat(testOrderFollowUp.getEta()).isEqualTo(UPDATED_ETA);
         assertThat(testOrderFollowUp.getUpdatedEta()).isEqualTo(UPDATED_UPDATED_ETA);
-        assertThat(testOrderFollowUp.getForwarder()).isEqualTo(UPDATED_FORWARDER);
         assertThat(testOrderFollowUp.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
         assertThat(testOrderFollowUp.getCustomInstruction()).isEqualTo(UPDATED_CUSTOM_INSTRUCTION);
         assertThat(testOrderFollowUp.getCustomInspection()).isEqualTo(UPDATED_CUSTOM_INSPECTION);
@@ -527,16 +461,12 @@ class OrderFollowUpResourceIT {
         assertThat(testOrderFollowUp.getDcMember()).isEqualTo(UPDATED_DC_MEMBER);
         assertThat(testOrderFollowUp.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testOrderFollowUp.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testOrderFollowUp.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testOrderFollowUp.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testOrderFollowUp.getParentKingdeeId()).isEqualTo(UPDATED_PARENT_KINGDEE_ID);
-        assertThat(testOrderFollowUp.getParentMondayId()).isEqualTo(UPDATED_PARENT_MONDAY_ID);
         assertThat(testOrderFollowUp.getQty()).isEqualTo(UPDATED_QTY);
         assertThat(testOrderFollowUp.getItemCode()).isEqualTo(UPDATED_ITEM_CODE);
-        assertThat(testOrderFollowUp.getAmount()).isEqualTo(UPDATED_AMOUNT);
-        assertThat(testOrderFollowUp.getDiscount()).isEqualTo(UPDATED_DISCOUNT);
-        assertThat(testOrderFollowUp.getUnit()).isEqualTo(UPDATED_UNIT);
         assertThat(testOrderFollowUp.getContractEndOfProdDate()).isEqualTo(UPDATED_CONTRACT_END_OF_PROD_DATE);
+        assertThat(testOrderFollowUp.getSupplierId()).isEqualTo(UPDATED_SUPPLIER_ID);
     }
 
     @Test
@@ -608,21 +538,20 @@ class OrderFollowUpResourceIT {
         partialUpdatedOrderFollowUp.setId(orderFollowUp.getId());
 
         partialUpdatedOrderFollowUp
-            .itemId(UPDATED_ITEM_ID)
-            .poNumber(UPDATED_PO_NUMBER)
-            .customer(UPDATED_CUSTOMER)
+            .orderDate(UPDATED_ORDER_DATE)
             .inspectionDate(UPDATED_INSPECTION_DATE)
             .requestEndOfProdDate(UPDATED_REQUEST_END_OF_PROD_DATE)
-            .atd(UPDATED_ATD)
-            .updatedEta(UPDATED_UPDATED_ETA)
+            .regularCheck(UPDATED_REGULAR_CHECK)
+            .etd(UPDATED_ETD)
+            .eta(UPDATED_ETA)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
-            .customInstruction(UPDATED_CUSTOM_INSTRUCTION)
+            .depositPaymentDate(UPDATED_DEPOSIT_PAYMENT_DATE)
             .balanceOfTotalPaymentDate(UPDATED_BALANCE_OF_TOTAL_PAYMENT_DATE)
-            .amountDepositPayment(UPDATED_AMOUNT_DEPOSIT_PAYMENT)
-            .itemName(UPDATED_ITEM_NAME)
-            .itemCode(UPDATED_ITEM_CODE)
-            .unit(UPDATED_UNIT)
-            .contractEndOfProdDate(UPDATED_CONTRACT_END_OF_PROD_DATE);
+            .amountPayment(UPDATED_AMOUNT_PAYMENT)
+            .dcMember(UPDATED_DC_MEMBER)
+            .parentKingdeeId(UPDATED_PARENT_KINGDEE_ID)
+            .contractEndOfProdDate(UPDATED_CONTRACT_END_OF_PROD_DATE)
+            .supplierId(UPDATED_SUPPLIER_ID);
 
         restOrderFollowUpMockMvc
             .perform(
@@ -636,43 +565,36 @@ class OrderFollowUpResourceIT {
         List<OrderFollowUp> orderFollowUpList = orderFollowUpRepository.findAll();
         assertThat(orderFollowUpList).hasSize(databaseSizeBeforeUpdate);
         OrderFollowUp testOrderFollowUp = orderFollowUpList.get(orderFollowUpList.size() - 1);
-        assertThat(testOrderFollowUp.getItemId()).isEqualTo(UPDATED_ITEM_ID);
-        assertThat(testOrderFollowUp.getPoNumber()).isEqualTo(UPDATED_PO_NUMBER);
-        assertThat(testOrderFollowUp.getCustomer()).isEqualTo(UPDATED_CUSTOMER);
+        assertThat(testOrderFollowUp.getPoNumber()).isEqualTo(DEFAULT_PO_NUMBER);
         assertThat(testOrderFollowUp.getSupplier()).isEqualTo(DEFAULT_SUPPLIER);
-        assertThat(testOrderFollowUp.getOrderDate()).isEqualTo(DEFAULT_ORDER_DATE);
+        assertThat(testOrderFollowUp.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
         assertThat(testOrderFollowUp.getCateGory()).isEqualTo(DEFAULT_CATE_GORY);
         assertThat(testOrderFollowUp.getInspectionDate()).isEqualTo(UPDATED_INSPECTION_DATE);
         assertThat(testOrderFollowUp.getRequestEndOfProdDate()).isEqualTo(UPDATED_REQUEST_END_OF_PROD_DATE);
         assertThat(testOrderFollowUp.getTotalAmount()).isEqualTo(DEFAULT_TOTAL_AMOUNT);
         assertThat(testOrderFollowUp.getTotalDiscount()).isEqualTo(DEFAULT_TOTAL_DISCOUNT);
         assertThat(testOrderFollowUp.getDisCountRate()).isEqualTo(DEFAULT_DIS_COUNT_RATE);
-        assertThat(testOrderFollowUp.getRegularCheck()).isEqualTo(DEFAULT_REGULAR_CHECK);
-        assertThat(testOrderFollowUp.getEtd()).isEqualTo(DEFAULT_ETD);
-        assertThat(testOrderFollowUp.getAtd()).isEqualTo(UPDATED_ATD);
-        assertThat(testOrderFollowUp.getEta()).isEqualTo(DEFAULT_ETA);
-        assertThat(testOrderFollowUp.getUpdatedEta()).isEqualTo(UPDATED_UPDATED_ETA);
-        assertThat(testOrderFollowUp.getForwarder()).isEqualTo(DEFAULT_FORWARDER);
+        assertThat(testOrderFollowUp.getRegularCheck()).isEqualTo(UPDATED_REGULAR_CHECK);
+        assertThat(testOrderFollowUp.getEtd()).isEqualTo(UPDATED_ETD);
+        assertThat(testOrderFollowUp.getAtd()).isEqualTo(DEFAULT_ATD);
+        assertThat(testOrderFollowUp.getEta()).isEqualTo(UPDATED_ETA);
+        assertThat(testOrderFollowUp.getUpdatedEta()).isEqualTo(DEFAULT_UPDATED_ETA);
         assertThat(testOrderFollowUp.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
-        assertThat(testOrderFollowUp.getCustomInstruction()).isEqualTo(UPDATED_CUSTOM_INSTRUCTION);
+        assertThat(testOrderFollowUp.getCustomInstruction()).isEqualTo(DEFAULT_CUSTOM_INSTRUCTION);
         assertThat(testOrderFollowUp.getCustomInspection()).isEqualTo(DEFAULT_CUSTOM_INSPECTION);
-        assertThat(testOrderFollowUp.getDepositPaymentDate()).isEqualTo(DEFAULT_DEPOSIT_PAYMENT_DATE);
+        assertThat(testOrderFollowUp.getDepositPaymentDate()).isEqualTo(UPDATED_DEPOSIT_PAYMENT_DATE);
         assertThat(testOrderFollowUp.getBalanceOfTotalPaymentDate()).isEqualTo(UPDATED_BALANCE_OF_TOTAL_PAYMENT_DATE);
-        assertThat(testOrderFollowUp.getAmountDepositPayment()).isEqualTo(UPDATED_AMOUNT_DEPOSIT_PAYMENT);
-        assertThat(testOrderFollowUp.getAmountPayment()).isEqualTo(DEFAULT_AMOUNT_PAYMENT);
-        assertThat(testOrderFollowUp.getDcMember()).isEqualTo(DEFAULT_DC_MEMBER);
+        assertThat(testOrderFollowUp.getAmountDepositPayment()).isEqualTo(DEFAULT_AMOUNT_DEPOSIT_PAYMENT);
+        assertThat(testOrderFollowUp.getAmountPayment()).isEqualTo(UPDATED_AMOUNT_PAYMENT);
+        assertThat(testOrderFollowUp.getDcMember()).isEqualTo(UPDATED_DC_MEMBER);
         assertThat(testOrderFollowUp.getComment()).isEqualTo(DEFAULT_COMMENT);
-        assertThat(testOrderFollowUp.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testOrderFollowUp.getBoardId()).isEqualTo(DEFAULT_BOARD_ID);
+        assertThat(testOrderFollowUp.getItemName()).isEqualTo(DEFAULT_ITEM_NAME);
         assertThat(testOrderFollowUp.getKingdeeId()).isEqualTo(DEFAULT_KINGDEE_ID);
-        assertThat(testOrderFollowUp.getParentKingdeeId()).isEqualTo(DEFAULT_PARENT_KINGDEE_ID);
-        assertThat(testOrderFollowUp.getParentMondayId()).isEqualTo(DEFAULT_PARENT_MONDAY_ID);
+        assertThat(testOrderFollowUp.getParentKingdeeId()).isEqualTo(UPDATED_PARENT_KINGDEE_ID);
         assertThat(testOrderFollowUp.getQty()).isEqualTo(DEFAULT_QTY);
-        assertThat(testOrderFollowUp.getItemCode()).isEqualTo(UPDATED_ITEM_CODE);
-        assertThat(testOrderFollowUp.getAmount()).isEqualTo(DEFAULT_AMOUNT);
-        assertThat(testOrderFollowUp.getDiscount()).isEqualTo(DEFAULT_DISCOUNT);
-        assertThat(testOrderFollowUp.getUnit()).isEqualTo(UPDATED_UNIT);
+        assertThat(testOrderFollowUp.getItemCode()).isEqualTo(DEFAULT_ITEM_CODE);
         assertThat(testOrderFollowUp.getContractEndOfProdDate()).isEqualTo(UPDATED_CONTRACT_END_OF_PROD_DATE);
+        assertThat(testOrderFollowUp.getSupplierId()).isEqualTo(UPDATED_SUPPLIER_ID);
     }
 
     @Test
@@ -688,9 +610,7 @@ class OrderFollowUpResourceIT {
         partialUpdatedOrderFollowUp.setId(orderFollowUp.getId());
 
         partialUpdatedOrderFollowUp
-            .itemId(UPDATED_ITEM_ID)
             .poNumber(UPDATED_PO_NUMBER)
-            .customer(UPDATED_CUSTOMER)
             .supplier(UPDATED_SUPPLIER)
             .orderDate(UPDATED_ORDER_DATE)
             .cateGory(UPDATED_CATE_GORY)
@@ -704,7 +624,6 @@ class OrderFollowUpResourceIT {
             .atd(UPDATED_ATD)
             .eta(UPDATED_ETA)
             .updatedEta(UPDATED_UPDATED_ETA)
-            .forwarder(UPDATED_FORWARDER)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .customInstruction(UPDATED_CUSTOM_INSTRUCTION)
             .customInspection(UPDATED_CUSTOM_INSPECTION)
@@ -715,16 +634,12 @@ class OrderFollowUpResourceIT {
             .dcMember(UPDATED_DC_MEMBER)
             .comment(UPDATED_COMMENT)
             .itemName(UPDATED_ITEM_NAME)
-            .boardId(UPDATED_BOARD_ID)
             .kingdeeId(UPDATED_KINGDEE_ID)
             .parentKingdeeId(UPDATED_PARENT_KINGDEE_ID)
-            .parentMondayId(UPDATED_PARENT_MONDAY_ID)
             .qty(UPDATED_QTY)
             .itemCode(UPDATED_ITEM_CODE)
-            .amount(UPDATED_AMOUNT)
-            .discount(UPDATED_DISCOUNT)
-            .unit(UPDATED_UNIT)
-            .contractEndOfProdDate(UPDATED_CONTRACT_END_OF_PROD_DATE);
+            .contractEndOfProdDate(UPDATED_CONTRACT_END_OF_PROD_DATE)
+            .supplierId(UPDATED_SUPPLIER_ID);
 
         restOrderFollowUpMockMvc
             .perform(
@@ -738,9 +653,7 @@ class OrderFollowUpResourceIT {
         List<OrderFollowUp> orderFollowUpList = orderFollowUpRepository.findAll();
         assertThat(orderFollowUpList).hasSize(databaseSizeBeforeUpdate);
         OrderFollowUp testOrderFollowUp = orderFollowUpList.get(orderFollowUpList.size() - 1);
-        assertThat(testOrderFollowUp.getItemId()).isEqualTo(UPDATED_ITEM_ID);
         assertThat(testOrderFollowUp.getPoNumber()).isEqualTo(UPDATED_PO_NUMBER);
-        assertThat(testOrderFollowUp.getCustomer()).isEqualTo(UPDATED_CUSTOMER);
         assertThat(testOrderFollowUp.getSupplier()).isEqualTo(UPDATED_SUPPLIER);
         assertThat(testOrderFollowUp.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
         assertThat(testOrderFollowUp.getCateGory()).isEqualTo(UPDATED_CATE_GORY);
@@ -754,7 +667,6 @@ class OrderFollowUpResourceIT {
         assertThat(testOrderFollowUp.getAtd()).isEqualTo(UPDATED_ATD);
         assertThat(testOrderFollowUp.getEta()).isEqualTo(UPDATED_ETA);
         assertThat(testOrderFollowUp.getUpdatedEta()).isEqualTo(UPDATED_UPDATED_ETA);
-        assertThat(testOrderFollowUp.getForwarder()).isEqualTo(UPDATED_FORWARDER);
         assertThat(testOrderFollowUp.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
         assertThat(testOrderFollowUp.getCustomInstruction()).isEqualTo(UPDATED_CUSTOM_INSTRUCTION);
         assertThat(testOrderFollowUp.getCustomInspection()).isEqualTo(UPDATED_CUSTOM_INSPECTION);
@@ -765,16 +677,12 @@ class OrderFollowUpResourceIT {
         assertThat(testOrderFollowUp.getDcMember()).isEqualTo(UPDATED_DC_MEMBER);
         assertThat(testOrderFollowUp.getComment()).isEqualTo(UPDATED_COMMENT);
         assertThat(testOrderFollowUp.getItemName()).isEqualTo(UPDATED_ITEM_NAME);
-        assertThat(testOrderFollowUp.getBoardId()).isEqualTo(UPDATED_BOARD_ID);
         assertThat(testOrderFollowUp.getKingdeeId()).isEqualTo(UPDATED_KINGDEE_ID);
         assertThat(testOrderFollowUp.getParentKingdeeId()).isEqualTo(UPDATED_PARENT_KINGDEE_ID);
-        assertThat(testOrderFollowUp.getParentMondayId()).isEqualTo(UPDATED_PARENT_MONDAY_ID);
         assertThat(testOrderFollowUp.getQty()).isEqualTo(UPDATED_QTY);
         assertThat(testOrderFollowUp.getItemCode()).isEqualTo(UPDATED_ITEM_CODE);
-        assertThat(testOrderFollowUp.getAmount()).isEqualTo(UPDATED_AMOUNT);
-        assertThat(testOrderFollowUp.getDiscount()).isEqualTo(UPDATED_DISCOUNT);
-        assertThat(testOrderFollowUp.getUnit()).isEqualTo(UPDATED_UNIT);
         assertThat(testOrderFollowUp.getContractEndOfProdDate()).isEqualTo(UPDATED_CONTRACT_END_OF_PROD_DATE);
+        assertThat(testOrderFollowUp.getSupplierId()).isEqualTo(UPDATED_SUPPLIER_ID);
     }
 
     @Test

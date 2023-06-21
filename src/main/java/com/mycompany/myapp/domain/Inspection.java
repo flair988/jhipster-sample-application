@@ -1,7 +1,7 @@
 package com.mycompany.myapp.domain;
 
+import jakarta.persistence.*;
 import java.io.Serializable;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -25,12 +25,6 @@ public class Inspection implements Serializable {
     @Column(name = "item_name")
     private String itemName;
 
-    @Column(name = "item_id")
-    private String itemId;
-
-    @Column(name = "board_id")
-    private String boardId;
-
     @Column(name = "kingdee_id")
     private String kingdeeId;
 
@@ -43,14 +37,8 @@ public class Inspection implements Serializable {
     @Column(name = "inspection_date")
     private String inspectionDate;
 
-    @Column(name = "end_of_production_date")
-    private String endOfProductionDate;
-
     @Column(name = "cate_gory")
     private String cateGory;
-
-    @Column(name = "technical_file")
-    private String technicalFile;
 
     @Column(name = "q_c_result")
     private String qCResult;
@@ -58,14 +46,20 @@ public class Inspection implements Serializable {
     @Column(name = "doc_status")
     private String docStatus;
 
-    @Column(name = "goods_ready_for_pick_up_date")
-    private String goodsReadyForPickUpDate;
-
     @Column(name = "inspection_type")
     private String inspectionType;
 
     @Column(name = "inspection_booking_status")
     private String inspectionBookingStatus;
+
+    @Column(name = "inspection_end_date")
+    private String inspectionEndDate;
+
+    @Column(name = "supplier_id")
+    private String supplierId;
+
+    @Column(name = "report_number")
+    private String reportNumber;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -93,32 +87,6 @@ public class Inspection implements Serializable {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
-    }
-
-    public String getItemId() {
-        return this.itemId;
-    }
-
-    public Inspection itemId(String itemId) {
-        this.setItemId(itemId);
-        return this;
-    }
-
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
-
-    public String getBoardId() {
-        return this.boardId;
-    }
-
-    public Inspection boardId(String boardId) {
-        this.setBoardId(boardId);
-        return this;
-    }
-
-    public void setBoardId(String boardId) {
-        this.boardId = boardId;
     }
 
     public String getKingdeeId() {
@@ -173,19 +141,6 @@ public class Inspection implements Serializable {
         this.inspectionDate = inspectionDate;
     }
 
-    public String getEndOfProductionDate() {
-        return this.endOfProductionDate;
-    }
-
-    public Inspection endOfProductionDate(String endOfProductionDate) {
-        this.setEndOfProductionDate(endOfProductionDate);
-        return this;
-    }
-
-    public void setEndOfProductionDate(String endOfProductionDate) {
-        this.endOfProductionDate = endOfProductionDate;
-    }
-
     public String getCateGory() {
         return this.cateGory;
     }
@@ -197,19 +152,6 @@ public class Inspection implements Serializable {
 
     public void setCateGory(String cateGory) {
         this.cateGory = cateGory;
-    }
-
-    public String getTechnicalFile() {
-        return this.technicalFile;
-    }
-
-    public Inspection technicalFile(String technicalFile) {
-        this.setTechnicalFile(technicalFile);
-        return this;
-    }
-
-    public void setTechnicalFile(String technicalFile) {
-        this.technicalFile = technicalFile;
     }
 
     public String getqCResult() {
@@ -238,19 +180,6 @@ public class Inspection implements Serializable {
         this.docStatus = docStatus;
     }
 
-    public String getGoodsReadyForPickUpDate() {
-        return this.goodsReadyForPickUpDate;
-    }
-
-    public Inspection goodsReadyForPickUpDate(String goodsReadyForPickUpDate) {
-        this.setGoodsReadyForPickUpDate(goodsReadyForPickUpDate);
-        return this;
-    }
-
-    public void setGoodsReadyForPickUpDate(String goodsReadyForPickUpDate) {
-        this.goodsReadyForPickUpDate = goodsReadyForPickUpDate;
-    }
-
     public String getInspectionType() {
         return this.inspectionType;
     }
@@ -275,6 +204,45 @@ public class Inspection implements Serializable {
 
     public void setInspectionBookingStatus(String inspectionBookingStatus) {
         this.inspectionBookingStatus = inspectionBookingStatus;
+    }
+
+    public String getInspectionEndDate() {
+        return this.inspectionEndDate;
+    }
+
+    public Inspection inspectionEndDate(String inspectionEndDate) {
+        this.setInspectionEndDate(inspectionEndDate);
+        return this;
+    }
+
+    public void setInspectionEndDate(String inspectionEndDate) {
+        this.inspectionEndDate = inspectionEndDate;
+    }
+
+    public String getSupplierId() {
+        return this.supplierId;
+    }
+
+    public Inspection supplierId(String supplierId) {
+        this.setSupplierId(supplierId);
+        return this;
+    }
+
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public String getReportNumber() {
+        return this.reportNumber;
+    }
+
+    public Inspection reportNumber(String reportNumber) {
+        this.setReportNumber(reportNumber);
+        return this;
+    }
+
+    public void setReportNumber(String reportNumber) {
+        this.reportNumber = reportNumber;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -302,20 +270,18 @@ public class Inspection implements Serializable {
         return "Inspection{" +
             "id=" + getId() +
             ", itemName='" + getItemName() + "'" +
-            ", itemId='" + getItemId() + "'" +
-            ", boardId='" + getBoardId() + "'" +
             ", kingdeeId='" + getKingdeeId() + "'" +
             ", supplierName='" + getSupplierName() + "'" +
             ", email='" + getEmail() + "'" +
             ", inspectionDate='" + getInspectionDate() + "'" +
-            ", endOfProductionDate='" + getEndOfProductionDate() + "'" +
             ", cateGory='" + getCateGory() + "'" +
-            ", technicalFile='" + getTechnicalFile() + "'" +
             ", qCResult='" + getqCResult() + "'" +
             ", docStatus='" + getDocStatus() + "'" +
-            ", goodsReadyForPickUpDate='" + getGoodsReadyForPickUpDate() + "'" +
             ", inspectionType='" + getInspectionType() + "'" +
             ", inspectionBookingStatus='" + getInspectionBookingStatus() + "'" +
+            ", inspectionEndDate='" + getInspectionEndDate() + "'" +
+            ", supplierId='" + getSupplierId() + "'" +
+            ", reportNumber='" + getReportNumber() + "'" +
             "}";
     }
 }

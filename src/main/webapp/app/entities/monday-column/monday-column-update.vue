@@ -5,84 +5,90 @@
         <h2
           id="jhipsterSampleApplicationApp.mondayColumn.home.createOrEditLabel"
           data-cy="MondayColumnCreateUpdateHeading"
-          v-text="$t('jhipsterSampleApplicationApp.mondayColumn.home.createOrEditLabel')"
-        >
-          Create or edit a MondayColumn
-        </h2>
+          v-text="t$('jhipsterSampleApplicationApp.mondayColumn.home.createOrEditLabel')"
+        ></h2>
         <div>
           <div class="form-group" v-if="mondayColumn.id">
-            <label for="id" v-text="$t('global.field.id')">ID</label>
+            <label for="id" v-text="t$('global.field.id')"></label>
             <input type="text" class="form-control" id="id" name="id" v-model="mondayColumn.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.mondayColumn.boardId')" for="monday-column-boardId"
-              >Board Id</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.mondayColumn.boardId')"
+              for="monday-column-boardId"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="boardId"
               id="monday-column-boardId"
               data-cy="boardId"
-              :class="{ valid: !$v.mondayColumn.boardId.$invalid, invalid: $v.mondayColumn.boardId.$invalid }"
-              v-model="$v.mondayColumn.boardId.$model"
+              :class="{ valid: !v$.boardId.$invalid, invalid: v$.boardId.$invalid }"
+              v-model="v$.boardId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.mondayColumn.columnId')" for="monday-column-columnId"
-              >Column Id</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.mondayColumn.columnId')"
+              for="monday-column-columnId"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="columnId"
               id="monday-column-columnId"
               data-cy="columnId"
-              :class="{ valid: !$v.mondayColumn.columnId.$invalid, invalid: $v.mondayColumn.columnId.$invalid }"
-              v-model="$v.mondayColumn.columnId.$model"
+              :class="{ valid: !v$.columnId.$invalid, invalid: v$.columnId.$invalid }"
+              v-model="v$.columnId.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.mondayColumn.title')" for="monday-column-title"
-              >Title</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.mondayColumn.title')"
+              for="monday-column-title"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="title"
               id="monday-column-title"
               data-cy="title"
-              :class="{ valid: !$v.mondayColumn.title.$invalid, invalid: $v.mondayColumn.title.$invalid }"
-              v-model="$v.mondayColumn.title.$model"
+              :class="{ valid: !v$.title.$invalid, invalid: v$.title.$invalid }"
+              v-model="v$.title.$model"
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('jhipsterSampleApplicationApp.mondayColumn.type')" for="monday-column-type"
-              >Type</label
-            >
+            <label
+              class="form-control-label"
+              v-text="t$('jhipsterSampleApplicationApp.mondayColumn.type')"
+              for="monday-column-type"
+            ></label>
             <input
               type="text"
               class="form-control"
               name="type"
               id="monday-column-type"
               data-cy="type"
-              :class="{ valid: !$v.mondayColumn.type.$invalid, invalid: $v.mondayColumn.type.$invalid }"
-              v-model="$v.mondayColumn.type.$model"
+              :class="{ valid: !v$.type.$invalid, invalid: v$.type.$invalid }"
+              v-model="v$.type.$model"
             />
           </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
-            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
+            <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')"></span>
           </button>
           <button
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.mondayColumn.$invalid || isSaving"
+            :disabled="v$.$invalid || isSaving"
             class="btn btn-primary"
           >
-            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
+            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.save')"></span>
           </button>
         </div>
       </form>
